@@ -4,9 +4,72 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ppj.vana.projekt</groupId>
-    <artifactId>projektMeteorolog</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>projektVana</groupId>
+    <artifactId>meteorolog</artifactId>
+    <version>0.1_BETA</version>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- MY OWN BUILD GOAL - COMPILE AND RUN MAIN METHOD -->
+    <build>
+        <plugins>
+            <plugin> <!-- PLUGIN NA AUTOMATICKE SPUSTENI MAIN METHOD PO BUILDU -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>ppj.vana.projekt.Projekt</mainClass>
+                            <arguments>
+                                <argument>Ahoj světe</argument>
+                                <argument>Test args</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin> <!-- DEFINICE MANIFESTU PRIMO V POMKU -->
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ppj.vana.projekt.Projekt</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+        <defaultGoal>compile</defaultGoal>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>MyCo Internal Repository</name>
+            <url>file:///C:\Users\mirav\Desktop\TUL\Semestr 2\PPJ\SEMESTRALKA</url>
+        </repository>
+    </distributionManagement>
 
 
 </project>
