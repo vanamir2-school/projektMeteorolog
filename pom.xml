@@ -6,7 +6,7 @@
 
     <groupId>projektVana</groupId>
     <artifactId>meteorolog</artifactId>
-    <version>0.11</version>
+    <version>0.12</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -42,16 +42,47 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
     <!-- MY OWN BUILD GOAL - COMPILE AND RUN MAIN METHOD -->
     <build>
         <plugins>
+            <!-- Vytvoreni projektu tak, aby obsahoval rovnou vsechny dependencies (a sel spustit z CMD)-->
+            <!-- https://www.staldal.nu/tech/2014/10/26/create-a-self-contained-jar-file-with-maven/ -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ppj.vana.projekt.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-jar-with-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <plugin> <!-- PLUGIN NA AUTOMATICKE SPUSTENI MAIN METHOD PO BUILDU -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
