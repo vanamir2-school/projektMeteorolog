@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import ppj.vana.projekt.configs.AppConfiguration;
 import ppj.vana.projekt.provisioning.Provisioner;
+import ppj.vana.projekt.service.CityService;
+import ppj.vana.projekt.service.CountryService;
 
 @SpringBootApplication
 public class Main {
@@ -20,10 +22,15 @@ public class Main {
     @Autowired
     private NamedParameterJdbcOperations namedParameterJdbcOperations;
 
-  /*  @Bean
-    public Foo offersDao() {
-        return new Foo("Duck duck");
-    }*/
+    @Bean
+    public CityService cityService() {
+        return new CityService();
+    }
+
+    @Bean
+    public CountryService countryService() {
+        return new CountryService();
+    }
 
     @Profile({"devel", "test", "prod"})
     @Bean(initMethod = "doProvision")
@@ -32,9 +39,6 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        logger.info("Entering application.");
-        System.out.println("This is my package! Those are args: " + (args != null ? String.join(", ", args) : "null"));
-
         SpringApplication app = new SpringApplication(Main.class);
         ApplicationContext ctx = app.run(args);
 
@@ -48,6 +52,11 @@ public class Main {
 
         AppConfiguration cfg = ctx.getBean(AppConfiguration.class);
         System.out.println(cfg.toString());
+
+        CountryService countrService = ctx.getBean(CountryService.class);
+        logger.info("Zaznamu : " + countrService.getAll().size());
+        countrService.deleteAll();
+        logger.info("Zaznamu : " + countrService.getAll().size());
     }
 
 }

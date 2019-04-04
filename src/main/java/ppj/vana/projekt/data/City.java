@@ -16,7 +16,7 @@ public class City {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "username")
+    @JoinColumn(name = "country")
     private Country country;
 
     public City() {

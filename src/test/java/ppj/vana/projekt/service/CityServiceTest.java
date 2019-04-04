@@ -1,4 +1,4 @@
-package ppj.vana.projekt;
+package ppj.vana.projekt.service;
 
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ppj.vana.projekt.Main;
+import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.service.CityService;
 
 import java.util.List;
@@ -22,13 +24,12 @@ import static org.junit.Assert.*;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CityServiceTest {
 
-    /*
+
     @Autowired
-    private CityService userService;
+    private CityService cityService;
 
-
-    private SecurityProperties.User user1 = new User("johnwpurcell", "John Purcell", "hellothere",
-            "john@caveofprogramming.com", true, "ROLE_USER");
+/*
+    private SecurityProperties.User user1 = new City(
     private User user2 = new User("richardhannay", "Richard Hannay", "the39steps",
             "richard@caveofprogramming.com", true, "ROLE_ADMIN");
     private User user3 = new User("suetheviolinist", "Sue Black", "iloveviolins",

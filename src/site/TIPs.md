@@ -5,6 +5,8 @@
 - PUSH  ... CTRL+K+SHIFT<br />
 - MAVEN OKNO ... View-Tools-Maven<br />
 - Generovani kodu ... ALT+INSERT<br />
+- Importy ... CTRL+ALT+O<br />
+- Code reformat ... CTRL+ALT+L<br />
 
 ### DB CMD connection (MySQL)
 - https://stackoverflow.com/questions/44481917/mysql-shell-is-not-able-to-connect-to-mysql-server?rq=1<br />
