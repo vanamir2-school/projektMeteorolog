@@ -6,6 +6,7 @@ import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.repositories.CityRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -23,16 +24,20 @@ public class CityService {
         return cityRepository.existsById(city);
     }
 
-    public List<City> getAllCities() {
+    public List<City> getAll() {
         return StreamSupport.stream(cityRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
-    public void deleteAllCities() {
+    public void deleteAll() {
         cityRepository.deleteAll();
     }
 
-    public void countCities() {
-        cityRepository.count();
+    public Optional<City> getById(String city) {
+        return cityRepository.findById(city);
+    }
+
+    public Long count() {
+        return cityRepository.count();
     }
 
     public void deleteCity(City city) {

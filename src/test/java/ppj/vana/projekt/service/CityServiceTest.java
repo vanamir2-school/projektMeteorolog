@@ -6,13 +6,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
 import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.service.CityService;
+import ppj.vana.projekt.data.Country;
 
 import java.util.List;
 
@@ -28,49 +27,57 @@ public class CityServiceTest {
     @Autowired
     private CityService cityService;
 
-/*
-    private SecurityProperties.User user1 = new City(
-    private User user2 = new User("richardhannay", "Richard Hannay", "the39steps",
-            "richard@caveofprogramming.com", true, "ROLE_ADMIN");
-    private User user3 = new User("suetheviolinist", "Sue Black", "iloveviolins",
-            "sue@caveofprogramming.com", true, "ROLE_USER");
-    private User user4 = new User("rogerblake", "Rog Blake", "liberator",
-            "rog@caveofprogramming.com", false, "user");
+    @Autowired
+    private CountryService countryService;
+
+    private Country country1 = new Country("Austrálie");
+    private Country country2 = new Country("Estonsko");
+    private Country country3 = new Country("Norsko");
+    private Country country4 = new Country("Brazílie");
+    private Country country5 = new Country("Česká republika");
+    private City city1 = new City("Sloup v Čechách", country5);
+    private City city2 = new City("Janov", country5);
+    private City city3 = new City("Ostrava", country5);
+    private City city4 = new City("Nový Bor", country5);
 
     @Before
     public void init() {
-        userService.deleteUsers();
+        countryService.deleteAll();
+        cityService.deleteAll();
+        countryService.save(country2);
+        countryService.save(country3);
+        countryService.save(country4);
+        countryService.save(country5);
     }
 
 
     @Test
     public void testCreateRetrieve() {
-        userService.create(user1);
+        cityService.save(city1);
 
-        List<User> users1 = userService.getAllUsers();
+        List<City> cities = cityService.getAll();
 
-        System.out.println(users1);
+        System.out.println(cities);
 
-        assertEquals("One user should have been created and retrieved", 1, users1.size());
+        assertEquals("One field should have been created and retrieved", 1, cities.size());
+        assertEquals("Inserted field should match retrieved", city1, cities.get(0));
 
-        assertEquals("Inserted user should match retrieved", user1, users1.get(0));
+        cityService.save(city2);
+        cityService.save(city3);
+        cityService.save(city4);
 
-        userService.create(user2);
-        userService.create(user3);
-        userService.create(user4);
-
-        List<User> users2 = userService.getAllUsers();
-
-        assertEquals("Should be four retrieved users.", 4, users2.size());
+        cities = cityService.getAll();
+        assertEquals("Should be four retrieved fields.", 4, cities.size());
     }
 
     @Test
     public void testExists() {
-        userService.create(user1);
-        userService.create(user2);
-        userService.create(user3);
+        cityService.save(city2);
+        cityService.save(city3);
+        cityService.save(city4);
 
-        assertTrue("User should exist.", userService.exists(user2.getUsername()));
-        assertFalse("User should not exist.", userService.exists("xkjhsfjlsjf"));
-    }*/
+        assertTrue("Entity should exist.", cityService.exists(city2.getName()));
+        assertFalse("Entity should not exist.", cityService.exists("xkjhsfjlsjf"));
+        assertEquals("Česká republika", cityService.getById("Ostrava").get().getCountry().getName());
+    }
 }

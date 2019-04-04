@@ -53,10 +53,11 @@ public class Main {
         AppConfiguration cfg = ctx.getBean(AppConfiguration.class);
         System.out.println(cfg.toString());
 
-        CountryService countrService = ctx.getBean(CountryService.class);
+       /* CountryService countrService = ctx.getBean(CountryService.class);
         logger.info("Zaznamu : " + countrService.getAll().size());
         countrService.deleteAll();
         logger.info("Zaznamu : " + countrService.getAll().size());
+        */
     }
 
 }
