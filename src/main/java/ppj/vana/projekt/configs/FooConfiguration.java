@@ -14,7 +14,7 @@ public class FooConfiguration {
     @Profile("devel")
     public static class DevPropertiesLoaderConfiguration {
         @Bean
-        public Foo Foo(){
+        public Foo Foo() {
             return new Foo("kachna-devel");
         }
     }
@@ -24,7 +24,7 @@ public class FooConfiguration {
     @Profile("test")
     public static class TestPropertiesLoaderConfiguration {
         @Bean
-        public Foo Foo(){
+        public Foo Foo() {
             return new Foo("TEST");
         }
     }
@@ -34,10 +34,9 @@ public class FooConfiguration {
     @Profile("prod")
     public static class ProdPropertiesLoaderConfiguration {
         @Bean
-        public Foo Foo(){
+        public Foo Foo() {
             return new Foo("ovce-prod");
         }
     }
-
 
 }

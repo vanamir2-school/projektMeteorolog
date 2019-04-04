@@ -2,14 +2,14 @@ package ppj.vana.projekt;
 
 public class Foo {
 
-    private String kachna;
+    private final String text;
 
     public Foo(String text){
-        this.kachna = text;
+        this.text = text;
     }
 
     public void makeSound (){
-        System.out.println(kachna);
+        System.out.println(text);
     }
 
 }
