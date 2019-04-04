@@ -24,7 +24,7 @@ public class Provisioner {
 
     public void doProvision() {
         List<String> allTables = namedParameterJdbcOperations.getJdbcOperations().queryForList("SELECT TABLE_NAME FROM  INFORMATION_SCHEMA.TABLES", String.class);
-        if (!allTables.contains("stat")) {
+        if (!allTables.contains("city") || !allTables.contains("country") ) {
             log.warn("DB Provisioner: No tables exist and will be created");
             createDb();
             allTables = namedParameterJdbcOperations.getJdbcOperations().queryForList("SELECT TABLE_NAME FROM  INFORMATION_SCHEMA.TABLES", String.class);
@@ -33,8 +33,8 @@ public class Provisioner {
             log.info("DB Provisioner: Table OFFERS exists, all existing tables: " + allTables);
 
         // test query
-        Integer mest = namedParameterJdbcOperations.getJdbcOperations().queryForObject("select count(*) from ppj.mesto", Integer.class);
-        System.out.println(mest);
+        Integer mestCnt = namedParameterJdbcOperations.getJdbcOperations().queryForObject("select count(*) from city", Integer.class);
+        log.info("DB Provisioner: Table City exists, number of records: " + mestCnt);
     }
 
     public void createDb() {
