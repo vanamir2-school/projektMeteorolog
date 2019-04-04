@@ -23,6 +23,9 @@ public class Provisioner {
     private DataSource dataSource;
 
     public void doProvision() {
+       // namedParameterJdbcOperations.getJdbcOperations().execute("set schema 'ppjtest'");
+
+        // NENI SCHEMA ADAPTABILNI
         List<String> allTables = namedParameterJdbcOperations.getJdbcOperations().queryForList("SELECT TABLE_NAME FROM  INFORMATION_SCHEMA.TABLES", String.class);
         if (!allTables.contains("city") || !allTables.contains("country") ) {
             log.warn("DB Provisioner: No tables exist and will be created");

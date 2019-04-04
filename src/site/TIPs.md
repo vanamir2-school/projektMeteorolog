@@ -4,7 +4,7 @@
 - COMMIT ... CTRL+K<br />
 - PUSH  ... CTRL+K+SHIFT<br />
 - MAVEN OKNO ... View-Tools-Maven<br />
-- Generovani kodu ... View-Tools-Maven<br />
+- Generovani kodu ... ALT+INSERT<br />
 
 ### DB CMD connection (MySQL)
 - https://stackoverflow.com/questions/44481917/mysql-shell-is-not-able-to-connect-to-mysql-server?rq=1<br />
