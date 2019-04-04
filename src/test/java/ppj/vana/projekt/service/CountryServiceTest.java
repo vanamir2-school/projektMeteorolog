@@ -26,11 +26,11 @@ public class CountryServiceTest {
     @Autowired
     private CountryService countryService;
 
-    private Country country1 = new Country("Austrálie");
-    private Country country2 = new Country("Estonsko");
-    private Country country3 = new Country("Norsko");
-    private Country country4 = new Country("Brazílie");
-    private Country country5 = new Country("Česká republika");
+    private final Country country1 = new Country("Austrálie");
+    private final Country country2 = new Country("Estonsko");
+    private final Country country3 = new Country("Norsko");
+    private final Country country4 = new Country("Brazílie");
+    private final Country country5 = new Country("Česká republika");
 
     @Before
     public void init() {

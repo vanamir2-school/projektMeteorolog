@@ -23,21 +23,15 @@ public class Provisioner {
     private DataSource dataSource;
 
     public void doProvision() {
-       // namedParameterJdbcOperations.getJdbcOperations().execute("set schema 'ppjtest'");
-
-        // NENI SCHEMA ADAPTABILNI
+        // TODO - NENI SCHEMA ADAPTABILNI
         List<String> allTables = namedParameterJdbcOperations.getJdbcOperations().queryForList("SELECT TABLE_NAME FROM  INFORMATION_SCHEMA.TABLES", String.class);
-        if (!allTables.contains("city") || !allTables.contains("country") ) {
+        if (!allTables.contains("city") || !allTables.contains("country")) {
             log.warn("DB Provisioner: No tables exist and will be created");
             createDb();
             allTables = namedParameterJdbcOperations.getJdbcOperations().queryForList("SELECT TABLE_NAME FROM  INFORMATION_SCHEMA.TABLES", String.class);
             System.out.println(allTables);
         } else
             log.info("DB Provisioner: Table OFFERS exists, all existing tables: " + allTables);
-
-        // test query
-        Integer mestCnt = namedParameterJdbcOperations.getJdbcOperations().queryForObject("select count(*) from city", Integer.class);
-        log.info("DB Provisioner: Table City exists, number of records: " + mestCnt);
     }
 
     public void createDb() {

@@ -31,14 +31,14 @@ public class CityServiceTest {
     private CountryService countryService;
 
     private Country country1 = new Country("Austrálie");
-    private Country country2 = new Country("Estonsko");
-    private Country country3 = new Country("Norsko");
-    private Country country4 = new Country("Brazílie");
-    private Country country5 = new Country("Česká republika");
-    private City city1 = new City("Sloup v Čechách", country5);
-    private City city2 = new City("Janov", country5);
-    private City city3 = new City("Ostrava", country5);
-    private City city4 = new City("Nový Bor", country5);
+    private final Country country2 = new Country("Estonsko");
+    private final Country country3 = new Country("Norsko");
+    private final Country country4 = new Country("Brazílie");
+    private final Country country5 = new Country("Česká republika");
+    private final City city1 = new City("Sloup v Čechách", country5);
+    private final City city2 = new City("Janov", country5);
+    private final City city3 = new City("Ostrava", country5);
+    private final City city4 = new City("Nový Bor", country5);
 
     @Before
     public void init() {
