@@ -45,10 +45,8 @@ public class Main {
         Foo foo = ctx.getBean(Foo.class);
         foo.makeSound();
 
-        logger.info("Exiting application. - INFO LEVEL");
-        logger.debug("Debug LEVEL");
         logger.error("ERROR LEVEL");
-        logger.trace("TRACE LEVEL");
+        logger.warn("WARN LEVEL");
 
         AppConfiguration cfg = ctx.getBean(AppConfiguration.class);
         System.out.println(cfg.toString());

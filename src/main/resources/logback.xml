@@ -2,20 +2,32 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <springProfile name="devel">
-        <root level="INFO">
-            <appender-ref ref="STDOUT"/>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+        <file>out.log</file>
+        <append>false</append>
+    </appender>
+
+    <springProfile name="devel,prod">
+        <root level="WARN">
+            <appender-ref ref="FILE"/>
         </root>
     </springProfile>
 
+
     <springProfile name="test">
-        <root level="INFO">
+        <root level="WARN">
             <appender-ref ref="STDOUT"/>
         </root>
     </springProfile>
 
 </configuration>
+
+        <!-- Urovne logovani: -->
+        <!-- ERROR, WARN, INFO, DEBUG, or TRACE. -->
