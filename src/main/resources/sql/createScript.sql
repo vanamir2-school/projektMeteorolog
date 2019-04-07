@@ -3,16 +3,19 @@
 drop table IF EXISTS City;
 drop table IF EXISTS Country;
 
-Create table Country (
-	name Varchar(80) NOT NULL,
-    Primary Key (name)) ENGINE=INNODB;
+Create table Country(
+                        name Varchar(80) NOT NULL,
+                        Primary Key (name)
+);
 
-Create table City (
+Create table City(
 	name Varchar(80) NOT NULL,
 	country Varchar(80) NOT NULL,
     Primary Key (name),
     FOREIGN KEY (country)
         REFERENCES Country(name)
-        ON DELETE CASCADE ) ENGINE=INNODB;
+        ON DELETE CASCADE
+);
 
+CREATE INDEX fk_states_cities_idx ON Country (name);
 commit;

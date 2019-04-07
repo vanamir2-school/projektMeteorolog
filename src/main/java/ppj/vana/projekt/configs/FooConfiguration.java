@@ -40,15 +40,6 @@ public class FooConfiguration {
         }
     }
 
-    @PropertySource("classpath:app_test.properties")
-    @Profile({"test"})
-    public class TestPropertiesLoaderConfiguration {
-        @Bean
-        public Foo Foo() {
-            return new Foo("Test - Profil: " + String.join(",", Arrays.asList(environment.getActiveProfiles())) + " - " + note);
-        }
-    }
-
     @PropertySource("classpath:app_prod.properties")
     @Profile({"prod"})
     public class ProdPropertiesLoaderConfiguration {

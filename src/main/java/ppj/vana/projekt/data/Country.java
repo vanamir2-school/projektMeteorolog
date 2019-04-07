@@ -1,9 +1,7 @@
 package ppj.vana.projekt.data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "country")
@@ -13,6 +11,9 @@ public class Country {
     @Column(name = "name")
     private String name;
 
+    /* @OneToMany(mappedBy = "state", fetch = FetchType.EAGER)
+     private List<City> cities;
+ */
     public Country() {
     }
 

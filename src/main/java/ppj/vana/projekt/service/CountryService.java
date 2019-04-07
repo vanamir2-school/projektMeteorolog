@@ -20,6 +20,10 @@ public class CountryService {
         countryRepository.save(country);
     }
 
+    public void saveList(List list) {
+        countryRepository.saveAll(list);
+    }
+
     public boolean exists(String country) {
         return countryRepository.existsById(country);
     }

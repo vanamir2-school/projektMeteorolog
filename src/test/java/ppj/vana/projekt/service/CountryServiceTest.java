@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Main.class)
 @ActiveProfiles({"test"})
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CountryServiceTest {
 
 
