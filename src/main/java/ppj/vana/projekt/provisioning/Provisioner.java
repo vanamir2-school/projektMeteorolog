@@ -36,10 +36,10 @@ public class Provisioner {
 
     public void createDb() {
         Resource createScript = new ClassPathResource("sql/createScript.sql");
-        //  Resource insertScript = new ClassPathResource("sql/insertScript.sql");
+        Resource insertScript = new ClassPathResource("sql/insertScript.sql");
         try {
             ScriptUtils.executeSqlScript(dataSource.getConnection(), createScript);
-            //   ScriptUtils.executeSqlScript(dataSource.getConnection(), insertScript);
+            ScriptUtils.executeSqlScript(dataSource.getConnection(), insertScript);
         } catch (Exception e) {
             e.printStackTrace();
         }

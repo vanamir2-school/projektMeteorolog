@@ -9,13 +9,11 @@ Create table Country(
 );
 
 Create table City(
-	name Varchar(80) NOT NULL,
-	country Varchar(80) NOT NULL,
-    Primary Key (name),
-    FOREIGN KEY (country)
-        REFERENCES Country(name)
-        ON DELETE CASCADE
+                     name    Varchar(80) NOT NULL,
+                     country Varchar(80) NOT NULL,
+                     Primary Key (name),
+                     FOREIGN KEY (country)
+                         REFERENCES Country (name)
+                         ON DELETE CASCADE
 );
-
-CREATE INDEX fk_states_cities_idx ON Country (name);
 commit;

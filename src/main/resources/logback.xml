@@ -14,14 +14,14 @@
         <append>false</append>
     </appender>
 
-    <springProfile name="devel,prod">
+    <springProfile name="devel">
         <root level="WARN">
             <appender-ref ref="FILE"/>
         </root>
     </springProfile>
 
 
-    <springProfile name="test">
+    <springProfile name="test,prod">
         <root level="WARN">
             <appender-ref ref="STDOUT"/>
         </root>
