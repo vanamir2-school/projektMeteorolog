@@ -91,6 +91,7 @@ public class CityServiceTest {
 
     @Test
     public void testSave() {
+        cityService.deleteAll();
         cityService.save(city1);
         cityService.save(city2);
         cityService.save(city3);
@@ -104,5 +105,10 @@ public class CityServiceTest {
         assertTrue("Entity should exist.", cityService.exists(city5.getName()));
         assertTrue("Entity should exist.", cityService.exists(city6.getName()));
         assertFalse("Entity should NOT exist.", cityService.exists(city7.getName()));
+
+        cityService.deleteCity(city4);
+        List<City> cities1 = cityService.getAll();
+        assertEquals("Should be 5 cities.", 5, cities1.size());
+
     }
 }
