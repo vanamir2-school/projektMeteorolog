@@ -3,6 +3,7 @@
 
 # idea config files
 *.idea
+*.iml
 
 # Log file
 *.log
