@@ -10,6 +10,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+// NESTACI MIT POUZE COUNTRY REPOSITORY NAMISTO SERVICE?
+// Kdyz je to tak jednoduchy service
+
 @Service
 public class CountryService {
 

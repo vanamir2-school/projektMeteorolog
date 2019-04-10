@@ -19,11 +19,21 @@ public class City {
     @JoinColumn(name = "country")
     private Country country;
 
+    @Column(name = "openweathermapid", nullable = true)
+    private Integer openWeatherMapID;
+
+
     public City() {
         this.country = new Country();
     }
 
     public City(String name, Country country) {
+        this.name = name;
+        this.country = country;
+    }
+
+    public City(String name, Country country, int id) {
+        this.openWeatherMapID = id;
         this.name = name;
         this.country = country;
     }
@@ -34,6 +44,14 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getOpenWeatherMapID() {
+        return openWeatherMapID;
+    }
+
+    public void setOpenWeatherMapID(int openWeatherMapID) {
+        this.openWeatherMapID = openWeatherMapID;
     }
 
     public Country getCountry() {
@@ -67,6 +85,7 @@ public class City {
     public String toString() {
         return "City{" +
                 "name='" + name + '\'' +
+                ", openWeatherMapID=" + openWeatherMapID +
                 ", country=" + country +
                 '}';
     }

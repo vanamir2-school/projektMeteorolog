@@ -49,5 +49,7 @@ INSERT INTO City (name,country) VALUES ("Jablonec nad Nisou","Česká republika"
 INSERT INTO City (name,country) VALUES ("Mladá Boleslav","Česká republika");
 INSERT INTO City (name,country) VALUES ("Třebíč","Česká republika");
 INSERT INTO City (name,country) VALUES ("Berlín","Německo");
+INSERT INTO City (name, country, openWeatherMapID)
+VALUES ("Česká Lípa", "Česká republika", 3077929);
 
 commit;

@@ -21,7 +21,7 @@
     </springProfile>
 
 
-    <springProfile name="test,prod">
+    <springProfile name="test,prod,devel">
         <root level="WARN">
             <appender-ref ref="STDOUT"/>
         </root>

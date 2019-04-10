@@ -16,4 +16,8 @@ CREATE TABLE City
         REFERENCES Country (name)
         ON DELETE CASCADE
 );
+
+ALTER TABLE City
+    ADD openWeatherMapID INT NULL;
+
 COMMIT;

@@ -24,3 +24,5 @@ USE dbname; <br />
 #### Path to project folder 
  - C:\Users\mirav\IdeaProjects\projektMeteorolog
 
+#### openWeatherMap - ID+KEZ+metrickéJednotky
+http://api.openweathermap.org/data/2.5/weather?id=3077929&APPID=8511369eded1edc6193a34676e82dec5&units=metric
