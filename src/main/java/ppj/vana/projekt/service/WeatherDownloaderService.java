@@ -3,14 +3,18 @@ package ppj.vana.projekt.service;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ppj.vana.projekt.Main;
 import ppj.vana.projekt.data.Measurement;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -21,9 +25,15 @@ import java.text.SimpleDateFormat;
 @Service
 public class WeatherDownloaderService {
 
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     private static final String CURRENT_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather";
 
     private static final String UNITS = "metric";
+
+    private Date queryStartDate = null;
+
+    private int queryCounter = 0;
 
     private SimpleDateFormat simpleDateFormat = null;
 
@@ -31,12 +41,42 @@ public class WeatherDownloaderService {
     @Value("${app.appid}")
     private String appid;
 
+    @NotNull
+    @Value("${app.apilimit}")
+    private Integer apilimit;
+
     public String getAppid() {
         return appid;
     }
 
+    /**
+     * Zkontroluje, zda nebyl překročen nastavený limit v počtu dotazů za minutu.
+     */
+    private boolean limitExceeded() {
+        if (apilimit == null)
+            throw new NullPointerException("Applimit konfigurovatelný v souboru: aplication.properties nebyl nalezen");
+        if (queryStartDate == null)
+            queryStartDate = new Date();
+        // pokud je queryStartDate mensi o vice jak 60 000ms - uz je pryc minuta a muzeme ho vynulovat
+        Long casovyRozdil = new Date().getTime() - queryStartDate.getTime();
+        if (casovyRozdil > 60000L) {
+            queryStartDate = new Date();
+            queryCounter = 0;
+            return false;
+        }
+        ++queryCounter;
+        System.out.println("Pocet dotazu: " + queryCounter);
+        if (queryCounter > apilimit)
+            return true;
+        return false;
+    }
 
     public Measurement getWeatherByCityID(int cityID) {
+        if (limitExceeded()) {
+            logger.error("Byl překročen limit v počtu dorazů. Bylo voláno více než " + apilimit + " dotazů za minutu");
+            return null;
+        }
+
         // stazeni dat do JSON formatu
         String urlString = CURRENT_WEATHER_API_URL + String.format("?id=%d&APPID=%s&units=%s", cityID, appid, UNITS);
         String jsonData = null;

@@ -44,9 +44,13 @@ public class Main {
         Measurement measurement1 = weatherDownloaderService.getWeatherByCityID(3077929);
         Measurement measurement2 = weatherDownloaderService.getWeatherByCityID(3071961);
         Measurement measurement3 = weatherDownloaderService.getWeatherByCityID(3067696);
+        Measurement measurement4 = weatherDownloaderService.getWeatherByCityID(3067696);
+        Measurement measurement5 = weatherDownloaderService.getWeatherByCityID(3067696);
         System.out.println(measurement1.toString());
         System.out.println(measurement2.toString());
         System.out.println(measurement3.toString());
+        System.out.println(measurement4.toString());
+        System.out.println(measurement5.toString());
         System.out.println(weatherDownloaderService.timestampToString(measurement1.getTimeOfMeasurement()));
     }
 
