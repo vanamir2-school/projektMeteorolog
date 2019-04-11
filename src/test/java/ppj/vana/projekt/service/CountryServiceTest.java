@@ -21,7 +21,6 @@ import static org.junit.Assert.*;
 @ActiveProfiles({"test"})
 public class CountryServiceTest {
 
-
     @Autowired
     private CountryService countryService;
 

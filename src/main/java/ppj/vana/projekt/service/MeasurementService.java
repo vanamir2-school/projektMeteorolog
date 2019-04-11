@@ -5,7 +5,7 @@ import ppj.vana.projekt.data.Measurement;
 
 public interface MeasurementService {
 
-    Measurement find(Integer objectId);
+    Measurement find(ObjectId objectId);
 
     Measurement add(Measurement user);
 

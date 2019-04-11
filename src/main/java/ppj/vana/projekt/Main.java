@@ -10,11 +10,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import ppj.vana.projekt.data.Measurement;
 import ppj.vana.projekt.provisioning.Provisioner;
-import ppj.vana.projekt.repositories.MeasurementRepository;
 import ppj.vana.projekt.service.CityService;
-import ppj.vana.projekt.service.MeasurementService;
 import ppj.vana.projekt.service.MongoMeasurementService;
+
+import java.util.List;
 
 @SpringBootApplication
 @EnableJpaRepositories("ppj.vana.projekt.repositories")
@@ -31,22 +32,21 @@ public class Main {
         CityService cs = ctx.getBean(CityService.class);
         System.out.println(cs.getAll().toString());
 
-        MeasurementRepository measurementRepository = ctx.getBean(MeasurementRepository.class);
-        System.out.println(String.format("Measurement collection contains %d records", measurementRepository.count()));
-
+        MongoMeasurementService measurementService = ctx.getBean(MongoMeasurementService.class);
+        List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
+        measurementList.forEach(System.out::println);
 
         Foo foo = ctx.getBean(Foo.class);
         foo.makeSound();
 
         logger.error("ERROR LEVEL");
-        logger.warn("WARN LEVEL");
     }
 
     @Bean
-    public MeasurementService mongoUserService() {
+    public MongoMeasurementService mongoUserService() {
         return new MongoMeasurementService(mongo);
     }
-    
+
     @Profile({"devel"})
     @Bean(initMethod = "doProvision")
     public Provisioner provisioner() {

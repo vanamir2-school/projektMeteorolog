@@ -28,17 +28,12 @@ public class Measurement {
 
     private Integer sunset;
 
-    private int wind; // rychlost vetru
+    private Integer wind; // rychlost vetru
 
-    public Measurement(Integer cityID, Integer timeOfMeasurement, Integer temperature, Integer humidity, Integer pressure, Integer sunrise, Integer sunset, int wind) {
+    public Measurement(Integer cityID, Integer timeOfMeasurement, Integer temperature) {
         this.cityID = cityID;
         this.timeOfMeasurement = timeOfMeasurement;
         this.temperature = temperature;
-        this.humidity = humidity;
-        this.pressure = pressure;
-        this.sunrise = sunrise;
-        this.sunset = sunset;
-        this.wind = wind;
     }
 
     public ObjectId getId() {
@@ -111,5 +106,20 @@ public class Measurement {
 
     public void setWind(int wind) {
         this.wind = wind;
+    }
+
+    @Override
+    public String toString() {
+        return "Measurement{" +
+                "id=" + id +
+                ", cityID=" + cityID +
+                ", timeOfMeasurement=" + timeOfMeasurement +
+                ", temperature=" + temperature +
+                ", humidity=" + humidity +
+                ", pressure=" + pressure +
+                ", sunrise=" + sunrise +
+                ", sunset=" + sunset +
+                ", wind=" + wind +
+                '}';
     }
 }
