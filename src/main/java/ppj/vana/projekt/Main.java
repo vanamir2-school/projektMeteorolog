@@ -16,6 +16,7 @@ import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
 import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
 @EnableJpaRepositories("ppj.vana.projekt.repositories")
@@ -35,6 +36,14 @@ public class Main {
         MongoMeasurementService measurementService = ctx.getBean(MongoMeasurementService.class);
         List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
         measurementList.forEach(System.out::println);
+
+        Measurement measurement1 = new Measurement(3077928, 123, 20);
+        // measurementService.add(measurement1);
+
+        Map<Integer, Integer> measurementCnt = measurementService.numOfRecordsUsingMapReduce();
+        for (int cityID : measurementCnt.keySet()) {
+            System.out.println(String.format("cityID: %d, number of records: %d", cityID, measurementCnt.get(cityID)));
+        }
 
         Foo foo = ctx.getBean(Foo.class);
         foo.makeSound();

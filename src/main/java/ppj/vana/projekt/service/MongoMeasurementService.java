@@ -2,10 +2,13 @@ package ppj.vana.projekt.service;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Query;
 import ppj.vana.projekt.data.Measurement;
 
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -36,4 +39,24 @@ public class MongoMeasurementService implements MeasurementService {
     public void remove(Measurement measurement) {
         mongo.remove(measurement);
     }
+
+
+    //Map-reduce is a data processing paradigm for condensing large volumes of data into useful aggregated results.
+    // For map-reduce operations, MongoDB provides the mapReduce database command.
+    public Map<Integer, Integer> numOfRecordsUsingMapReduce() {
+        final String mapJS = "classpath:mongoDB/measurement_cityID_map.js";
+        final String reduceJS = "classpath:mongoDB/measurement_cityID_reduce.js";
+        // query , kolekce (coz je seskupeni dokumentu - neco jako RDBMS tabulka), map, reduce, entityClass
+        MapReduceResults<CountEntry> mapReduceResult = mongo.mapReduce(new Query(), mongo.getCollectionName(Measurement.class), mapJS, reduceJS, CountEntry.class);
+        Map<Integer, Integer> numOfRecords = new TreeMap<>();
+        mapReduceResult.forEach((result) -> numOfRecords.put(result.id, result.value));
+        return numOfRecords;
+    }
+
+    private static class CountEntry {
+        // id == cityID -- to si definujeme v map
+        public int id; // TOTO SE MUSI SHODOVAT S ID DANE ENTITY (Measurement), jinak se to POSE*E
+        public int value; // count
+    }
+
 }

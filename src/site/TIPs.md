@@ -26,3 +26,12 @@ USE dbname; <br />
 
 #### openWeatherMap - ID+KEZ+metrickéJednotky
 http://api.openweathermap.org/data/2.5/weather?id=3077929&APPID=8511369eded1edc6193a34676e82dec5&units=metric
+
+
+#### MongoDB - testovani v CMD
+D:\Program Files\MongoDB\bin> .\mongo.exe<br />
+use meteorolog<br />
+var mapFunction = function map(){     return emit(this.cityID,1); };<br />
+var reduceFunction = function reduce(key, values) {     return Array.sum( values ); };<br />
+db.meteorolog.mapReduce(mapFunction,reduceFunction,{ out: "map_reduce_example" } ).find()<br />
+
