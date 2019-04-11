@@ -16,24 +16,32 @@ public class Measurement {
     @Indexed
     private Integer cityID;
 
-    private Integer timeOfMeasurement;
+    private Long timeOfMeasurement;
 
-    private Integer temperature;
+    private Double temperature;
 
     private Integer humidity;
 
     private Integer pressure; // tlak
 
-    private Integer sunrise;
+    private Long sunrise;
 
-    private Integer sunset;
+    private Long sunset;
 
-    private Integer wind; // rychlost vetru
+    private Double wind; // rychlost vetru
 
-    public Measurement(Integer cityID, Integer timeOfMeasurement, Integer temperature) {
+    public Measurement(Integer cityID, Long timeOfMeasurement, Double temperature) {
         this.cityID = cityID;
         this.timeOfMeasurement = timeOfMeasurement;
         this.temperature = temperature;
+    }
+
+    public void setMultiple(Integer humidity, Integer pressure, Long sunrise, Long sunset, Double wind) {
+        this.humidity = humidity;
+        this.pressure = pressure;
+        this.sunrise = sunrise;
+        this.sunset = sunset;
+        this.wind = wind;
     }
 
     public ObjectId getId() {
@@ -52,19 +60,19 @@ public class Measurement {
         this.cityID = cityID;
     }
 
-    public Integer getTimeOfMeasurement() {
+    public Long getTimeOfMeasurement() {
         return timeOfMeasurement;
     }
 
-    public void setTimeOfMeasurement(Integer timeOfMeasurement) {
+    public void setTimeOfMeasurement(Long timeOfMeasurement) {
         this.timeOfMeasurement = timeOfMeasurement;
     }
 
-    public Integer getTemperature() {
+    public Double getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(Integer temperature) {
+    public void setTemperature(Double temperature) {
         this.temperature = temperature;
     }
 
@@ -84,27 +92,27 @@ public class Measurement {
         this.pressure = pressure;
     }
 
-    public Integer getSunrise() {
+    public Long getSunrise() {
         return sunrise;
     }
 
-    public void setSunrise(Integer sunrise) {
+    public void setSunrise(Long sunrise) {
         this.sunrise = sunrise;
     }
 
-    public Integer getSunset() {
+    public Long getSunset() {
         return sunset;
     }
 
-    public void setSunset(Integer sunset) {
+    public void setSunset(Long sunset) {
         this.sunset = sunset;
     }
 
-    public int getWind() {
+    public Double getWind() {
         return wind;
     }
 
-    public void setWind(int wind) {
+    public void setWind(Double wind) {
         this.wind = wind;
     }
 

@@ -25,6 +25,7 @@ public class FooConfiguration {
 
     @Autowired
     private Environment environment;
+
     private String note;
 
     public void setNote(String note) {

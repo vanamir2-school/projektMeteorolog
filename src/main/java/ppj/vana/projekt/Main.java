@@ -12,10 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ppj.vana.projekt.data.Measurement;
 import ppj.vana.projekt.provisioning.Provisioner;
-import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.MongoMeasurementService;
+import ppj.vana.projekt.service.WeatherDownloaderService;
 
-import java.util.List;
 import java.util.Map;
 
 @SpringBootApplication
@@ -23,6 +22,7 @@ import java.util.Map;
 public class Main {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     @Autowired
     private MongoTemplate mongo;
 
@@ -30,25 +30,23 @@ public class Main {
         SpringApplication app = new SpringApplication(Main.class);
         ApplicationContext ctx = app.run(args);
 
-        CityService cs = ctx.getBean(CityService.class);
-        System.out.println(cs.getAll().toString());
-
-        MongoMeasurementService measurementService = ctx.getBean(MongoMeasurementService.class);
-        List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
-        measurementList.forEach(System.out::println);
-
-        Measurement measurement1 = new Measurement(3077928, 123, 20);
-        // measurementService.add(measurement1);
-
-        Map<Integer, Integer> measurementCnt = measurementService.numOfRecordsUsingMapReduce();
-        for (int cityID : measurementCnt.keySet()) {
-            System.out.println(String.format("cityID: %d, number of records: %d", cityID, measurementCnt.get(cityID)));
-        }
-
-        Foo foo = ctx.getBean(Foo.class);
-        foo.makeSound();
-
+        // some temporal testing/outputs
+        Map<Integer, Integer> measurementCnt = ctx.getBean(MongoMeasurementService.class).numOfRecordsUsingMapReduce();
+        measurementCnt.forEach((k, v) -> System.out.println(String.format("cityID: %d, number of records: %d", k, measurementCnt.get(k))));
+        ctx.getBean(Foo.class).makeSound();
         logger.error("ERROR LEVEL");
+        System.out.println("Appid: " + ctx.getBean(WeatherDownloaderService.class).getAppid());
+
+        // otestovani API
+        WeatherDownloaderService weatherDownloaderService = ctx.getBean(WeatherDownloaderService.class);
+        Measurement measurement1 = weatherDownloaderService.getWeatherByCityID(3077929);
+        Measurement measurement2 = weatherDownloaderService.getWeatherByCityID(3071961);
+        Measurement measurement3 = weatherDownloaderService.getWeatherByCityID(3067696);
+        System.out.println(measurement1.toString());
+        System.out.println(measurement2.toString());
+        System.out.println(measurement3.toString());
+        System.out.println(weatherDownloaderService.timestampToString(measurement1.getTimeOfMeasurement()));
+
     }
 
     @Bean
