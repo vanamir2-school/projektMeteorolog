@@ -20,9 +20,9 @@ import static org.junit.Assert.assertEquals;
 @ActiveProfiles({"test"})
 public class MongoMeasurementServiceTest {
 
-    private final Measurement measurement1 = new Measurement(3077929, 123, 20);
-    private final Measurement measurement2 = new Measurement(3077929, 124, 20);
-    private final Measurement measurement3 = new Measurement(3077929, 999, 28);
+    private final Measurement measurement1 = new Measurement(3077929, 123L, 20.0);
+    private final Measurement measurement2 = new Measurement(3077929, 124L, 20.0);
+    private final Measurement measurement3 = new Measurement(3077929, 999L, 28.0);
 
     @Autowired
     private MongoMeasurementService measurementService;

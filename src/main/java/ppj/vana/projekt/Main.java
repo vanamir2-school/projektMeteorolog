@@ -37,6 +37,8 @@ public class Main {
         logger.error("ERROR LEVEL");
         System.out.println("Appid: " + ctx.getBean(WeatherDownloaderService.class).getAppid());
 
+
+        // TODO - předělat na klasické JUnit testy
         // otestovani API
         WeatherDownloaderService weatherDownloaderService = ctx.getBean(WeatherDownloaderService.class);
         Measurement measurement1 = weatherDownloaderService.getWeatherByCityID(3077929);
@@ -46,7 +48,6 @@ public class Main {
         System.out.println(measurement2.toString());
         System.out.println(measurement3.toString());
         System.out.println(weatherDownloaderService.timestampToString(measurement1.getTimeOfMeasurement()));
-
     }
 
     @Bean
