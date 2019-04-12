@@ -19,7 +19,20 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <packaging>war</packaging>
+
     <dependencies>
+        <!--  Tomcat jasper  -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--  servlet  -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
         <!--  REST  -->
         <dependency>
             <groupId>com.squareup.retrofit</groupId>
@@ -202,10 +215,13 @@
                     </archive>
                 </configuration>
             </plugin>
-
+            <!-- Pro vytvoreni WAR (obohaceny JAR urceny pro distribuci webove aplikace) -->
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webXml>web/WEB-INF/web.xml</webXml>
+                </configuration>
             </plugin>
         </plugins>
         <defaultGoal>compile</defaultGoal>

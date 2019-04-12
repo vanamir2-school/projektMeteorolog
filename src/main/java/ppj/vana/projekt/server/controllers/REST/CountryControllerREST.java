@@ -1,4 +1,4 @@
-package ppj.vana.projekt.server.controllers;
+package ppj.vana.projekt.server.controllers.REST;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import ppj.vana.projekt.service.CountryService;
 import java.util.List;
 
 @RestController
-public class CountryController {
+public class CountryControllerREST {
 
     @Autowired
     private CountryService countryService;
@@ -31,5 +31,6 @@ public class CountryController {
     public ResponseEntity<APIErrorMessage> handleAPIException(APIException ex) {
         return new ResponseEntity<>(new APIErrorMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
 
 }
