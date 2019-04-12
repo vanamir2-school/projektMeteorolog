@@ -35,3 +35,10 @@ var mapFunction = function map(){     return emit(this.cityID,1); };<br />
 var reduceFunction = function reduce(key, values) {     return Array.sum( values ); };<br />
 db.meteorolog.mapReduce(mapFunction,reduceFunction,{ out: "map_reduce_example" } ).find()<br />
 
+#### Vyhledani PID dle portu (+ zabiti)- powershell:
+netstat -a -o | Select-String "8080"<br />
+Taskkill /PID 12276 /F
+
+#### REST API GUIDE
+https://spring.io/guides/gs/rest-service/
+

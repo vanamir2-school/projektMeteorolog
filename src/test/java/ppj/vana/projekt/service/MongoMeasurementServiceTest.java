@@ -12,6 +12,7 @@ import ppj.vana.projekt.data.Measurement;
 import ppj.vana.projekt.repositories.MeasurementRepository;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 public class MongoMeasurementServiceTest {
 
     private final Measurement measurement1 = new Measurement(3077929, 123L, 20.0);
-    private final Measurement measurement2 = new Measurement(3077929, 124L, 20.0);
+    private final Measurement measurement2 = new Measurement(3077925, 124L, 20.0);
     private final Measurement measurement3 = new Measurement(3077929, 999L, 28.0);
 
     @Autowired
@@ -48,4 +49,22 @@ public class MongoMeasurementServiceTest {
         List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
         assertEquals("Should be equal", 2, measurementList.size());
     }
+
+    @Test
+    public void testMapReduce() {
+        measurementRepository.deleteAll();
+        measurementService.add(measurement1);
+        measurementService.add(measurement2);
+        measurementService.add(measurement3);
+
+        List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
+        assertEquals("Should be equal", 2, measurementList.size());
+        measurementList = measurementService.findAllRecordForCityID(3077925);
+        assertEquals("Should be equal", 1, measurementList.size());
+
+        Map<Integer, Integer> measurementCnt = measurementService.numOfRecordsUsingMapReduce();
+        assertEquals("Should be equal", 2, measurementCnt.get(3077929).intValue());
+        assertEquals("Should be equal", 1, measurementCnt.get(3077925).intValue());
+    }
+
 }

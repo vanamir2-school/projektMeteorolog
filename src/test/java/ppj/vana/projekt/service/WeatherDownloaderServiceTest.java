@@ -20,9 +20,17 @@ public class WeatherDownloaderServiceTest {
     @Autowired
     private WeatherDownloaderService weatherDownloaderService;
 
+    // test API call limit
     @Test
-    public void testDownload() {
-        Measurement measurement1 = weatherDownloaderService.getWeatherByCityID(3067696); // 3067696 = cityID of Prague
+    public void testLimitandDownload() {
+        for (int i = 0; i < weatherDownloaderService.getApilimit(); ++i)
+            cheackMeasurementLoaded(weatherDownloaderService.getWeatherByCityID(3077929));
+        Measurement measurement2 = weatherDownloaderService.getWeatherByCityID(3071961);
+        assertNull(measurement2);
+    }
+
+    // check if data download was completely done
+    private void cheackMeasurementLoaded(Measurement measurement1) {
         assertNull(measurement1.getId());
         assertNotNull(measurement1.getCityID());
         assertNotNull(measurement1.getTemperature());

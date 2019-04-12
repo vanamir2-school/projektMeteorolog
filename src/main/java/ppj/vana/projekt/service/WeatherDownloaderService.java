@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ppj.vana.projekt.Main;
 import ppj.vana.projekt.data.Measurement;
 
+import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URL;
@@ -40,10 +41,13 @@ public class WeatherDownloaderService {
     @NotNull
     @Value("${app.appid}")
     private String appid;
-
     @NotNull
     @Value("${app.apilimit}")
     private Integer apilimit;
+
+    public Integer getApilimit() {
+        return apilimit;
+    }
 
     public String getAppid() {
         return appid;
@@ -65,7 +69,7 @@ public class WeatherDownloaderService {
             return false;
         }
         ++queryCounter;
-        System.out.println("Pocet dotazu: " + queryCounter);
+        logger.info("Za poslední minutu je toto " + queryCounter + ". dotaz na OpenWeatherAPI.");
         if (queryCounter > apilimit)
             return true;
         return false;
@@ -115,6 +119,11 @@ public class WeatherDownloaderService {
         if (simpleDateFormat == null)
             simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         return simpleDateFormat.format(value * 1000L);
+    }
+
+    @PostConstruct
+    private void postConstructLogg() {
+        logger.info("Appid: " + getAppid());
     }
 
 }
