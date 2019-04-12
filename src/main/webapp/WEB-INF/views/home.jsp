@@ -12,7 +12,5 @@
 
 <p><a href="${pageContext.request.contextPath}/printCountries">Print countries</a></p>
 
-<p><a href="${pageContext.request.contextPath}/createoffer">Add a new offer.</a></p>
-
 </body>
 </html>

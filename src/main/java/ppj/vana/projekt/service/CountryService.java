@@ -19,6 +19,10 @@ public class CountryService {
     @Autowired
     private CountryRepository countryRepository;
 
+    public void create(Country country) {
+        countryRepository.save(country);
+    }
+
     public void save(Country country) {
         countryRepository.save(country);
     }
@@ -39,8 +43,8 @@ public class CountryService {
         countryRepository.deleteAll();
     }
 
-    public Optional<Country> getById(String country) {
-        return countryRepository.findById(country);
+    public Optional<Country> getByName(String countryName) {
+        return countryRepository.findById(countryName);
     }
 
     public Long count() {

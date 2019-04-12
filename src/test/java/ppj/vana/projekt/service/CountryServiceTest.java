@@ -62,6 +62,6 @@ public class CountryServiceTest {
 
         assertTrue("Field should exist.", countryService.exists(country2.getName()));
         assertFalse("Field should not exist.", countryService.exists("xkjhsfjlsjf"));
-        assertEquals("Česká republika", countryService.getById("Česká republika").get().getName());
+        assertEquals("Česká republika", countryService.getByName("Česká republika").get().getName());
     }
 }
