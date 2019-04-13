@@ -19,22 +19,22 @@ import java.util.List;
  */
 public interface ServerAPI {
 
-    public static final String COUNTRY_NAME = "{countryName}";
-    public static final String COUNTRY_PATH = "/country";
-    public static final String COUNTRY_PATH_ALL = "/country/all";
-    public static final String COUNTRY_PATH_NAME = "/country/" + COUNTRY_NAME;
+    // -------------------------------------------------------------- COUNTRY API - start
+    public static final String COUNTRY_BASE_PATH = "/country";
+    public static final String C_NAME_PATH = "/{countryName}";
+    public static final String C_ALL_PATH = "/all";
+    public static final String C_NAME = "countryName";
 
-    @GET(COUNTRY_PATH_ALL)
+    @GET(COUNTRY_BASE_PATH + C_ALL_PATH)
     public Call<ResponseEntity<List<Country>>> getCountries();
 
-    @GET(COUNTRY_PATH_NAME)
-    public Country getCountryByID(@Path(COUNTRY_NAME) String countryName);
+    @GET(COUNTRY_BASE_PATH + C_NAME_PATH)
+    public Call<ResponseEntity<Country>> getCountryByID(@Path(C_NAME) String countryName);
 
-    @DELETE(COUNTRY_PATH_NAME)
-    public ResponseEntity deleteCountry(@Path(COUNTRY_NAME) String countryName);
+    @DELETE(COUNTRY_BASE_PATH + C_NAME_PATH)
+    public Call<ResponseEntity> deleteCountry(@Path(C_NAME) String countryName);
 
-
-    // TODO - tahle jedina metoda funguje, ostatní je třeba otestovat - například v Mainu, aby vše bylo OK
-    @PUT(ServerAPI.COUNTRY_PATH)
+    @PUT(ServerAPI.COUNTRY_BASE_PATH)
     public Call<ResponseEntity> addCountry(@Body Country country);
+    // -------------------------------------------------------------- COUNTRY API - end
 }

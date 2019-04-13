@@ -5,22 +5,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.internal.matchers.ArrayEquals;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
 import ppj.vana.projekt.Main;
 import ppj.vana.projekt.data.Country;
@@ -31,32 +25,31 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.util.Map;
+
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.junit.Assert.assertEquals;
 
-import java.util.Map;
-
 
 // https://www.baeldung.com/spring-boot-testing
-
-
 @RunWith(SpringRunner.class) // jinak se nespustí server -- mozna nechat
-//@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Main.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({"test"})
 @TestPropertySource(locations = "classpath:app_test.properties")
 public class CountryRESTControllerTest {
 
     ServerAPI serverAPI;
+
     @LocalServerPort
     private int port;
+
     @Autowired
     private TestRestTemplate testRestTemplate;
-    private ConfigurableApplicationContext ctx;
 
-    private GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(new GsonBuilder().setLenient().create());
-    private String URL;
-    private Retrofit retrofit;
+    private static final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(new GsonBuilder().setLenient().create());
+    private static ConfigurableApplicationContext ctx;
+    private static String URL;
+    private static Retrofit retrofit;
 
     @Before
     public void init() {
