@@ -39,6 +39,6 @@ db.meteorolog.mapReduce(mapFunction,reduceFunction,{ out: "map_reduce_example" }
 netstat -a -o | Select-String "8080"<br />
 Taskkill /PID 12276 /F
 
-#### REST API GUIDE
-https://spring.io/guides/gs/rest-service/
-
+#### REST API
+ Spring guide - https://spring.io/guides/gs/rest-service/ <br />
+Chrome REST client - https://github.com/jarrodek/ChromeRestClient

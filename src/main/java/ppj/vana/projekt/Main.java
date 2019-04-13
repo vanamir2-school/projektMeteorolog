@@ -69,8 +69,8 @@ public class Main {
                 } else {
                     System.out.println("FAIL - RESPONSE WAS NOT SUCCESFULL");
                     ResponseEntity responseEntity = response.body();
-                    System.out.println(responseEntity.getStatusCode().toString());
-                    System.out.println(responseEntity.getStatusCodeValue());
+                    if (responseEntity != null && responseEntity.getBody() != null)
+                        System.out.println(responseEntity.getBody().toString());
                 }
 
             }

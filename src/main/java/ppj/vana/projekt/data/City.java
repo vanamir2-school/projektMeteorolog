@@ -19,7 +19,8 @@ public class City {
     @JoinColumn(name = "country")
     private Country country;
 
-    @Column(name = "openweathermapid", nullable = true)
+    @Basic
+    @Column(name = "openweathermapid")
     private Integer openWeatherMapID;
 
 
