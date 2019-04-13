@@ -54,6 +54,20 @@ public class CityRESTController {
         return new ResponseEntity<>(city, HttpStatus.OK);
     }
 
+    // POST - update City
+    @RequestMapping(value = CITY_NAME_PATH, method = RequestMethod.POST)
+    public ResponseEntity updateCity(@PathVariable(CITY_NAME) String cityName, @RequestBody City city) {
+        // Check if updated city exists
+        if (!cityService.exists(cityName))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        // check if updated city name (ID) matches requested cityName
+        City cityLoaded = cityService.getByName(cityName).orElse(null);
+        if (cityLoaded == null || !cityLoaded.getName().equals(cityName))
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        cityService.save(city);
+        return new ResponseEntity<>(city, HttpStatus.OK);
+    }
+
     @ExceptionHandler(APIException.class)
     public ResponseEntity<APIErrorMessage> handleAPIException(APIException ex) {
         return new ResponseEntity<>(new APIErrorMessage(ex.getMessage()), HttpStatus.BAD_REQUEST);

@@ -110,7 +110,7 @@ public class RESTControllersTest {
         assertEquals(cityResponse.body().getName(), "Krakov");
         assertEquals(cityResponse.body(), new City("Krakov", new Country(PANDARIA), 2564));
 
-        // DELETE COUNTRY
+        // DELETE CITY
         serverAPI.deleteCity("Krakov").execute();
         cityListReceived = serverAPI.getCities().execute().body();
         cityList.remove(new City("Krakov", new Country(PANDARIA), 2564));
@@ -121,6 +121,14 @@ public class RESTControllersTest {
         cityResponse = serverAPI.getCityByID("Krakov").execute();
         assertEquals(cityResponse.code(), HttpStatus.NOT_FOUND.value());
         assertNull(cityResponse.body());
+
+        // UPDATE CITY
+        assertEquals("Test return CODE - should be HTTP OK - 200", serverAPI.updateCity("Vidlákov", new City("Vidlákov", country, 42)).execute().raw().code(), HttpStatus.OK.value());
+        cityResponse = serverAPI.getCityByID("Vidlákov").execute();
+        assertEquals(cityResponse.code(), HttpStatus.OK.value());
+        assert cityResponse.body() != null;
+        assertEquals(cityResponse.body().getName(), "Vidlákov");
+        assertEquals(cityResponse.body(), new City("Vidlákov", new Country(PANDARIA), 42));
 
         // země vrátíme do původního stavu
         serverAPI.deleteCountry("Pandaria").execute();
