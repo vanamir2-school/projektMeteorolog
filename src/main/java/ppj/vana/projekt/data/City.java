@@ -3,18 +3,22 @@ package ppj.vana.projekt.data;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "city")
 public class City {
 
     @Id
+    @NotNull
     @Column(name = "name")
     private String name;
 
     @ManyToOne
+    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "country")
     private Country country;
@@ -33,7 +37,7 @@ public class City {
         this.country = country;
     }
 
-    public City(String name, Country country, int id) {
+    public City(String name, Country country, Integer id) {
         this.openWeatherMapID = id;
         this.name = name;
         this.country = country;
@@ -47,11 +51,11 @@ public class City {
         this.name = name;
     }
 
-    public int getOpenWeatherMapID() {
+    public Integer getOpenWeatherMapID() {
         return openWeatherMapID;
     }
 
-    public void setOpenWeatherMapID(int openWeatherMapID) {
+    public void setOpenWeatherMapID(Integer openWeatherMapID) {
         this.openWeatherMapID = openWeatherMapID;
     }
 
@@ -71,14 +75,14 @@ public class City {
         City city = (City) o;
 
         if (!name.equals(city.name)) return false;
-        return country.equals(city.country);
+        return country != null ? country.equals(city.country) : city.country == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = name.hashCode();
-        result = 31 * result + country.hashCode();
+        result = 31 * result + (country != null ? country.hashCode() : 0);
         return result;
     }
 

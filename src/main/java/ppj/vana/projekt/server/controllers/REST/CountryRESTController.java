@@ -21,14 +21,14 @@ public class CountryRESTController {
     private CountryService countryService;
 
     // GET - všechny státy JSON formát
-    @RequestMapping(value = C_ALL_PATH, method = RequestMethod.GET)
+    @RequestMapping(value = COUNTRY_ALL_PATH, method = RequestMethod.GET)
     public ResponseEntity<List<Country>> getCountries() {
         return new ResponseEntity<>(countryService.getAll(), HttpStatus.OK);
     }
 
     // GET - by ID (nazevStatu)
-    @RequestMapping(value = C_NAME_PATH, method = RequestMethod.GET)
-    public ResponseEntity<Country> getCountryByID(@PathVariable(C_NAME) String countryName) {
+    @RequestMapping(value = COUNTRY_NAME_PATH, method = RequestMethod.GET)
+    public ResponseEntity<Country> getCountryByID(@PathVariable(COUNTRY_NAME) String countryName) {
         Country country = countryService.getByName(countryName).orElse(null);
         if (country == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -36,8 +36,8 @@ public class CountryRESTController {
     }
 
     // DELETE - by ID (nazevStatu)
-    @RequestMapping(value = C_NAME_PATH, method = RequestMethod.DELETE)
-    public ResponseEntity deleteCountry(@PathVariable(C_NAME) String countryName) {
+    @RequestMapping(value = COUNTRY_NAME_PATH, method = RequestMethod.DELETE)
+    public ResponseEntity deleteCountry(@PathVariable(COUNTRY_NAME) String countryName) {
         Country country = countryService.getByName(countryName).orElse(null);
         if (country == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

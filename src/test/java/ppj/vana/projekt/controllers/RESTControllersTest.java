@@ -7,11 +7,11 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
+import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.data.Country;
 import ppj.vana.projekt.server.ServerAPI;
 import retrofit2.Response;
@@ -79,6 +79,52 @@ public class RESTControllersTest {
         countryArrayList.remove(new Country(FINSKO));
         assert receivedCountryArrayList != null;
         assertTrue("Test returned values from getCountries()", countryArrayList.size() == receivedCountryArrayList.size() && countryArrayList.containsAll(receivedCountryArrayList));
+    }
+
+    @Test
+    public void CityOperations() throws IOException {
+
+        // V DB musi byt zeme pod kterou budeme pridata zeme
+        String PANDARIA = "Pandaria";
+        Country country = new Country(PANDARIA);
+        assertEquals("Test return CODE - should be HTTP OK - 200", serverAPI.addCountry(country).execute().raw().code(), HttpStatus.OK.value());
+
+        // INSERT CITY
+        City city1 = new City("Krakov", country, 2564);
+        City city2 = new City("Vidlákov", country, 2564);// ublic City(String name, Country country, Integer id) {
+        List<City> cityList = new ArrayList<>();
+        cityList.add(city1);
+        cityList.add(city2);
+        assertEquals("Test return CODE - should be HTTP OK - 200", serverAPI.addCity(cityList.get(0)).execute().raw().code(), HttpStatus.OK.value());
+        assertEquals("Test return CODE - should be HTTP OK - 200", serverAPI.addCity(cityList.get(1)).execute().raw().code(), HttpStatus.OK.value());
+
+        // GET ALL
+        List<City> cityListReceived = serverAPI.getCities().execute().body();
+        assert cityListReceived != null;
+        assertTrue("Test returned values from getCountries()", cityList.size() == cityListReceived.size() && cityList.containsAll(cityListReceived));
+
+        //GET SPECIFIC CITY
+        Response<City> cityResponse = serverAPI.getCityByID("Krakov").execute();
+        assertEquals(cityResponse.code(), HttpStatus.OK.value());
+        assert cityResponse.body() != null;
+        assertEquals(cityResponse.body().getName(), "Krakov");
+        assertEquals(cityResponse.body(), new City("Krakov", new Country(PANDARIA), 2564));
+
+        // DELETE COUNTRY
+        serverAPI.deleteCity("Krakov").execute();
+        cityListReceived = serverAPI.getCities().execute().body();
+        cityList.remove(new City("Krakov", new Country(PANDARIA), 2564));
+        assert cityListReceived != null;
+        assertTrue("Test returned values from getCountries()", cityList.size() == cityListReceived.size() && cityList.containsAll(cityListReceived));
+
+
+        cityResponse = serverAPI.getCityByID("Krakov").execute();
+        assertEquals(cityResponse.code(), HttpStatus.NOT_FOUND.value());
+        assertNull(cityResponse.body());
+
+        // země vrátíme do původního stavu
+        serverAPI.deleteCountry("Pandaria").execute();
+
     }
 
 }

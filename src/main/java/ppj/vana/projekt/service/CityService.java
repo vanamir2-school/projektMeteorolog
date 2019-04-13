@@ -32,7 +32,7 @@ public class CityService {
         cityRepository.deleteAll();
     }
 
-    public Optional<City> getById(String city) {
+    public Optional<City> getByName(String city) {
         return cityRepository.findById(city);
     }
 
@@ -40,7 +40,7 @@ public class CityService {
         return cityRepository.count();
     }
 
-    public void deleteCity(City city) {
+    public void delete(City city) {
         cityRepository.delete(city);
     }
 

@@ -1,5 +1,7 @@
 package ppj.vana.projekt.data;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 
 @Entity

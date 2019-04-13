@@ -88,7 +88,7 @@ public class CityServiceTest {
 
         assertTrue("Entity should exist.", cityService.exists(city2.getName()));
         assertFalse("Entity should not exist.", cityService.exists("xkjhsfjlsjf"));
-        assertEquals("Česká republika", cityService.getById("Ostrava").get().getCountry().getName());
+        assertEquals("Česká republika", cityService.getByName("Ostrava").get().getCountry().getName());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class CityServiceTest {
         assertTrue("Entity should exist.", cityService.exists(city6.getName()));
         assertFalse("Entity should NOT exist.", cityService.exists(city7.getName()));
 
-        cityService.deleteCity(city4);
+        cityService.delete(city4);
         List<City> cities1 = cityService.getAll();
         assertEquals("Should be 5 cities.", 5, cities1.size());
 
