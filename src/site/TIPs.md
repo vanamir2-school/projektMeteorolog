@@ -42,3 +42,6 @@ Taskkill /PID 12276 /F
 #### REST API
  Spring guide - https://spring.io/guides/gs/rest-service/ <br />
 Chrome REST client - https://github.com/jarrodek/ChromeRestClient
+
+#### JSON + ObjectMapper (de/serializace)
+https://www.baeldung.com/jackson-object-mapper-tutorial

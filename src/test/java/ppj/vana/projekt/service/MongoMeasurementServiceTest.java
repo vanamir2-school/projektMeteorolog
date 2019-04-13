@@ -29,24 +29,22 @@ public class MongoMeasurementServiceTest {
 
     @Autowired
     private MongoMeasurementService measurementService;
-    @Autowired
-    private MeasurementRepository measurementRepository;
 
     @Before
     public void init() {
-        measurementRepository.deleteAll();
+        measurementService.deleteAll();
     }
 
     @Test
     public void testCreateRetrieve() {
-        assertEquals("Should be 0 retrieved fields.", 0, measurementRepository.count());
+        assertEquals("Should be 0 retrieved fields.", 0, measurementService.count());
         measurementService.add(measurement1);
         measurementService.add(measurement2);
         measurementService.add(measurement3);
-        assertEquals("Should be 3 retrieved fields.", 3, measurementRepository.count());
+        assertEquals("Should be 3 retrieved fields.", 3, measurementService.count());
         measurementService.remove(measurement2);
-        assertEquals("Should be 2 retrieved fields.", 2, measurementRepository.count());
-        assertEquals("Should be equal", 28, measurementService.find(measurement3.getId()).getTemperature().intValue());
+        assertEquals("Should be 2 retrieved fields.", 2, measurementService.count());
+        assertEquals("Should be equal", 28, measurementService.getByID(measurement3.getId()).getTemperature().intValue());
 
         List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
         assertEquals("Should be equal", 2, measurementList.size());
@@ -54,7 +52,7 @@ public class MongoMeasurementServiceTest {
 
     @Test
     public void testMapReduce() {
-        measurementRepository.deleteAll();
+        measurementService.deleteAll();
         measurementService.add(measurement1);
         measurementService.add(measurement2);
         measurementService.add(measurement3);

@@ -3,9 +3,10 @@ package ppj.vana.projekt.service;
 import org.bson.types.ObjectId;
 import ppj.vana.projekt.data.Measurement;
 
+// TODO UDELAT INTEFRACE PRO VSECHNY CONTROLLERY
 public interface MeasurementService {
 
-    Measurement find(ObjectId objectId);
+    Measurement getByID(ObjectId objectId);
 
     Measurement add(Measurement user);
 

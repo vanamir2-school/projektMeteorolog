@@ -19,16 +19,23 @@ import java.util.List;
  */
 public interface ServerAPI {
 
-    // -------------------------------------------------------------- COUNTRY API
+    // -------------------------------------------------------------- COUNTRY API - PATHS
     String COUNTRY_BASE_PATH = "/country";
     String COUNTRY_NAME_PATH = "/{countryName}";
     String COUNTRY_ALL_PATH = "/all";
     String COUNTRY_NAME = "countryName";
-    // -------------------------------------------------------------- CITY API
+    // -------------------------------------------------------------- CITY API - PATHS
     String CITY_BASE_PATH = "/city";
     String CITY_NAME_PATH = "/{cityName}";
     String CITY_ALL_PATH = "/all";
+    String CITY_NAME = "cityName";
 
+    // -------------------------------------------------------------- CITY API - PATHS
+    String MEASUREMENT_BASE_PATH = "/measurement";
+    String MEASUREMENT_NAME_PATH = "/{id}";
+    String MEASUREMENT_NAME = "id";
+
+    // -------------------------------------------------------------- COUNTRY API
     @PUT(ServerAPI.COUNTRY_BASE_PATH)
     Call<Void> addCountry(@Body Country country);
 
@@ -40,7 +47,8 @@ public interface ServerAPI {
 
     @DELETE(COUNTRY_BASE_PATH + COUNTRY_NAME_PATH)
     Call<Void> deleteCountry(@Path(COUNTRY_NAME) String countryName);
-    String CITY_NAME = "cityName";
+
+    // -------------------------------------------------------------- CITY API
 
     @GET(CITY_BASE_PATH + CITY_ALL_PATH)
     Call<List<City>> getCities();

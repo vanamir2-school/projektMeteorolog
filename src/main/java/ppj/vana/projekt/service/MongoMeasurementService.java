@@ -1,10 +1,12 @@
 package ppj.vana.projekt.service;
 
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Query;
 import ppj.vana.projekt.data.Measurement;
+import ppj.vana.projekt.repositories.MeasurementRepository;
 
 import java.util.List;
 import java.util.Map;
@@ -16,6 +18,11 @@ public class MongoMeasurementService implements MeasurementService {
 
     private final MongoOperations mongo;
 
+    @Autowired
+    private MeasurementRepository measurementRepository;
+
+
+
     public MongoMeasurementService(MongoOperations mongo) {
         this.mongo = mongo;
     }
@@ -24,8 +31,30 @@ public class MongoMeasurementService implements MeasurementService {
         return mongo.find(Query.query(where("cityID").is(cityID)), Measurement.class);
     }
 
+    public boolean exists(String id) {
+        ObjectId objectId = new ObjectId(id);
+        return measurementRepository.existsById(objectId);
+    }
+
+    public boolean exists(ObjectId objectId) {
+        return measurementRepository.existsById(objectId);
+    }
+
+    public long count() {
+        return measurementRepository.count();
+    }
+
+    public void deleteAll() {
+        measurementRepository.deleteAll();
+    }
+
     @Override
-    public Measurement find(ObjectId objectId) {
+    public Measurement getByID(ObjectId objectId) {
+        return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
+    }
+
+    public Measurement getByID(String id) {
+        ObjectId objectId = new ObjectId(id);
         return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
     }
 

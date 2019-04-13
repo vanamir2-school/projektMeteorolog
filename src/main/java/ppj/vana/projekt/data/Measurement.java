@@ -1,16 +1,23 @@
 package ppj.vana.projekt.data;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.bson.types.ObjectId;
+import org.springframework.boot.jackson.JsonComponent;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ppj.vana.projekt.serializer.ObjectIdSerializer;
 
 import javax.persistence.Id;
+import java.io.IOException;
 
 @Document(collection = "meteorolog")
 public class Measurement {
 
     @Id
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     @Indexed
@@ -130,4 +137,6 @@ public class Measurement {
                 ", wind=" + wind +
                 '}';
     }
+
+
 }
