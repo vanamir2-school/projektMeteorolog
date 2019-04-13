@@ -1,23 +1,20 @@
 package ppj.vana.projekt.data;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.bson.types.ObjectId;
-import org.springframework.boot.jackson.JsonComponent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ppj.vana.projekt.serializer.ObjectIdSerializer;
 
 import javax.persistence.Id;
-import java.io.IOException;
 
 @Document(collection = "meteorolog")
 public class Measurement {
 
     @Id
     @JsonSerialize(using = ObjectIdSerializer.class)
+    //@JsonDeserialize(using = ObjectIdDeserializer.class)
     private ObjectId id;
 
     @Indexed
@@ -37,11 +34,26 @@ public class Measurement {
 
     private Double wind; // rychlost vetru
 
-    public Measurement(Integer cityID, Long timeOfMeasurement, Double temperature) {
+    public Measurement() {
+    }
+
+    public Measurement(ObjectId id, Integer cityID, Long timeOfMeasurement, Double temperature, Integer humidity, Integer pressure, Long sunrise, Long sunset, Double wind) {
+        this.id = id;
         this.cityID = cityID;
         this.timeOfMeasurement = timeOfMeasurement;
         this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        this.sunrise = sunrise;
+        this.sunset = sunset;
+        this.wind = wind;
     }
+
+  /*  public Measurement(Integer cityID, Long timeOfMeasurement, Double temperature) {
+        this.cityID = cityID;
+        this.timeOfMeasurement = timeOfMeasurement;
+        this.temperature = temperature;
+    }*/
 
     public void setMultiple(Integer humidity, Integer pressure, Long sunrise, Long sunset, Double wind) {
         this.humidity = humidity;

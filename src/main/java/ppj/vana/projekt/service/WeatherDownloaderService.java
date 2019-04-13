@@ -3,6 +3,7 @@ package ppj.vana.projekt.service;
 import org.apache.commons.io.IOUtils;
 //import org.json.JSONException;
 //import org.json.JSONObject;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -100,8 +101,8 @@ public class WeatherDownloaderService {
             Integer pressure = (Integer) json.getJSONObject("main").get("pressure");
             Integer sunrise = (Integer) json.getJSONObject("sys").get("sunrise");
             Integer sunset = (Integer) json.getJSONObject("sys").get("sunset");
-            measurement = new Measurement(cityID, timeOfMeasurement.longValue(), temperature);
-            measurement.setMultiple(humidity, pressure, sunrise.longValue(), sunset.longValue(), windSpeed);
+            measurement = new Measurement(new ObjectId(), cityID, timeOfMeasurement.longValue(), temperature, humidity, pressure, sunrise.longValue(), sunset.longValue(), windSpeed);
+            //measurement.setMultiple();
 
             // TODO - dodelat LOGOVANI
         } catch (IOException e) {

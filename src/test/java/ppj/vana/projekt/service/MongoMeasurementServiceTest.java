@@ -1,5 +1,6 @@
 package ppj.vana.projekt.service;
 
+import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,9 +24,11 @@ import static org.junit.Assert.assertEquals;
 @TestPropertySource(locations = "classpath:app_test.properties")
 public class MongoMeasurementServiceTest {
 
-    private final Measurement measurement1 = new Measurement(3077929, 123L, 20.0);
-    private final Measurement measurement2 = new Measurement(3077925, 124L, 20.0);
-    private final Measurement measurement3 = new Measurement(3077929, 999L, 28.0);
+    private final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, null, null, null, null, null);
+    private final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 20L, 20.0, null, null, null, null, null);
+    private final Measurement measurement3 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, null, null, null, null, null);
+    // private final Measurement measurement2 = new Measurement(3077925, 124L, 20.0);
+    // private final Measurement measurement3 = new Measurement(3077929, 999L, 28.0);
 
     @Autowired
     private MongoMeasurementService measurementService;
@@ -44,7 +47,7 @@ public class MongoMeasurementServiceTest {
         assertEquals("Should be 3 retrieved fields.", 3, measurementService.count());
         measurementService.remove(measurement2);
         assertEquals("Should be 2 retrieved fields.", 2, measurementService.count());
-        assertEquals("Should be equal", 28, measurementService.getByID(measurement3.getId()).getTemperature().intValue());
+        assertEquals("Should be equal", 20, measurementService.getByID(measurement3.getId()).getTemperature().intValue());
 
         List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
         assertEquals("Should be equal", 2, measurementList.size());

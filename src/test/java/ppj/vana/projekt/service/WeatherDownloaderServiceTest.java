@@ -33,7 +33,7 @@ public class WeatherDownloaderServiceTest {
 
     // check if data download was completely done
     private void cheackMeasurementLoaded(Measurement measurement1) {
-        assertNull(measurement1.getId());
+        assertNotNull(measurement1.getId());
         assertNotNull(measurement1.getCityID());
         assertNotNull(measurement1.getTemperature());
         assertNotNull(measurement1.getHumidity());
