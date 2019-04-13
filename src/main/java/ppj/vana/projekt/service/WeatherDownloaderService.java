@@ -1,11 +1,13 @@
 package ppj.vana.projekt.service;
 
 import org.apache.commons.io.IOUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+//import org.json.JSONException;
+//import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.configurationprocessor.json.JSONException;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 import ppj.vana.projekt.Main;
 import ppj.vana.projekt.data.Measurement;
