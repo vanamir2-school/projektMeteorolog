@@ -58,6 +58,11 @@ public class MongoMeasurementService implements MeasurementService {
         return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
     }
 
+    public Measurement update(Measurement measurement) {
+        measurementRepository.save(measurement);
+        return measurement;
+    }
+
     @Override
     public Measurement add(Measurement measurement) {
         mongo.insert(measurement);

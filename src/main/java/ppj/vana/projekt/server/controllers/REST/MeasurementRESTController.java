@@ -58,7 +58,7 @@ public class MeasurementRESTController {
         Measurement measurementLoaded = measurementService.getByID(id);
         if (measurementLoaded == null || !measurementLoaded.getId().equals(measurement.getId()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        measurementService.add(measurement);
+        measurementService.update(measurement);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
