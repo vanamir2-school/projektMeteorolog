@@ -23,8 +23,7 @@ public class CountryRESTController {
     // GET - všechny státy JSON formát
     @RequestMapping(value = C_ALL_PATH, method = RequestMethod.GET)
     public ResponseEntity<List<Country>> getCountries() {
-        List<Country> countries = countryService.getAll();
-        return new ResponseEntity<>(countries, HttpStatus.OK);
+        return new ResponseEntity<>(countryService.getAll(), HttpStatus.OK);
     }
 
     // GET - by ID (nazevStatu)
@@ -42,8 +41,7 @@ public class CountryRESTController {
         Country country = countryService.getByName(countryName).orElse(null);
         if (country == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        else
-            countryService.delete(country);
+        countryService.delete(country);
         return new ResponseEntity(HttpStatus.OK);
     }
 

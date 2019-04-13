@@ -34,9 +34,7 @@ public class Country {
         if (o == null || getClass() != o.getClass()) return false;
 
         Country country = (Country) o;
-
         return name.equals(country.name);
-
     }
 
     @Override
