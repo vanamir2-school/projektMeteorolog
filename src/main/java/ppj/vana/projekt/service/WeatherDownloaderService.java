@@ -6,11 +6,13 @@ import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 import ppj.vana.projekt.Main;
+import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.data.Measurement;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -28,6 +31,9 @@ import java.util.Date;
  */
 @Service
 public class WeatherDownloaderService {
+
+    @Autowired
+    private MongoMeasurementService measurementService;
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
@@ -76,6 +82,17 @@ public class WeatherDownloaderService {
         if (queryCounter > apilimit)
             return true;
         return false;
+    }
+
+    public void loadWeatherToDatabase(List<City> cityList){
+        cityList.forEach( (city)-> loadWeatherToDatabase(city) );
+    }
+
+    public void loadWeatherToDatabase(City city){
+        if( city == null || city.getOpenWeatherMapID() == null)
+            throw new NullPointerException("Entity City must be initilized with opeanWeatherMap cityID.");
+        Measurement measurement = this.getWeatherByCityID(city.getOpenWeatherMapID());
+        measurementService.add(measurement);
     }
 
     public Measurement getWeatherByCityID(int cityID) {

@@ -44,12 +44,12 @@ public class MongoMeasurementService implements MeasurementService {
     public String averageValuesForCity(String cityName, int days) {
         // city does not exists? null
         if (!cityService.exists(cityName))
-            return "City " + cityName + "does not exist.";
+            return "City " + cityName + " does not exist.";
         City city = cityService.getByName(cityName).get();
         // city does not have connection with mongoDB? null
         Integer cityID = city.getOpenWeatherMapID();
         if (cityID == null)
-            return "City " + cityName + "does not have any measured data.";
+            return "City " + cityName + " does not have any measured data.";
 
         // rozsah dnů je 1-365, jinak null
         if (days < 1 || days > 365)
@@ -57,6 +57,7 @@ public class MongoMeasurementService implements MeasurementService {
         Date currentTime = new Date();
 
         Long timestamp = currentTime.getTime() - ONE_DAY_MILISSECONDS * days;
+        Long timestampSeconds = timestamp/1000;
         logger.info("Aktuální čas: " + weatherDownloaderService.timestampToStringMilliSeconds(currentTime.getTime()));
         logger.info("Průměr se počítá od: " + weatherDownloaderService.timestampToStringMilliSeconds(timestamp));
 
@@ -68,7 +69,7 @@ public class MongoMeasurementService implements MeasurementService {
         double humidity = 0;
         double pressure = 0;
         double wind = 0.0;
-        List<Measurement> filteredList = mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestamp)), Measurement.class);
+        List<Measurement> filteredList = mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestampSeconds)), Measurement.class);
         if( filteredList.isEmpty() )
             return "No measured data in requested interval.";
 
