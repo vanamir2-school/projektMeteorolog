@@ -36,20 +36,32 @@ public class WeatherDownloaderService {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final String CURRENT_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather";
     private static final String UNITS = "metric";
+    private static SimpleDateFormat simpleDateFormat = null;
     @Autowired
     private MongoMeasurementService measurementService;
     private Date queryStartDate = null;
-
     private int queryCounter = 0;
-
-    private SimpleDateFormat simpleDateFormat = null;
-
     @NotNull
     @Value("${app.appid}")
     private String appid;
     @NotNull
     @Value("${app.apilimit}")
     private Integer apilimit;
+
+    /**
+     * Converts UNIX time to String with pattern "dd-MM-yyyy HH:mm:ss".
+     */
+    public static String timestampToStringSeconds(Long value) {
+        if (simpleDateFormat == null)
+            simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        return simpleDateFormat.format(value * 1000L);
+    }
+
+    public static String timestampToStringMilliSeconds(Long value) {
+        if (simpleDateFormat == null)
+            simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        return simpleDateFormat.format(value);
+    }
 
     public Integer getApilimit() {
         return apilimit;
@@ -127,21 +139,6 @@ public class WeatherDownloaderService {
         }
 
         return measurement;
-    }
-
-    /**
-     * Converts UNIX time to String with pattern "dd-MM-yyyy HH:mm:ss".
-     */
-    public String timestampToStringSeconds(Long value) {
-        if (simpleDateFormat == null)
-            simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        return simpleDateFormat.format(value * 1000L);
-    }
-
-    public String timestampToStringMilliSeconds(Long value) {
-        if (simpleDateFormat == null)
-            simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        return simpleDateFormat.format(value);
     }
 
     @PostConstruct

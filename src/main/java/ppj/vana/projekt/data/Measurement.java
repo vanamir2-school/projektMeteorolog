@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ppj.vana.projekt.serializer.ObjectIdDeserializer;
 import ppj.vana.projekt.serializer.ObjectIdSerializer;
+import ppj.vana.projekt.service.WeatherDownloaderService;
 
 import javax.persistence.Id;
 
@@ -141,7 +142,6 @@ public class Measurement {
     }
 
     @Override
-    // TODO
     public String toString() {
         return "Measurement{" +
                 "id=" + id +
@@ -154,6 +154,17 @@ public class Measurement {
                 ", sunset=" + sunset +
                 ", wind=" + wind +
                 '}';
+    }
+
+    public String toStringReadable() {
+        return "Measurement for city: " + cityID +
+                ", timeOfMeasurement=" + WeatherDownloaderService.timestampToStringSeconds(timeOfMeasurement) +
+                ", temperature=" + temperature + " °C" +
+                ", humidity=" + humidity + "%" +
+                ", pressure=" + pressure + " hPa" +
+                ", sunrise=" + WeatherDownloaderService.timestampToStringSeconds(sunrise) +
+                ", sunset=" + WeatherDownloaderService.timestampToStringSeconds(sunset) +
+                ", wind=" + wind + " m/s";
     }
 
     @Override

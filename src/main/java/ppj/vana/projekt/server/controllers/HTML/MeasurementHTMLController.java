@@ -24,7 +24,7 @@ public class MeasurementHTMLController {
     @RequestMapping("/measurementByCountry")
     public String showOffers(Model model) {
         List<String> measurementStringList = new ArrayList<>();
-        measurementService.getAll().forEach((measurement) -> measurementStringList.add(measurement.toString()));
+        measurementService.getAll().forEach((measurement) -> measurementStringList.add(measurement.toStringReadable()));
         model.addAttribute("measurements", measurementStringList);
         return "measurementByCountry";
     }
