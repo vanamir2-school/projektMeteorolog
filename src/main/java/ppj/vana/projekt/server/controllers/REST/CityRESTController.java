@@ -8,6 +8,8 @@ import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.server.controllers.exceptions.APIErrorMessage;
 import ppj.vana.projekt.server.controllers.exceptions.APIException;
 import ppj.vana.projekt.service.CityService;
+import ppj.vana.projekt.service.MeasurementService;
+import ppj.vana.projekt.service.MongoMeasurementService;
 
 import java.util.List;
 
@@ -20,10 +22,21 @@ public class CityRESTController {
     @Autowired
     private CityService cityService;
 
+    @Autowired
+    private MongoMeasurementService measurementService;
+
     // GET - všechny města
     @RequestMapping(value = CITY_ALL_PATH, method = RequestMethod.GET)
     public ResponseEntity<List<City>> getCities() {
         return new ResponseEntity<>(cityService.getAll(), HttpStatus.OK);
+    }
+
+    // GET - average by ID (nazevMesta)
+    @RequestMapping(value = CITY_NAME_PATH + CITY_DAYS_PATH, method = RequestMethod.GET)
+    public ResponseEntity<String> getAverageByCityByParam(@PathVariable(CITY_NAME) String cityName, @PathVariable(CITY_DAYS) Integer days) {
+        String average = measurementService.averageValuesForCity(cityName,days);
+        return new ResponseEntity<>(average, HttpStatus.OK);
+
     }
 
     // GET - by ID (nazevMesta)

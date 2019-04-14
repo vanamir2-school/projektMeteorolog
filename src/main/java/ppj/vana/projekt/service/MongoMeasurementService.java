@@ -44,16 +44,16 @@ public class MongoMeasurementService implements MeasurementService {
     public String averageValuesForCity(String cityName, int days) {
         // city does not exists? null
         if (!cityService.exists(cityName))
-            return null;
+            return "City " + cityName + "does not exist.";
         City city = cityService.getByName(cityName).get();
         // city does not have connection with mongoDB? null
         Integer cityID = city.getOpenWeatherMapID();
         if (cityID == null)
-            return null;
+            return "City " + cityName + "does not have any measured data.";
 
         // rozsah dnů je 1-365, jinak null
         if (days < 1 || days > 365)
-            return null;
+            return "You can calculate average back to 1-365 days.";
         Date currentTime = new Date();
 
         Long timestamp = currentTime.getTime() - ONE_DAY_MILISSECONDS * days;
@@ -69,6 +69,9 @@ public class MongoMeasurementService implements MeasurementService {
         double pressure = 0;
         double wind = 0.0;
         List<Measurement> filteredList = mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestamp)), Measurement.class);
+        if( filteredList.isEmpty() )
+            return "No measured data in requested interval.";
+
         for (Measurement m : filteredList) {
             // pokud není vyplněno u záznamu vše, nebudu ho do průměru počítat
             if (m.getTemperature() == null || m.getHumidity() == null || m.getPressure() == null || m.getWind() == null)

@@ -28,8 +28,10 @@ public interface ServerAPI {
     // -------------------------------------------------------------- CITY API - PATHS
     String CITY_BASE_PATH = "/city";
     String CITY_NAME_PATH = "/{cityName}";
+    String CITY_DAYS_PATH = "/{days}";
     String CITY_ALL_PATH = "/all";
     String CITY_NAME = "cityName";
+    String CITY_DAYS = "days";
 
     // -------------------------------------------------------------- CITY API - PATHS
     String MEASUREMENT_BASE_PATH = "/measurement";
