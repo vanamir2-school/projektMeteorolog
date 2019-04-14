@@ -118,10 +118,16 @@ public class WeatherDownloaderService {
     /**
      * Converts UNIX time to String with pattern "dd-MM-yyyy HH:mm:ss".
      */
-    public String timestampToString(Long value) {
+    public String timestampToStringSeconds(Long value) {
         if (simpleDateFormat == null)
             simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         return simpleDateFormat.format(value * 1000L);
+    }
+
+    public String timestampToStringMilliSeconds(Long value) {
+        if (simpleDateFormat == null)
+            simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        return simpleDateFormat.format(value);
     }
 
     @PostConstruct

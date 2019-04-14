@@ -2,6 +2,7 @@ package ppj.vana.projekt.server;
 
 import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.data.Country;
+import ppj.vana.projekt.data.Measurement;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -64,4 +65,18 @@ public interface ServerAPI {
 
     @POST(ServerAPI.CITY_BASE_PATH + CITY_NAME_PATH)
     Call<Void> updateCity(@Path(CITY_NAME) String cityName, @Body City city);
+
+    // -------------------------------------------------------------- MEASUREMENT API
+
+    @GET(MEASUREMENT_BASE_PATH + MEASUREMENT_NAME_PATH)
+    Call<Measurement> getMeasurementByID(@Path(MEASUREMENT_NAME) String id);
+
+    @DELETE(MEASUREMENT_BASE_PATH + MEASUREMENT_NAME_PATH)
+    Call<Void> deleteMeasurement(@Path(MEASUREMENT_NAME) String id);
+
+    @PUT(ServerAPI.MEASUREMENT_BASE_PATH)
+    Call<Void> addMeasurement(@Body Measurement measurement);
+
+    @POST(ServerAPI.MEASUREMENT_BASE_PATH + MEASUREMENT_NAME_PATH)
+    Call<Void> updateMeasurement(@Path(MEASUREMENT_NAME) String measurementName, @Body Measurement measurement);
 }

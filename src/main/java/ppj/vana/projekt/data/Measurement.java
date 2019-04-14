@@ -1,10 +1,14 @@
 package ppj.vana.projekt.data;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import ppj.vana.projekt.serializer.ObjectIdDeserializer;
 import ppj.vana.projekt.serializer.ObjectIdSerializer;
 
 import javax.persistence.Id;
@@ -13,8 +17,9 @@ import javax.persistence.Id;
 public class Measurement {
 
     @Id
-    @JsonSerialize(using = ObjectIdSerializer.class)
+    @Expose
     //@JsonDeserialize(using = ObjectIdDeserializer.class)
+    @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
     @Indexed
@@ -150,5 +155,37 @@ public class Measurement {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        Measurement that = (Measurement) o;
+
+        if (!id.equals(that.id)) return false;
+        if (cityID != null ? !cityID.equals(that.cityID) : that.cityID != null) return false;
+        if (timeOfMeasurement != null ? !timeOfMeasurement.equals(that.timeOfMeasurement) : that.timeOfMeasurement != null)
+            return false;
+        if (temperature != null ? !temperature.equals(that.temperature) : that.temperature != null) return false;
+        if (humidity != null ? !humidity.equals(that.humidity) : that.humidity != null) return false;
+        if (pressure != null ? !pressure.equals(that.pressure) : that.pressure != null) return false;
+        if (sunrise != null ? !sunrise.equals(that.sunrise) : that.sunrise != null) return false;
+        if (sunset != null ? !sunset.equals(that.sunset) : that.sunset != null) return false;
+        return wind != null ? wind.equals(that.wind) : that.wind == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (cityID != null ? cityID.hashCode() : 0);
+        result = 31 * result + (timeOfMeasurement != null ? timeOfMeasurement.hashCode() : 0);
+        result = 31 * result + (temperature != null ? temperature.hashCode() : 0);
+        result = 31 * result + (humidity != null ? humidity.hashCode() : 0);
+        result = 31 * result + (pressure != null ? pressure.hashCode() : 0);
+        result = 31 * result + (sunrise != null ? sunrise.hashCode() : 0);
+        result = 31 * result + (sunset != null ? sunset.hashCode() : 0);
+        result = 31 * result + (wind != null ? wind.hashCode() : 0);
+        return result;
+    }
 }

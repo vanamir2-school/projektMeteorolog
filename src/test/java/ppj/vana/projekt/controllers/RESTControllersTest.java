@@ -1,6 +1,10 @@
 package ppj.vana.projekt.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.GsonBuilder;
+import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +17,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
 import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.data.Country;
+import ppj.vana.projekt.data.Measurement;
+import ppj.vana.projekt.serializer.ObjectIdDeserializer;
+import ppj.vana.projekt.serializer.ObjectIdSerializer;
 import ppj.vana.projekt.server.ServerAPI;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,6 +41,7 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:app_test.properties")
 public class RESTControllersTest {
 
+
     private static final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(new GsonBuilder().setLenient().create());
     private static ServerAPI serverAPI;
     @LocalServerPort
@@ -41,8 +50,12 @@ public class RESTControllersTest {
     @Before
     public void init() {
         String URL = "http://localhost:" + this.port;
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(URL).addConverterFactory(gsonConverterFactory).build();
+
+        // GsonConverterFactory  NEFUNGUJE
+        // NUTNO POUŽÍT JacksonConverterFactory, JINAK SE NEPOUŽIJÍ CUSTOM SERIALIZACE/DESERIALIZACE
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(URL).addConverterFactory(JacksonConverterFactory.create()).build();
         serverAPI = retrofit.create(ServerAPI.class);
+
     }
 
     @Test
@@ -132,6 +145,48 @@ public class RESTControllersTest {
 
         // země vrátíme do původního stavu
         serverAPI.deleteCountry("Pandaria").execute();
+
+    }
+
+    @Test
+
+    public void MeasurementOperations() throws IOException {
+        final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, 40, 40, 40L, 40L, 40.0);
+        final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 20L, 20.0, null, null, null, null, null);
+        final Measurement measurement3 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, null, null, null, null, null);
+
+        // test se/deserializace
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(measurement1));
+
+        SimpleModule module = new SimpleModule();
+        Measurement measurement1Deserialized = objectMapper.readValue(objectMapper.writeValueAsString(measurement1), Measurement.class);
+        System.out.println(objectMapper.writeValueAsString(measurement1Deserialized));
+
+
+        // ADD
+        assertEquals(serverAPI.addMeasurement(measurement1).execute().raw().code(), HttpStatus.OK.value());
+        assertEquals(serverAPI.addMeasurement(measurement2).execute().raw().code(), HttpStatus.OK.value());
+        assertEquals(serverAPI.addMeasurement(measurement3).execute().raw().code(), HttpStatus.OK.value());
+
+        // UPDATE
+        measurement1.setCityID(42);
+        assertEquals("Test return CODE - should be HTTP OK - 200", serverAPI.updateMeasurement(measurement1.getId().toHexString(), measurement1).execute().raw().code(), HttpStatus.OK.value());
+
+        //GET
+        Response<Measurement> measurementResponse = serverAPI.getMeasurementByID(measurement1.getId().toHexString()).execute();
+        assertEquals(measurementResponse.code(), HttpStatus.OK.value());
+        assert measurementResponse.body() != null;
+        assertEquals(measurementResponse.body(), measurement1);
+        assertEquals(measurementResponse.body().getCityID().longValue(), 42);
+
+        // DELETE CITY
+        serverAPI.deleteMeasurement(measurement1.getId().toHexString()).execute();
+
+        // GET  DELETED - ERROR
+        measurementResponse = serverAPI.getMeasurementByID(measurement1.getId().toHexString()).execute();
+        assertEquals(measurementResponse.code(), HttpStatus.NOT_FOUND.value());
+        assertNull(measurementResponse.body());
 
     }
 

@@ -10,6 +10,7 @@ import java.io.IOException;
 public class ObjectIdSerializer extends JsonSerializer<ObjectId> {
     @Override
     public void serialize(ObjectId objectId, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        System.out.println("SERIALIZE: " + objectId.toHexString());
         jsonGenerator.writeString(objectId.toHexString());
     }
 }
