@@ -45,3 +45,12 @@ Chrome REST client - https://github.com/jarrodek/ChromeRestClient
 
 #### JSON + ObjectMapper (de/serializace)
 https://www.baeldung.com/jackson-object-mapper-tutorial
+
+#### JSP and JSTL
+JSP technology is used to create web application just like Servlet technology. It can be thought of as an extension to Servlet because it provides more functionality than servlet such as expression language, JSTL, etc. > https://www.javatpoint.com/jsp-tutorial<br />
+
+The JSP Standard Tag Library (JSTL) represents a set of tags to simplify the JSP development > 
+https://www.javatpoint.com/jstl
+
+Tvorba komboBoxu > https://dzone.com/tutorials/java/struts/struts-example/struts-html-select-tag-example-1.html
+

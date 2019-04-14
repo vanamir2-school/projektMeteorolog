@@ -36,7 +36,7 @@ public class Main {
         WeatherDownloaderService weatherDownloaderService = ctx.getBean(WeatherDownloaderService.class);
 
         // load curret measurement for all cities
-        weatherDownloaderService.loadWeatherToDatabase(cityService.getAll());
+        //weatherDownloaderService.loadWeatherToDatabase(cityService.getAll());
 
         // docasna testovaci class
         ctx.getBean(Foo.class).makeSound();
