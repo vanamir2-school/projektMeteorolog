@@ -1,6 +1,7 @@
 -- INSERT SCRIPT PRO PPJ
 
 -- country
+
 INSERT INTO Country (name) VALUES ("Germany");
 INSERT INTO Country (name) VALUES ("Slovakia");
 INSERT INTO Country (name) VALUES ("Czech Republic");

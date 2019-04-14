@@ -32,6 +32,10 @@ public class MongoMeasurementService implements MeasurementService {
     private CityService cityService;
 
 
+    public List<Measurement> getAll(){
+        return measurementRepository.findAll();
+    }
+
     public MongoMeasurementService(MongoOperations mongo) {
         this.mongo = mongo;
     }

@@ -9,9 +9,9 @@
 </head>
 <body>
 <title>Insert title here</title>
-<h1>List of all countries saved in database:</h1>
-<c:forEach var="country" items="${countries}">
-    <p><c:out value="${country}"></c:out></p>
+<h1>List of all cities saved in database:</h1>
+<c:forEach var="city" items="${cities}">
+    <p><c:out value="${city}"></c:out></p>
 </c:forEach>
 
 </body>

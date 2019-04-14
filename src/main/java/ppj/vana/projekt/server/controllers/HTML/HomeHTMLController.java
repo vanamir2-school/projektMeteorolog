@@ -1,10 +1,10 @@
-package ppj.vana.projekt.server.controllers;
+package ppj.vana.projekt.server.controllers.HTML;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class HomeController {
+public class HomeHTMLController {
 
     @RequestMapping("/")
     public String showHome() {

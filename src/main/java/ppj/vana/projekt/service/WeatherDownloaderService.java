@@ -1,8 +1,6 @@
 package ppj.vana.projekt.service;
 
 import org.apache.commons.io.IOUtils;
-//import org.json.JSONException;
-//import org.json.JSONObject;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +21,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+//import org.json.JSONException;
+//import org.json.JSONObject;
+
 
 /**
  * WeatherDownloaderService je třída na stažení počasí ze stránky https://openweathermap.org přes poskytované API.
@@ -32,15 +33,11 @@ import java.util.List;
 @Service
 public class WeatherDownloaderService {
 
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final String CURRENT_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather";
+    private static final String UNITS = "metric";
     @Autowired
     private MongoMeasurementService measurementService;
-
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
-
-    private static final String CURRENT_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather";
-
-    private static final String UNITS = "metric";
-
     private Date queryStartDate = null;
 
     private int queryCounter = 0;
@@ -84,15 +81,16 @@ public class WeatherDownloaderService {
         return false;
     }
 
-    public void loadWeatherToDatabase(List<City> cityList){
-        cityList.forEach( (city)-> loadWeatherToDatabase(city) );
+    public void loadWeatherToDatabase(List<City> cityList) {
+        cityList.forEach((city) -> loadWeatherToDatabase(city));
     }
 
-    public void loadWeatherToDatabase(City city){
-        if( city == null || city.getOpenWeatherMapID() == null)
+    public void loadWeatherToDatabase(City city) {
+        if (city == null || city.getOpenWeatherMapID() == null)
             throw new NullPointerException("Entity City must be initilized with opeanWeatherMap cityID.");
         Measurement measurement = this.getWeatherByCityID(city.getOpenWeatherMapID());
         measurementService.add(measurement);
+        logger.info("Measurement INSERTION: " + measurement.toString());
     }
 
     public Measurement getWeatherByCityID(int cityID) {
@@ -111,13 +109,13 @@ public class WeatherDownloaderService {
             JSONObject json = new JSONObject(jsonData);
 
             // inicializace Measurement
-            Double temperature = (Double) json.getJSONObject("main").get("temp");
-            Double windSpeed = (Double) json.getJSONObject("wind").get("speed");
-            Integer timeOfMeasurement = (Integer) json.get("dt");
-            Integer humidity = (Integer) json.getJSONObject("main").get("humidity");
-            Integer pressure = (Integer) json.getJSONObject("main").get("pressure");
-            Integer sunrise = (Integer) json.getJSONObject("sys").get("sunrise");
-            Integer sunset = (Integer) json.getJSONObject("sys").get("sunset");
+            Double temperature = json.getJSONObject("main").getDouble("temp");
+            Double windSpeed = json.getJSONObject("wind").getDouble("speed");
+            Integer timeOfMeasurement = json.getInt("dt");
+            Integer humidity = json.getJSONObject("main").getInt("humidity");
+            Integer pressure = json.getJSONObject("main").getInt("pressure");
+            Integer sunrise = json.getJSONObject("sys").getInt("sunrise");
+            Integer sunset = json.getJSONObject("sys").getInt("sunset");
             measurement = new Measurement(new ObjectId(), cityID, timeOfMeasurement.longValue(), temperature, humidity, pressure, sunrise.longValue(), sunset.longValue(), windSpeed);
             //measurement.setMultiple();
 
@@ -127,7 +125,6 @@ public class WeatherDownloaderService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         return measurement;
     }
