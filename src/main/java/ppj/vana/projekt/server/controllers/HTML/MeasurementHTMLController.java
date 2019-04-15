@@ -22,31 +22,31 @@ import java.util.Map;
 @Controller
 public class MeasurementHTMLController {
 
-    @Autowired
-    private MongoMeasurementService measurementService;
-
     // support map that is filled with HTTP request and used by Measurement entity to fill City name
     private static Map<Integer, City> mapIdToCity = new HashMap<>();
     @Autowired
+    private MongoMeasurementService measurementService;
+    @Autowired
     private CityService cityService;
 
-    public static Map<Integer, City> getMapIdToCity(){
+    public static Map<Integer, City> getMapIdToCity() {
         return mapIdToCity;
     }
 
-    @RequestMapping("/measurementByCountry")
+    @RequestMapping("/printMeasurements")
     public String showMeasurements(Model model) {
         fillMap();
         List<String> measurementStringList = new ArrayList<>();
         List<Measurement> measurementList = measurementService.getAll();
         measurementList.forEach((measurement) -> measurementStringList.add(measurement.toStringReadable()));
         model.addAttribute("measurements", measurementStringList);
-        return "measurementByCountry";
+        return "printMeasurements";
     }
 
-    private void fillMap(){
+
+    private void fillMap() {
         mapIdToCity.clear();
-        cityService.getAll().forEach( (city)-> mapIdToCity.put(city.getOpenWeatherMapID(),city));
+        cityService.getAll().forEach((city) -> mapIdToCity.put(city.getOpenWeatherMapID(), city));
     }
 
     @ExceptionHandler(APIException.class)

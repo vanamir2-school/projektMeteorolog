@@ -12,7 +12,8 @@
 
 <p><a href="${pageContext.request.contextPath}/printCountries">Print all countries</a></p>
 <p><a href="${pageContext.request.contextPath}/printCities">Print all cities</a></p>
-<p><a href="${pageContext.request.contextPath}/measurementByCountry">Measurement by country</a></p>
+<p><a href="${pageContext.request.contextPath}/printMeasurements">Print all measurements</a></p>
+<p><a href="${pageContext.request.contextPath}/testPage">Test page</a></p>
 
 </body>
 </html>

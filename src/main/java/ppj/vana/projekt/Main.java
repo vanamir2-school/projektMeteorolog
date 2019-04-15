@@ -27,8 +27,7 @@ public class Main {
     private MongoTemplate mongo;
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(Main.class);
-        ApplicationContext ctx = app.run(args);
+        ApplicationContext ctx  = SpringApplication.run(Main.class,args);
 
         CityService cityService = ctx.getBean(CityService.class);
         CountryService countryService= ctx.getBean(CountryService.class);

@@ -22,6 +22,26 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <!--  thymeleaf
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency> -->
         <!--  Jackson - na vlastni serializaci ObjectID-->
         <!-- https://mvnrepository.com/artifact/org.codehaus.jackson/jackson-mapper-asl -->
         <!--<dependency>
@@ -84,6 +104,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <optional>true</optional>
         </dependency>
         <!--Apache Commons IO https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
@@ -192,6 +213,10 @@
     <!-- MY OWN BUILD GOAL - COMPILE AND RUN MAIN METHOD -->
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <!-- Vytvoreni projektu tak, aby obsahoval rovnou vsechny dependencies (a sel spustit z CMD)-->
             <!-- https://www.staldal.nu/tech/2014/10/26/create-a-self-contained-jar-file-with-maven/ -->
             <plugin>

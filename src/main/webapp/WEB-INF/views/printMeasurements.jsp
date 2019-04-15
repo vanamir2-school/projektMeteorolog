@@ -9,6 +9,7 @@
 </head>
 <body>
 <title>Insert title here</title>
+
 <h1>List of all countries saved in database:</h1>
 <c:forEach var="measurement" items="${measurements}">
     <p><c:out value="${measurement}"></c:out></p>
