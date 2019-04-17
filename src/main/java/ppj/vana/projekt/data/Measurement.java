@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import ppj.vana.projekt.serializer.ObjectIdDeserializer;
 import ppj.vana.projekt.serializer.ObjectIdSerializer;
 import ppj.vana.projekt.server.controllers.HTML.MeasurementHTMLController;
+import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.WeatherDownloaderService;
 
 import javax.persistence.Id;
@@ -159,7 +160,7 @@ public class Measurement {
     }
 
     public String toStringReadable() {
-        Map<Integer, City> mapIdToCity = MeasurementHTMLController.getMapIdToCity();
+        Map<Integer, City> mapIdToCity = CountryService.mapIdToCity;
         return "Measurement for city: " + mapIdToCity.get(cityID).getName() +
                 ", timeOfMeasurement=" + WeatherDownloaderService.timestampToStringSeconds(timeOfMeasurement) +
                 ", temperature=" + temperature + " °C" +

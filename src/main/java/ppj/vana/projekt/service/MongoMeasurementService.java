@@ -97,6 +97,11 @@ public class MongoMeasurementService implements MeasurementService {
         return output;
     }
 
+
+    public List<Measurement> findAllRecordForCities(List<Integer> citiesID) {
+        return mongo.find(Query.query(where("cityID").in(citiesID)), Measurement.class);
+    }
+
     public List<Measurement> findAllRecordForCityID(Integer cityID) {
         return mongo.find(Query.query(where("cityID").is(cityID)), Measurement.class);
     }

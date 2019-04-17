@@ -12,6 +12,7 @@ import ppj.vana.projekt.data.Measurement;
 import ppj.vana.projekt.server.controllers.exceptions.APIErrorMessage;
 import ppj.vana.projekt.server.controllers.exceptions.APIException;
 import ppj.vana.projekt.service.CityService;
+import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
 import java.util.ArrayList;
@@ -22,16 +23,10 @@ import java.util.Map;
 @Controller
 public class MeasurementHTMLController {
 
-    // support map that is filled with HTTP request and used by Measurement entity to fill City name
-    private static Map<Integer, City> mapIdToCity = new HashMap<>();
     @Autowired
     private MongoMeasurementService measurementService;
     @Autowired
     private CityService cityService;
-
-    public static Map<Integer, City> getMapIdToCity() {
-        return mapIdToCity;
-    }
 
     @RequestMapping("/printMeasurements")
     public String showMeasurements(Model model) {
@@ -45,8 +40,8 @@ public class MeasurementHTMLController {
 
 
     private void fillMap() {
-        mapIdToCity.clear();
-        cityService.getAll().forEach((city) -> mapIdToCity.put(city.getOpenWeatherMapID(), city));
+        CountryService.mapIdToCity.clear();
+        cityService.getAll().forEach((city) -> CountryService.mapIdToCity.put(city.getOpenWeatherMapID(), city));
     }
 
     @ExceptionHandler(APIException.class)

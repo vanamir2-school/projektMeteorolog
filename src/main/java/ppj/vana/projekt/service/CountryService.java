@@ -2,11 +2,11 @@ package ppj.vana.projekt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ppj.vana.projekt.data.City;
 import ppj.vana.projekt.data.Country;
 import ppj.vana.projekt.repositories.CountryRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -15,6 +15,9 @@ import java.util.stream.StreamSupport;
 
 @Service
 public class CountryService {
+
+    // support map that is filled with HTTP request and used by Measurement entity to fill City name
+    public static Map<Integer, City> mapIdToCity = new HashMap<>();
 
     @Autowired
     private CountryRepository countryRepository;

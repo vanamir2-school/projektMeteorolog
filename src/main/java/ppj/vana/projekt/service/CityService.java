@@ -28,6 +28,16 @@ public class CityService {
         return StreamSupport.stream(cityRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
+    public List<City> getCitiesByCountry( String countryName) {
+        if (countryName == null)
+            return null;
+
+        List<City> cityList = cityRepository.findByCountry(countryName);
+        if (cityList.size() == 0)
+            return null;
+        return cityList;
+    }
+
     public void deleteAll() {
         cityRepository.deleteAll();
     }
