@@ -17,7 +17,7 @@ import ppj.vana.projekt.service.MongoMeasurementService;
 import ppj.vana.projekt.service.WeatherDownloaderService;
 
 @SpringBootApplication
-@EnableJpaRepositories("ppj.vana.projekt.dao.repositories")
+@EnableJpaRepositories("ppj.vana.projekt")
 public class Main {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);

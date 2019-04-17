@@ -2,8 +2,8 @@ package ppj.vana.projekt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.dao.CityRepository;
+import ppj.vana.projekt.model.City;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class CityService {
         return StreamSupport.stream(cityRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
-    public List<City> getCitiesByCountry( String countryName) {
+    public List<City> getCitiesByCountry(String countryName) {
         if (countryName == null)
             return null;
 
