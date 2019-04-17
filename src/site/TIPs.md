@@ -1,5 +1,8 @@
 ﻿# TIPs
 
+### .MD tips
+https://github.com/tchapi/markdown-cheatsheet/blob/master/README.md
+
 ### IDE
 - COMMIT ... CTRL+K<br />
 - PUSH  ... CTRL+K+SHIFT<br />
@@ -53,4 +56,28 @@ The JSP Standard Tag Library (JSTL) represents a set of tags to simplify the JSP
 https://www.javatpoint.com/jstl
 
 Tvorba komboBoxu > https://dzone.com/tutorials/java/struts/struts-example/struts-html-select-tag-example-1.html
+
+#### Javadoc plugin
+https://github.com/setial/intellij-javadocs/wiki<br />
+To generate javadocs for active element press "shift + alt + G".<br />
+To generate javadocs for all elements in current java file press "shift + ctrl + alt + G".<br />
+
+#### Project structure
+https://softwareengineering.stackexchange.com/questions/175950/in-mvc-dao-should-be-called-from-controller-or-model
+
+##### 3-tier architecture:<br />
+ * data: persisted data;<br />
+ * service: logical part of the application;<br />
+ * presentation: hmi, webservice...<br />
+
+#####  The MVC pattern takes place in the presentation tier of the above architecture (for a webapp):<br />
+
+* data<br />
+* service<br />
+* presentation:<br />
+    * controller: intercepts the HTTP request and returns the HTTP response<br />
+    * model: stores data to be displayed/treated<br />
+    * view: organises output/display.<br />
+    
+##### Another view> https://www.tutorialspoint.com/spring_boot/spring_boot_code_structure.htm
 

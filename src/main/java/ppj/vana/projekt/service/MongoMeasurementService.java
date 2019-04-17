@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Query;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Measurement;
-import ppj.vana.projekt.repositories.MeasurementRepository;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Measurement;
+import ppj.vana.projekt.dao.MeasurementRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -19,11 +19,17 @@ import java.util.TreeMap;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
+/**
+ * The type Mongo measurement service.
+ */
 public class MongoMeasurementService implements MeasurementService {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final long ONE_DAY_MILISSECONDS = 86400000;
     private final MongoOperations mongo;
+    /**
+     * The Weather downloader service.
+     */
     @Autowired
     WeatherDownloaderService weatherDownloaderService;
     @Autowired
@@ -32,18 +38,30 @@ public class MongoMeasurementService implements MeasurementService {
     private CityService cityService;
 
 
-    public List<Measurement> getAll(){
-        return measurementRepository.findAll();
-    }
-
+    /**
+     * Instantiates a new Mongo measurement service.
+     *
+     * @param mongo the mongo
+     */
     public MongoMeasurementService(MongoOperations mongo) {
         this.mongo = mongo;
     }
 
     /**
+     * Get all list.
+     *
+     * @return the list
+     */
+    public List<Measurement> getAll(){
+        return measurementRepository.findAll();
+    }
+
+    /**
      * Vrátí instanci Measurement uvnitř které jsou zprůměrované hodnoty.
      *
-     * @param days udává kolik dnů "dozadu" bude výpočet zahrnovat. Range 1-365.
+     * @param cityName the city name
+     * @param days     udává kolik dnů "dozadu" bude výpočet zahrnovat. Range 1-365.
+     * @return the string
      */
     public String averageValuesForCity(String cityName, int days) {
         // city does not exists? null
@@ -53,7 +71,7 @@ public class MongoMeasurementService implements MeasurementService {
         // city does not have connection with mongoDB? null
         Integer cityID = city.getOpenWeatherMapID();
         if (cityID == null)
-            return "City " + cityName + " does not have any measured data.";
+            return "City " + cityName + " does not have any measured model.";
 
         // rozsah dnů je 1-365, jinak null
         if (days < 1 || days > 365)
@@ -75,7 +93,7 @@ public class MongoMeasurementService implements MeasurementService {
         double wind = 0.0;
         List<Measurement> filteredList = mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestampSeconds)), Measurement.class);
         if( filteredList.isEmpty() )
-            return "No measured data in requested interval.";
+            return "No measured model in requested interval.";
 
         for (Measurement m : filteredList) {
             // pokud není vyplněno u záznamu vše, nebudu ho do průměru počítat
@@ -98,27 +116,59 @@ public class MongoMeasurementService implements MeasurementService {
     }
 
 
+    /**
+     * Find all record for cities list.
+     *
+     * @param citiesID the cities id
+     * @return the list
+     */
     public List<Measurement> findAllRecordForCities(List<Integer> citiesID) {
         return mongo.find(Query.query(where("cityID").in(citiesID)), Measurement.class);
     }
 
+    /**
+     * Find all record for city id list.
+     *
+     * @param cityID the city id
+     * @return the list
+     */
     public List<Measurement> findAllRecordForCityID(Integer cityID) {
         return mongo.find(Query.query(where("cityID").is(cityID)), Measurement.class);
     }
 
+    /**
+     * Exists boolean.
+     *
+     * @param id the id
+     * @return the boolean
+     */
     public boolean exists(String id) {
         ObjectId objectId = new ObjectId(id);
         return measurementRepository.existsById(objectId);
     }
 
+    /**
+     * Exists boolean.
+     *
+     * @param objectId the object id
+     * @return the boolean
+     */
     public boolean exists(ObjectId objectId) {
         return measurementRepository.existsById(objectId);
     }
 
+    /**
+     * Count long.
+     *
+     * @return the long
+     */
     public long count() {
         return measurementRepository.count();
     }
 
+    /**
+     * Delete all.
+     */
     public void deleteAll() {
         measurementRepository.deleteAll();
     }
@@ -128,11 +178,23 @@ public class MongoMeasurementService implements MeasurementService {
         return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
     }
 
+    /**
+     * Gets by id.
+     *
+     * @param id the id
+     * @return the by id
+     */
     public Measurement getByID(String id) {
         ObjectId objectId = new ObjectId(id);
         return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
     }
 
+    /**
+     * Update measurement.
+     *
+     * @param measurement the measurement
+     * @return the measurement
+     */
     public Measurement update(Measurement measurement) {
         measurementRepository.save(measurement);
         return measurement;
@@ -150,7 +212,12 @@ public class MongoMeasurementService implements MeasurementService {
     }
 
 
-    //Map-reduce is a data processing paradigm for condensing large volumes of data into useful aggregated results.
+    /**
+     * Num of records using map reduce map.
+     *
+     * @return the map
+     */
+//Map-reduce is a model processing paradigm for condensing large volumes of model into useful aggregated results.
     // For map-reduce operations, MongoDB provides the mapReduce database command.
     public Map<Integer, Integer> numOfRecordsUsingMapReduce() {
         final String mapJS = "classpath:mongoDB/measurement_cityID_map.js";
@@ -163,8 +230,14 @@ public class MongoMeasurementService implements MeasurementService {
     }
 
     private static class CountEntry {
-        // id == cityID -- to si definujeme v map
+        /**
+         * The Id.
+         */
+// id == cityID -- to si definujeme v map
         public int id; // TOTO SE MUSI SHODOVAT S ID DANE ENTITY (Measurement), jinak se to POSE*E
+        /**
+         * The Value.
+         */
         public int value; // count
     }
 

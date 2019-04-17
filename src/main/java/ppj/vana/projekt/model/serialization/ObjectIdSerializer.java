@@ -1,4 +1,4 @@
-package ppj.vana.projekt.serializer;
+package ppj.vana.projekt.model.serialization;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

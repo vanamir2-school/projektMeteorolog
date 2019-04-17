@@ -1,17 +1,17 @@
-package ppj.vana.projekt.server.controllers.REST;
+package ppj.vana.projekt.controller.REST;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ppj.vana.projekt.data.Country;
-import ppj.vana.projekt.server.controllers.exceptions.APIErrorMessage;
-import ppj.vana.projekt.server.controllers.exceptions.APIException;
+import ppj.vana.projekt.model.Country;
+import ppj.vana.projekt.controller.exceptions.APIErrorMessage;
+import ppj.vana.projekt.controller.exceptions.APIException;
 import ppj.vana.projekt.service.CountryService;
 
 import java.util.List;
 
-import static ppj.vana.projekt.server.ServerAPI.*;
+import static ppj.vana.projekt.controller.ServerAPI.*;
 
 @RestController
 @RequestMapping(COUNTRY_BASE_PATH)

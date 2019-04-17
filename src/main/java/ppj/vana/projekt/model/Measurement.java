@@ -1,16 +1,11 @@
-package ppj.vana.projekt.data;
+package ppj.vana.projekt.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.JsonAdapter;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import ppj.vana.projekt.serializer.ObjectIdDeserializer;
-import ppj.vana.projekt.serializer.ObjectIdSerializer;
-import ppj.vana.projekt.server.controllers.HTML.MeasurementHTMLController;
+import ppj.vana.projekt.model.serialization.ObjectIdSerializer;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.WeatherDownloaderService;
 

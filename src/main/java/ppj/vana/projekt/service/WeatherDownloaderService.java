@@ -10,8 +10,8 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Measurement;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Measurement;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;

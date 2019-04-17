@@ -1,18 +1,16 @@
 package ppj.vana.projekt.service;
 
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Country;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Country;
 
 import java.util.ArrayList;
 import java.util.Arrays;

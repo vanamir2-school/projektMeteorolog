@@ -10,10 +10,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Country;
-import ppj.vana.projekt.data.Measurement;
-import ppj.vana.projekt.repositories.MeasurementRepository;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Country;
+import ppj.vana.projekt.model.Measurement;
 
 import java.util.Date;
 import java.util.List;

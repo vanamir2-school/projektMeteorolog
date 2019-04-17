@@ -1,11 +1,11 @@
-package ppj.vana.projekt.repositories;
+package ppj.vana.projekt.dao;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import ppj.vana.projekt.data.City;
+import ppj.vana.projekt.model.City;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ppj.vana.projekt.configs;
+package ppj.vana.projekt.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -10,15 +10,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import ppj.vana.projekt.data.Measurement;
-import ppj.vana.projekt.provisioning.Provisioner;
+import ppj.vana.projekt.dao.provisioner.SqlProvisioner;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 import ppj.vana.projekt.service.WeatherDownloaderService;
 
 @SpringBootApplication
-@EnableJpaRepositories("ppj.vana.projekt.repositories")
+@EnableJpaRepositories("ppj.vana.projekt.dao.repositories")
 public class Main {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
@@ -27,10 +26,10 @@ public class Main {
     private MongoTemplate mongo;
 
     public static void main(String[] args) {
-        ApplicationContext ctx  = SpringApplication.run(Main.class,args);
+        ApplicationContext ctx = SpringApplication.run(Main.class, args);
 
         CityService cityService = ctx.getBean(CityService.class);
-        CountryService countryService= ctx.getBean(CountryService.class);
+        CountryService countryService = ctx.getBean(CountryService.class);
         MongoMeasurementService measurementService = ctx.getBean(MongoMeasurementService.class);
         WeatherDownloaderService weatherDownloaderService = ctx.getBean(WeatherDownloaderService.class);
 
@@ -48,8 +47,8 @@ public class Main {
 
     @Profile({"devel"})
     @Bean(initMethod = "doProvision")
-    public Provisioner provisioner() {
-        return new Provisioner();
+    public SqlProvisioner provisioner() {
+        return new SqlProvisioner();
     }
 
 }

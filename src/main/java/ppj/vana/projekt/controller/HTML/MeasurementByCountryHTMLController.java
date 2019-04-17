@@ -1,4 +1,4 @@
-package ppj.vana.projekt.server.controllers.HTML;
+package ppj.vana.projekt.controller.HTML;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,16 +8,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Country;
-import ppj.vana.projekt.data.Measurement;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Country;
+import ppj.vana.projekt.model.Measurement;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
 import javax.validation.Valid;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 public class MeasurementByCountryHTMLController {
@@ -60,7 +59,7 @@ public class MeasurementByCountryHTMLController {
         // all cities in country
         List<City> cityListByCounty = cityService.getCitiesByCountry(selectedCountry);
         if(cityListByCounty == null){
-            measurementStringList.add("No data available.");
+            measurementStringList.add("No model available.");
             model.addAttribute("measurementList",measurementStringList);
             return "measurementByCountry";
         }
@@ -72,7 +71,7 @@ public class MeasurementByCountryHTMLController {
         // all measurements for selected citites - String
         measumenetList.forEach( (m)->measurementStringList.add(m.toStringReadable() ));
 
-        model.addAttribute("measurementList", measurementStringList.isEmpty() ? measurementStringList.add("No data available.") : measurementStringList);
+        model.addAttribute("measurementList", measurementStringList.isEmpty() ? measurementStringList.add("No model available.") : measurementStringList);
         return "measurementByCountry";
     }
 

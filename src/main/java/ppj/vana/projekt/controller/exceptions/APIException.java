@@ -1,4 +1,4 @@
-package ppj.vana.projekt.server.controllers.exceptions;
+package ppj.vana.projekt.controller.exceptions;
 
 public class APIException extends RuntimeException {
 

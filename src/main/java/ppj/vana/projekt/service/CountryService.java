@@ -2,9 +2,9 @@ package ppj.vana.projekt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Country;
-import ppj.vana.projekt.repositories.CountryRepository;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Country;
+import ppj.vana.projekt.dao.CountryRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;

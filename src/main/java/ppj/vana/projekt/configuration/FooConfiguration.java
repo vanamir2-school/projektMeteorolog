@@ -1,4 +1,4 @@
-package ppj.vana.projekt.configs;
+package ppj.vana.projekt.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;

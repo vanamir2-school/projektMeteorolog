@@ -8,7 +8,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.data.Measurement;
+import ppj.vana.projekt.model.Measurement;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -31,7 +31,7 @@ public class WeatherDownloaderServiceTest {
         assertNull(measurement2);
     }
 
-    // check if data download was completely done
+    // check if model download was completely done
     private void cheackMeasurementLoaded(Measurement measurement1) {
         assertNotNull(measurement1.getId());
         assertNotNull(measurement1.getCityID());

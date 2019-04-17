@@ -1,8 +1,8 @@
-package ppj.vana.projekt.server;
+package ppj.vana.projekt.controller;
 
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Country;
-import ppj.vana.projekt.data.Measurement;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Country;
+import ppj.vana.projekt.model.Measurement;
 import retrofit2.Call;
 import retrofit2.http.*;
 

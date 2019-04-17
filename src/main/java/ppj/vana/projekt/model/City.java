@@ -1,9 +1,8 @@
-package ppj.vana.projekt.data;
+package ppj.vana.projekt.model;
 
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

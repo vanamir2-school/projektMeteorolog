@@ -1,4 +1,4 @@
-package ppj.vana.projekt.server.controllers.HTML;
+package ppj.vana.projekt.controller.HTML;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -7,18 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Measurement;
-import ppj.vana.projekt.server.controllers.exceptions.APIErrorMessage;
-import ppj.vana.projekt.server.controllers.exceptions.APIException;
+import ppj.vana.projekt.model.Measurement;
+import ppj.vana.projekt.controller.exceptions.APIErrorMessage;
+import ppj.vana.projekt.controller.exceptions.APIException;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class MeasurementHTMLController {

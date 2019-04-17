@@ -1,7 +1,6 @@
 package ppj.vana.projekt.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
@@ -15,12 +14,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.data.City;
-import ppj.vana.projekt.data.Country;
-import ppj.vana.projekt.data.Measurement;
-import ppj.vana.projekt.serializer.ObjectIdDeserializer;
-import ppj.vana.projekt.serializer.ObjectIdSerializer;
-import ppj.vana.projekt.server.ServerAPI;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Country;
+import ppj.vana.projekt.model.Measurement;
+import ppj.vana.projekt.controller.ServerAPI;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

@@ -1,4 +1,4 @@
-package ppj.vana.projekt.provisioning;
+package ppj.vana.projekt.dao.provisioner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import ppj.vana.projekt.Main;
 import javax.sql.DataSource;
 import java.util.List;
 
-public class Provisioner {
+public class SqlProvisioner {
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
