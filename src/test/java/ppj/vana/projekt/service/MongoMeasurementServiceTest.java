@@ -27,15 +27,13 @@ import static org.junit.Assert.assertEquals;
 public class MongoMeasurementServiceTest {
 
     private static final long ONE_DAY_SECONDS = 86400;
-    private final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 1554370113855L, 25.0, 55, 56, 56L, 50L, 50.0);
-    private final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 1554370113851L, 20.0, null, null, null, null, null);
-    private final Measurement measurement3 = new Measurement(new ObjectId(), 3077929, 1554370113951L, 20.0, 10, 10, 10L, 10L, 10.0);
-    // private final Measurement measurement2 = new Measurement(3077925, 124L, 20.0);
-    // private final Measurement measurement3 = new Measurement(3077929, 999L, 28.0);
+    private final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 1554370113855L, 25.0, 55, 56, 50.0);
+    private final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 1554370113851L, 20.0, null, null, null);
+    private final Measurement measurement3 = new Measurement(new ObjectId(), 3077929, 1554370113951L, 20.0, 10, 10, 10.0);
+    private final Measurement measurement4 = new Measurement(new ObjectId(), 3077929, 1554370113850L, 20.0, 100, 100, 100.0);
 
     @Autowired
     private MongoMeasurementService measurementService;
-    private final Measurement measurement4 = new Measurement(new ObjectId(), 3077929, 1554370113850L, 20.0, 100, 100, 100L, 100L, 100.0);
     @Autowired
     private CityService cityService;
     @Autowired
@@ -84,7 +82,7 @@ public class MongoMeasurementServiceTest {
         countryService.save(country);
         cityService.save(new City("Praha", country, 3077929)); //     public City(String name, Country country, Integer id) {
         int days = 10;
-        Long timestamp = new Date().getTime()/1000 - ONE_DAY_SECONDS * days; // 10 dnu zpatky - tyto udaje chceme
+        long timestamp = new Date().getTime() / 1000 - ONE_DAY_SECONDS * days; // 10 dnu zpatky - tyto udaje chceme
         Long timestampPlusOneDay = timestamp + ONE_DAY_SECONDS; // toto je OK, ty chceme v mereni, stalo se to o den pozdeji
         Long timestampMinusOneDay = timestamp - ONE_DAY_SECONDS; // toto je stary udaj, ten nechceme
 

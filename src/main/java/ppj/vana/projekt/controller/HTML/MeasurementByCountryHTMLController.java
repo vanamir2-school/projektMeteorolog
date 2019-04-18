@@ -59,7 +59,7 @@ public class MeasurementByCountryHTMLController {
         // all cities in country
         List<City> cityListByCounty = cityService.getCitiesByCountry(selectedCountry);
         if(cityListByCounty == null){
-            measurementStringList.add("No model available.");
+            measurementStringList.add("No measurements available.");
             model.addAttribute("measurementList",measurementStringList);
             return "measurementByCountry";
         }

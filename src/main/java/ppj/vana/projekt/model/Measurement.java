@@ -30,40 +30,21 @@ public class Measurement {
 
     private Integer humidity;
 
-    private Integer pressure; // tlak
+    private Integer pressure;
 
-    private Long sunrise;
-
-    private Long sunset;
-
-    private Double wind; // rychlost vetru
+    // wind speed in m/s
+    private Double wind;
 
     public Measurement() {
     }
 
-    public Measurement(ObjectId id, Integer cityID, Long timeOfMeasurement, Double temperature, Integer humidity, Integer pressure, Long sunrise, Long sunset, Double wind) {
+    public Measurement(ObjectId id, Integer cityID, Long timeOfMeasurement, Double temperature, Integer humidity, Integer pressure, Double wind) {
         this.id = id;
         this.cityID = cityID;
         this.timeOfMeasurement = timeOfMeasurement;
         this.temperature = temperature;
         this.humidity = humidity;
         this.pressure = pressure;
-        this.sunrise = sunrise;
-        this.sunset = sunset;
-        this.wind = wind;
-    }
-
-  /*  public Measurement(Integer cityID, Long timeOfMeasurement, Double temperature) {
-        this.cityID = cityID;
-        this.timeOfMeasurement = timeOfMeasurement;
-        this.temperature = temperature;
-    }*/
-
-    public void setMultiple(Integer humidity, Integer pressure, Long sunrise, Long sunset, Double wind) {
-        this.humidity = humidity;
-        this.pressure = pressure;
-        this.sunrise = sunrise;
-        this.sunset = sunset;
         this.wind = wind;
     }
 
@@ -115,22 +96,6 @@ public class Measurement {
         this.pressure = pressure;
     }
 
-    public Long getSunrise() {
-        return sunrise;
-    }
-
-    public void setSunrise(Long sunrise) {
-        this.sunrise = sunrise;
-    }
-
-    public Long getSunset() {
-        return sunset;
-    }
-
-    public void setSunset(Long sunset) {
-        this.sunset = sunset;
-    }
-
     public Double getWind() {
         return wind;
     }
@@ -148,21 +113,17 @@ public class Measurement {
                 ", temperature=" + temperature +
                 ", humidity=" + humidity +
                 ", pressure=" + pressure +
-                ", sunrise=" + sunrise +
-                ", sunset=" + sunset +
                 ", wind=" + wind +
                 '}';
     }
 
     public String toStringReadable() {
         Map<Integer, City> mapIdToCity = CountryService.mapIdToCity;
-        return "Measurement for city: " + mapIdToCity.get(cityID).getName() +
-                ", timeOfMeasurement=" + WeatherDownloaderService.timestampToStringSeconds(timeOfMeasurement) +
+        return "City: " + mapIdToCity.get(cityID).getName() +
+                ", time=" + WeatherDownloaderService.timestampToStringSeconds(timeOfMeasurement) +
                 ", temperature=" + temperature + " °C" +
                 ", humidity=" + humidity + "%" +
                 ", pressure=" + pressure + " hPa" +
-                ", sunrise=" + WeatherDownloaderService.timestampToStringSeconds(sunrise) +
-                ", sunset=" + WeatherDownloaderService.timestampToStringSeconds(sunset) +
                 ", wind=" + wind + " m/s";
     }
 
@@ -180,8 +141,6 @@ public class Measurement {
         if (temperature != null ? !temperature.equals(that.temperature) : that.temperature != null) return false;
         if (humidity != null ? !humidity.equals(that.humidity) : that.humidity != null) return false;
         if (pressure != null ? !pressure.equals(that.pressure) : that.pressure != null) return false;
-        if (sunrise != null ? !sunrise.equals(that.sunrise) : that.sunrise != null) return false;
-        if (sunset != null ? !sunset.equals(that.sunset) : that.sunset != null) return false;
         return wind != null ? wind.equals(that.wind) : that.wind == null;
 
     }
@@ -194,8 +153,6 @@ public class Measurement {
         result = 31 * result + (temperature != null ? temperature.hashCode() : 0);
         result = 31 * result + (humidity != null ? humidity.hashCode() : 0);
         result = 31 * result + (pressure != null ? pressure.hashCode() : 0);
-        result = 31 * result + (sunrise != null ? sunrise.hashCode() : 0);
-        result = 31 * result + (sunset != null ? sunset.hashCode() : 0);
         result = 31 * result + (wind != null ? wind.hashCode() : 0);
         return result;
     }

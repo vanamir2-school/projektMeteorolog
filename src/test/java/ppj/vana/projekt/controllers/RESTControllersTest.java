@@ -2,7 +2,6 @@ package ppj.vana.projekt.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.gson.GsonBuilder;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,13 +13,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
+import ppj.vana.projekt.controller.ServerAPI;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.Measurement;
-import ppj.vana.projekt.controller.ServerAPI;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.IOException;
@@ -38,9 +36,8 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:app_test.properties")
 public class RESTControllersTest {
 
-
-    private static final GsonConverterFactory gsonConverterFactory = GsonConverterFactory.create(new GsonBuilder().setLenient().create());
     private static ServerAPI serverAPI;
+
     @LocalServerPort
     private int port;
 
@@ -148,9 +145,9 @@ public class RESTControllersTest {
     @Test
 
     public void MeasurementOperations() throws IOException {
-        final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, 40, 40, 40L, 40L, 40.0);
-        final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 20L, 20.0, null, null, null, null, null);
-        final Measurement measurement3 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, null, null, null, null, null);
+        final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, 40, 40, 40.0);
+        final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 20L, 20.0, null, null, null);
+        final Measurement measurement3 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, null, null, null);
 
         // test se/deserializace
         ObjectMapper objectMapper = new ObjectMapper();

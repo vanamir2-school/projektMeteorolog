@@ -38,8 +38,6 @@ public class WeatherDownloaderServiceTest {
         assertNotNull(measurement1.getTemperature());
         assertNotNull(measurement1.getHumidity());
         assertNotNull(measurement1.getPressure());
-        assertNotNull(measurement1.getSunrise());
-        assertNotNull(measurement1.getSunset());
         assertNotNull(measurement1.getWind());
         assertNotNull(measurement1.getTimeOfMeasurement());
     }

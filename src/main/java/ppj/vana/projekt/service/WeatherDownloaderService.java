@@ -126,10 +126,7 @@ public class WeatherDownloaderService {
             Integer timeOfMeasurement = json.getInt("dt");
             Integer humidity = json.getJSONObject("main").getInt("humidity");
             Integer pressure = json.getJSONObject("main").getInt("pressure");
-            Integer sunrise = json.getJSONObject("sys").getInt("sunrise");
-            Integer sunset = json.getJSONObject("sys").getInt("sunset");
-            measurement = new Measurement(new ObjectId(), cityID, timeOfMeasurement.longValue(), temperature, humidity, pressure, sunrise.longValue(), sunset.longValue(), windSpeed);
-            //measurement.setMultiple();
+            measurement = new Measurement(new ObjectId(), cityID, timeOfMeasurement.longValue(), temperature, humidity, pressure, windSpeed);
 
             // TODO - dodelat LOGOVANI
         } catch (IOException e) {

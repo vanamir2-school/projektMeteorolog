@@ -1,6 +1,7 @@
 ﻿# TODO LIST
 
 ##Iterace 2 - X.X.2019 (PO)
+- [ ] u HTML APi udělat tlačítko zpět na hlavní stránku (přesměrování na localhost/ )
 - [ ] implementace obecného interface v service třídách
 - [ ] upravení modelu (smazat sunrise-sunset) + nastavit u entit držení si více atributů (country si bude pamatovat všechna města - List<City> pomoc9 anotace... lazy load)
 - [ ] udělat @Transactional pristup v service
