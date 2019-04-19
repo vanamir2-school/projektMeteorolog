@@ -1,4 +1,4 @@
-package ppj.vana.projekt.dao;
+package ppj.vana.projekt.model.repository;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

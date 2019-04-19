@@ -12,7 +12,6 @@ import ppj.vana.projekt.Main;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -23,18 +22,16 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:app_test.properties")
 public class CountryServiceTest {
 
-    @Autowired
-    private CountryService countryService;
-
-    private final City city1 = new City("Sloup v Čechách", country5);
-
     private final Country country1 = new Country("Austrálie");
     private final Country country2 = new Country("Estonsko");
     private final Country country3 = new Country("Norsko");
     private final Country country4 = new Country("Brazílie");
     private final Country country5 = new Country("Česká republika");
+    private final City city1 = new City("Sloup v Čechách", country5);
     private final City city2 = new City("Janov", country4);
     private final City city3 = new City("Ostrava", country5);
+    @Autowired
+    private CountryService countryService;
     @Autowired
     private CityService cityService;
 
@@ -81,7 +78,7 @@ public class CountryServiceTest {
         cityService.save(city2);
         cityService.save(city3);
 
-     //   EntityGraph<Post> entityGraph = entityManager.createEntityGraph(Post.class);
+        //   EntityGraph<Post> entityGraph = entityManager.createEntityGraph(Post.class);
 
         //assertEquals( countryService.getByName("Česká republika").get().getCities().size() , 2);
     }

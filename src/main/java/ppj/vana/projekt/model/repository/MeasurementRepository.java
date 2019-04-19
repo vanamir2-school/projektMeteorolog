@@ -1,4 +1,4 @@
-package ppj.vana.projekt.dao;
+package ppj.vana.projekt.model.repository;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;

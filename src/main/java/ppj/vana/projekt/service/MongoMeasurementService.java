@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Query;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.dao.MeasurementRepository;
+import ppj.vana.projekt.model.repository.MeasurementRepository;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
 
