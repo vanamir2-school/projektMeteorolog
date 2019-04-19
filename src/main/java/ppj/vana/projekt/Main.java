@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
@@ -16,10 +17,13 @@ import ppj.vana.projekt.providers.SqlProvider;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
+/**
+ * extends SpringBootServletInitializer must be declared. otherwise TomCat server does not work
+ * */
 @SpringBootApplication
 @EnableScheduling
 @EnableJpaRepositories("ppj.vana.projekt")
-public class Main {
+public class Main extends SpringBootServletInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 

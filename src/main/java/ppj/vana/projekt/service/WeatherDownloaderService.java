@@ -66,7 +66,7 @@ public class WeatherDownloaderService {
             return false;
         }
         ++queryCounter;
-        logger.info("This is request number" + queryCounter + " in the last minute on OpenWeatherAPI.");
+        logger.info("This is request number " + queryCounter + " in the last minute on OpenWeatherAPI.");
         if (queryCounter > apilimit)
             return true;
         return false;

@@ -2,12 +2,14 @@
 
 ##Iterace 2 - X.X.2019 (PO)
 
-- [ ] Maven Deploy - samostně spustitelná web app  <br />
-
 - [ ] u HTML APi udělat tlačítko zpět na hlavní stránku (přesměrování na localhost/ )
 - [ ] udělat @Transactional pristup v service
 - [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
-- [ ] Zkrášlit response na average REST API requesty  <br />
+- [ ] Zkrášlit response na average REST API requesty - aby to v prohlížeči vypadalo lidstky a ne číslo s 10.0000000001 <br />
+- [ ] Počítat average přímo dotazem na MongoDB, namísto v Javě <br />
+- [ ] Opravit tlačítko submit u select country .. rozbiji se protoze neni relativni a na deploy je jina adresa http://localhost:8080/meteorolog/measurementByCountry <br />
+
+- [x] Maven Deploy - samostně spustitelná web app - deploy pomocí .WAR na TomCat 9.0.19 <br /> 
 - [x] Konfigurovatelná expirace záznamů měření (default 14 dnů) <br />
 - [x] Automatická aktualizace dat a její nastavení (uvnitř .properties) <br />
 - [x] Read-only mód <br />

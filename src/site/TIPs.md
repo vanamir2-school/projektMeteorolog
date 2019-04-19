@@ -23,6 +23,8 @@ USE dbname; <br />
  mvn deploy<br />
  cd C:\Users\mirav\Desktop\TUL\Semestr 2\PPJ\SEMESTRALKA\projektVana\meteorolog<br />
  java -jar .\meteorolog-0.1_BETA.jar args<br />
+ ##### package to single jar with dependecies
+ mvn package:single
 
 #### Path to project folder 
  - C:\Users\mirav\IdeaProjects\projektMeteorolog
