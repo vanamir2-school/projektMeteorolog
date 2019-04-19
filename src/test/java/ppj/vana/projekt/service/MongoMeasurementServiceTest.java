@@ -33,7 +33,7 @@ public class MongoMeasurementServiceTest {
     private final Measurement measurement4 = new Measurement(new ObjectId(), 3077929, 1554370113850L, 20.0, 100, 100, 100.0);
 
     @Autowired
-    private MongoMeasurementService measurementService;
+    private MongoMeasurementService service;
     @Autowired
     private CityService cityService;
     @Autowired
@@ -41,37 +41,37 @@ public class MongoMeasurementServiceTest {
 
     @Before
     public void init() {
-        measurementService.deleteAll();
+        service.deleteAll();
     }
 
     @Test
     public void testCreateRetrieve() {
-        assertEquals("Should be 0 retrieved fields.", 0, measurementService.count());
-        measurementService.add(measurement1);
-        measurementService.add(measurement2);
-        measurementService.add(measurement3);
-        assertEquals("Should be 3 retrieved fields.", 3, measurementService.count());
-        measurementService.remove(measurement2);
-        assertEquals("Should be 2 retrieved fields.", 2, measurementService.count());
-        assertEquals("Should be equal", 20, measurementService.getByID(measurement3.getId()).getTemperature().intValue());
+        assertEquals(0, service.count());
+        service.add(measurement1);
+        service.add(measurement2);
+        service.add(measurement3);
+        assertEquals(3, service.count());
+        service.delete(measurement2);
+        assertEquals(2, service.count());
+        assertEquals(20, service.get(measurement3.getId()).getTemperature().intValue());
 
-        List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
-        assertEquals("Should be equal", 2, measurementList.size());
+        List<Measurement> measurementList = service.findAllRecordForCityID(3077929);
+        assertEquals(2, measurementList.size());
     }
 
     @Test
     public void testMapReduce() {
-        measurementService.deleteAll();
-        measurementService.add(measurement1);
-        measurementService.add(measurement2);
-        measurementService.add(measurement3);
+        service.deleteAll();
+        service.add(measurement1);
+        service.add(measurement2);
+        service.add(measurement3);
 
-        List<Measurement> measurementList = measurementService.findAllRecordForCityID(3077929);
+        List<Measurement> measurementList = service.findAllRecordForCityID(3077929);
         assertEquals("Should be equal", 2, measurementList.size());
-        measurementList = measurementService.findAllRecordForCityID(3077925);
+        measurementList = service.findAllRecordForCityID(3077925);
         assertEquals("Should be equal", 1, measurementList.size());
 
-        Map<Integer, Integer> measurementCnt = measurementService.numOfRecordsUsingMapReduce();
+        Map<Integer, Integer> measurementCnt = service.numOfRecordsUsingMapReduce();
         assertEquals("Should be equal", 2, measurementCnt.get(3077929).intValue());
         assertEquals("Should be equal", 1, measurementCnt.get(3077925).intValue());
     }
@@ -90,10 +90,10 @@ public class MongoMeasurementServiceTest {
         measurement2.setTimeOfMeasurement(timestampPlusOneDay);  // nema se zapocitat - mesto nesedi
         measurement3.setTimeOfMeasurement(timestampPlusOneDay);  // ma se zapocitat - mesto i cas OK
         measurement4.setTimeOfMeasurement(timestampMinusOneDay); // nema se zapocitat - cas nesedi
-        measurementService.add(measurement1);
-        measurementService.add(measurement2);
-        measurementService.add(measurement3);
-        measurementService.add(measurement4);
+        service.add(measurement1);
+        service.add(measurement2);
+        service.add(measurement3);
+        service.add(measurement4);
 
         String incOutput = String.format("Averaged values for city %s in last %d days:", "Praha", days) + System.lineSeparator();
         incOutput += String.format("Temperature: %s", 22.5) + System.lineSeparator();
@@ -101,7 +101,7 @@ public class MongoMeasurementServiceTest {
         incOutput += String.format("Pressure: %s", 33.0) + System.lineSeparator();
         incOutput += String.format("Wind speed: %s", 30.0) + System.lineSeparator();
 
-        String output = measurementService.averageValuesForCity("Praha", days);
+        String output = service.averageValuesForCity("Praha", days);
 
         assertEquals(incOutput, output);
     }

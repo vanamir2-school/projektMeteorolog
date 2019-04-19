@@ -34,7 +34,7 @@ public class CityService {
 
         List<City> cityList = cityRepository.findByCountry(countryName);
         if (cityList.size() == 0)
-            return null;
+            return cityList;
         return cityList;
     }
 

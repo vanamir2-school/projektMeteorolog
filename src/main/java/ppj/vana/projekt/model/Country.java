@@ -1,6 +1,10 @@
 package ppj.vana.projekt.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "country")
@@ -10,9 +14,6 @@ public class Country {
     @Column(name = "name")
     private String name;
 
-    /* @OneToMany(mappedBy = "state", fetch = FetchType.EAGER)
-     private List<City> cities;
- */
     public Country() {
     }
 

@@ -10,9 +10,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-// TODO NESTACI MIT POUZE COUNTRY REPOSITORY NAMISTO SERVICE?
-// Kdyz je to tak jednoduchy service
-
 @Service
 public class CountryService {
 

@@ -23,7 +23,7 @@ public class MeasurementRESTController {
     // GET - by ID 
     @RequestMapping(value = MEASUREMENT_NAME_PATH, method = RequestMethod.GET)
     public ResponseEntity<Measurement> getMeasurementByID(@PathVariable(MEASUREMENT_NAME) String id) {
-        Measurement measurement = measurementService.getByID(id);
+        Measurement measurement = measurementService.getByHexaString(id);
         if (measurement == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(measurement, HttpStatus.OK);
@@ -32,17 +32,17 @@ public class MeasurementRESTController {
     // DELETE - by ID (nazevStatu)
     @RequestMapping(value = MEASUREMENT_NAME_PATH, method = RequestMethod.DELETE)
     public ResponseEntity deleteMeasurement(@PathVariable(MEASUREMENT_NAME) String id) {
-        Measurement measurement = measurementService.getByID(id);
+        Measurement measurement = measurementService.getByHexaString(id);
         if (measurement == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        measurementService.remove(measurement);
+        measurementService.delete(measurement);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     // PUT - add Measurement
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity addMeasurement(@RequestBody Measurement measurement) {
-        if (measurementService.exists(measurement.getId()))
+        if (measurementService.exists(measurement))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         measurementService.add(measurement);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -52,10 +52,10 @@ public class MeasurementRESTController {
     @RequestMapping(value = MEASUREMENT_NAME_PATH, method = RequestMethod.POST)
     public ResponseEntity updateMeasurement(@PathVariable(MEASUREMENT_NAME) String id, @RequestBody Measurement measurement) {
         // Check if updated measurement exists
-        if (!measurementService.exists(id))
+        if (!measurementService.existsByHexaString(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         // check if updated measurement name (ID) matches requested ID
-        Measurement measurementLoaded = measurementService.getByID(id);
+        Measurement measurementLoaded = measurementService.getByHexaString(id);
         if (measurementLoaded == null || !measurementLoaded.getId().equals(measurement.getId()))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         measurementService.update(measurement);

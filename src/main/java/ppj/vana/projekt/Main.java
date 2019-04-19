@@ -11,10 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ppj.vana.projekt.dao.provisioner.SqlProvisioner;
-import ppj.vana.projekt.service.CityService;
-import ppj.vana.projekt.service.CountryService;
-import ppj.vana.projekt.service.MongoMeasurementService;
-import ppj.vana.projekt.service.WeatherDownloaderService;
+import ppj.vana.projekt.service.*;
 
 @SpringBootApplication
 @EnableJpaRepositories("ppj.vana.projekt")
@@ -32,6 +29,9 @@ public class Main {
         CountryService countryService = ctx.getBean(CountryService.class);
         MongoMeasurementService measurementService = ctx.getBean(MongoMeasurementService.class);
         WeatherDownloaderService weatherDownloaderService = ctx.getBean(WeatherDownloaderService.class);
+
+        // ctxProvider
+        System.out.println(CtxProvider.getContext().getBean(CountryService.class).getAll().toString());
 
         // load curret measurement for all cities
         //weatherDownloaderService.loadWeatherToDatabase(cityService.getAll());

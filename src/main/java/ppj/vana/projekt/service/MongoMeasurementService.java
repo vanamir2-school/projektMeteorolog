@@ -8,9 +8,9 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Query;
 import ppj.vana.projekt.Main;
+import ppj.vana.projekt.dao.MeasurementRepository;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
-import ppj.vana.projekt.dao.MeasurementRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -22,14 +22,12 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 /**
  * The type Mongo measurement service.
  */
-public class MongoMeasurementService implements MeasurementService {
+public class MongoMeasurementService implements IService<Measurement, ObjectId> {
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
     private static final long ONE_DAY_MILISSECONDS = 86400000;
     private final MongoOperations mongo;
-    /**
-     * The Weather downloader service.
-     */
+
     @Autowired
     WeatherDownloaderService weatherDownloaderService;
     @Autowired
@@ -38,23 +36,36 @@ public class MongoMeasurementService implements MeasurementService {
     private CityService cityService;
 
 
-    /**
-     * Instantiates a new Mongo measurement service.
-     *
-     * @param mongo the mongo
-     */
     public MongoMeasurementService(MongoOperations mongo) {
         this.mongo = mongo;
     }
 
-    /**
-     * Get all list.
-     *
-     * @return the list
-     */
-    public List<Measurement> getAll(){
-        return measurementRepository.findAll();
+
+    // ---------------------------------------------------------------- CUSTOM PUBLIC METHODS
+
+    public List<Measurement> findAllRecordForCities(List<Integer> citiesID) {
+        return mongo.find(Query.query(where("cityID").in(citiesID)), Measurement.class);
     }
+
+    public List<Measurement> findAllRecordForCityID(Integer cityID) {
+        return mongo.find(Query.query(where("cityID").is(cityID)), Measurement.class);
+    }
+
+    public Measurement getByHexaString(String id) {
+        ObjectId objectId = new ObjectId(id);
+        return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
+    }
+
+    public Boolean existsByHexaString(String id) {
+        ObjectId objectId = new ObjectId(id);
+        return measurementRepository.existsById(objectId);
+    }
+
+    public Measurement update(Measurement measurement) {
+        measurementRepository.save(measurement);
+        return measurement;
+    }
+
 
     /**
      * Vrátí instanci Measurement uvnitř které jsou zprůměrované hodnoty.
@@ -79,9 +90,9 @@ public class MongoMeasurementService implements MeasurementService {
         Date currentTime = new Date();
 
         Long timestamp = currentTime.getTime() - ONE_DAY_MILISSECONDS * days;
-        Long timestampSeconds = timestamp/1000;
-        logger.info("Aktuální čas: " + weatherDownloaderService.timestampToStringMilliSeconds(currentTime.getTime()));
-        logger.info("Průměr se počítá od: " + weatherDownloaderService.timestampToStringMilliSeconds(timestamp));
+        Long timestampSeconds = timestamp / 1000;
+        logger.info("Aktuální čas: " + WeatherDownloaderService.timestampToStringMilliSeconds(currentTime.getTime()));
+        logger.info("Průměr se počítá od: " + WeatherDownloaderService.timestampToStringMilliSeconds(timestamp));
 
        /* System.out.println(timestamp);
         System.out.println(weatherDownloaderService.timestampToStringMilliSeconds(currentTime.getTime()));
@@ -92,7 +103,7 @@ public class MongoMeasurementService implements MeasurementService {
         double pressure = 0;
         double wind = 0.0;
         List<Measurement> filteredList = mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestampSeconds)), Measurement.class);
-        if( filteredList.isEmpty() )
+        if (filteredList.isEmpty())
             return "No measured model in requested interval.";
 
         for (Measurement m : filteredList) {
@@ -116,108 +127,45 @@ public class MongoMeasurementService implements MeasurementService {
     }
 
 
-    /**
-     * Find all record for cities list.
-     *
-     * @param citiesID the cities id
-     * @return the list
-     */
-    public List<Measurement> findAllRecordForCities(List<Integer> citiesID) {
-        return mongo.find(Query.query(where("cityID").in(citiesID)), Measurement.class);
+    // ------------------------------------------------ INTERFACE @Override
+    @Override
+    public List<Measurement> getAll() {
+        return measurementRepository.findAll();
     }
 
-    /**
-     * Find all record for city id list.
-     *
-     * @param cityID the city id
-     * @return the list
-     */
-    public List<Measurement> findAllRecordForCityID(Integer cityID) {
-        return mongo.find(Query.query(where("cityID").is(cityID)), Measurement.class);
+    @Override
+    public boolean exists(Measurement measurement) {
+        return measurementRepository.existsById(measurement.getId());
     }
 
-    /**
-     * Exists boolean.
-     *
-     * @param id the id
-     * @return the boolean
-     */
-    public boolean exists(String id) {
-        ObjectId objectId = new ObjectId(id);
-        return measurementRepository.existsById(objectId);
+    @Override
+    public Measurement get(ObjectId objectId) {
+        return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
     }
 
-    /**
-     * Exists boolean.
-     *
-     * @param objectId the object id
-     * @return the boolean
-     */
-    public boolean exists(ObjectId objectId) {
-        return measurementRepository.existsById(objectId);
-    }
-
-    /**
-     * Count long.
-     *
-     * @return the long
-     */
+    @Override
     public long count() {
         return measurementRepository.count();
     }
 
-    /**
-     * Delete all.
-     */
+    @Override
     public void deleteAll() {
         measurementRepository.deleteAll();
     }
 
     @Override
-    public Measurement getByID(ObjectId objectId) {
-        return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
-    }
-
-    /**
-     * Gets by id.
-     *
-     * @param id the id
-     * @return the by id
-     */
-    public Measurement getByID(String id) {
-        ObjectId objectId = new ObjectId(id);
-        return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
-    }
-
-    /**
-     * Update measurement.
-     *
-     * @param measurement the measurement
-     * @return the measurement
-     */
-    public Measurement update(Measurement measurement) {
-        measurementRepository.save(measurement);
-        return measurement;
+    public void add(Measurement entity) {
+        mongo.insert(entity);
     }
 
     @Override
-    public Measurement add(Measurement measurement) {
-        mongo.insert(measurement);
-        return measurement;
-    }
-
-    @Override
-    public void remove(Measurement measurement) {
+    public void delete(Measurement measurement) {
         mongo.remove(measurement);
     }
 
+    // ------------------------------------------------ MAP-REDUCE
 
-    /**
-     * Num of records using map reduce map.
-     *
-     * @return the map
-     */
-//Map-reduce is a model processing paradigm for condensing large volumes of model into useful aggregated results.
+    //Map-reduce is a model processing paradigm for condensing large volumes of model into useful aggregated results.
     // For map-reduce operations, MongoDB provides the mapReduce database command.
     public Map<Integer, Integer> numOfRecordsUsingMapReduce() {
         final String mapJS = "classpath:mongoDB/measurement_cityID_map.js";
@@ -230,14 +178,8 @@ public class MongoMeasurementService implements MeasurementService {
     }
 
     private static class CountEntry {
-        /**
-         * The Id.
-         */
-// id == cityID -- to si definujeme v map
+        // id == cityID -- to si definujeme v map
         public int id; // TOTO SE MUSI SHODOVAT S ID DANE ENTITY (Measurement), jinak se to POSE*E
-        /**
-         * The Value.
-         */
         public int value; // count
     }
 
