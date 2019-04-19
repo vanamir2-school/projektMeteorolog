@@ -1,6 +1,7 @@
 package ppj.vana.projekt.controller.REST;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import ppj.vana.projekt.controller.exceptions.APIException;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static ppj.vana.projekt.controller.ServerAPI.*;
@@ -23,6 +25,12 @@ public class CityRESTController {
 
     @Autowired
     private MongoMeasurementService measurementService;
+
+    private static final String READ_ONLY_ERROR = "READ-ONLY state is ON! You can not add or delete anything";
+
+    @NotNull
+    @Value("${app.readonly}")
+    private Boolean readonly;
 
     // GET - všechny města
     @RequestMapping(value = CITY_ALL_PATH, method = RequestMethod.GET)
@@ -50,6 +58,8 @@ public class CityRESTController {
     // DELETE - by ID (nazevMesta)
     @RequestMapping(value = CITY_NAME_PATH, method = RequestMethod.DELETE)
     public ResponseEntity deleteCity(@PathVariable(CITY_NAME) String cityName) {
+        if(readonly)
+            return new ResponseEntity(READ_ONLY_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         City city = cityService.get(cityName);
         if (city == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -60,6 +70,8 @@ public class CityRESTController {
     // PUT - add City
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity addCity(@RequestBody City city) {
+        if(readonly)
+            return new ResponseEntity(READ_ONLY_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         if (cityService.exists(city))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         cityService.add(city);
@@ -69,6 +81,8 @@ public class CityRESTController {
     // POST - update City
     @RequestMapping(value = CITY_NAME_PATH, method = RequestMethod.POST)
     public ResponseEntity updateCity(@PathVariable(CITY_NAME) String cityName, @RequestBody City city) {
+        if(readonly)
+            return new ResponseEntity(READ_ONLY_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         // Check if updated city exists
         if (!cityService.existsById(cityName))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

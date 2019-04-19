@@ -38,7 +38,7 @@ public class Main {
         System.out.println(ContextProvider.getContext().getBean(CountryService.class).getAll().toString());
 
         // load curret measurement for all cities
-        //weatherDownloaderService.loadWeatherToDatabase(cityService.getAll());
+        //weatherDownloaderService.saveWeatherToDatabase(cityService.getAll());
 
         // docasna testovaci class
         ctx.getBean(Foo.class).makeSound();

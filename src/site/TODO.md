@@ -2,12 +2,13 @@
 
 ##Iterace 2 - X.X.2019 (PO)
 - [ ] u HTML APi udělat tlačítko zpět na hlavní stránku (přesměrování na localhost/ )
-- [ ] implementace obecného interface v service třídách
 - [ ] udělat @Transactional pristup v service
 - [ ] Konfigurovatelná expirace záznamů měření (default 14 dnů) <br />
-- [ ] Read-only mód  <br />
+- [ ] Read-only mód  - TODO po auto aktualizaci <br />
 - [ ] Automatická aktualizace dat a její nastavení  <br />
 - [ ] Maven Deploy - samostně spustitelná web app  <br />
+- [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
+- [x] implementace obecného interface v service třídách
 - [x] upravení modelu (smazat sunrise-sunset)   <br />
 - [x] Stáhnout nějaký plugin pro javadoc <br />
 - [x] MVC API dodělat selekci dle státu.<br />

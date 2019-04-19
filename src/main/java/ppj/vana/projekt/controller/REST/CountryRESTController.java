@@ -1,6 +1,7 @@
 package ppj.vana.projekt.controller.REST;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import ppj.vana.projekt.controller.exceptions.APIErrorMessage;
 import ppj.vana.projekt.controller.exceptions.APIException;
 import ppj.vana.projekt.service.CountryService;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static ppj.vana.projekt.controller.ServerAPI.*;
@@ -19,6 +21,12 @@ public class CountryRESTController {
 
     @Autowired
     private CountryService countryService;
+
+    private static final String READ_ONLY_ERROR = "READ-ONLY state is ON! You can not add or delete anything";
+
+    @NotNull
+    @Value("${app.readonly}")
+    private Boolean readonly;
 
     // GET - všechny státy JSON formát
     @RequestMapping(value = COUNTRY_ALL_PATH, method = RequestMethod.GET)
@@ -38,6 +46,8 @@ public class CountryRESTController {
     // DELETE - by ID (nazevStatu)
     @RequestMapping(value = COUNTRY_NAME_PATH, method = RequestMethod.DELETE)
     public ResponseEntity deleteCountry(@PathVariable(COUNTRY_NAME) String countryName) {
+        if(readonly)
+            return new ResponseEntity(READ_ONLY_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         Country country = countryService.get(countryName);
         if (country == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -48,6 +58,8 @@ public class CountryRESTController {
     // PUT - add Country
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity addCountry(@RequestBody Country country) {
+        if(readonly)
+            return new ResponseEntity(READ_ONLY_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         if (countryService.exists(country))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         countryService.add(country);

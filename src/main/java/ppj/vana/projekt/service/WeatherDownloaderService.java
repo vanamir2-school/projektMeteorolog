@@ -93,11 +93,11 @@ public class WeatherDownloaderService {
         return false;
     }
 
-    public void loadWeatherToDatabase(List<City> cityList) {
-        cityList.forEach((city) -> loadWeatherToDatabase(city));
+    public void saveWeatherToDatabase(List<City> cityList) {
+        cityList.forEach((city) -> saveWeatherToDatabase(city));
     }
 
-    public void loadWeatherToDatabase(City city) {
+    public void saveWeatherToDatabase(City city) {
         if (city == null || city.getOpenWeatherMapID() == null)
             throw new NullPointerException("Entity City must be initilized with opeanWeatherMap cityID.");
         Measurement measurement = this.getWeatherByCityID(city.getOpenWeatherMapID());
