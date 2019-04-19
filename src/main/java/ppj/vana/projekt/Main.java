@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import ppj.vana.projekt.providers.ContextProvider;
 import ppj.vana.projekt.providers.SqlProvider;
-import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
-import ppj.vana.projekt.service.WeatherDownloaderService;
 
 @SpringBootApplication
+@EnableScheduling
 @EnableJpaRepositories("ppj.vana.projekt")
 public class Main {
 
@@ -28,17 +28,8 @@ public class Main {
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
-
-        CityService cityService = ctx.getBean(CityService.class);
-        CountryService countryService = ctx.getBean(CountryService.class);
-        MongoMeasurementService measurementService = ctx.getBean(MongoMeasurementService.class);
-        WeatherDownloaderService weatherDownloaderService = ctx.getBean(WeatherDownloaderService.class);
-
         // ctxProvider
         System.out.println(ContextProvider.getContext().getBean(CountryService.class).getAll().toString());
-
-        // load curret measurement for all cities
-        //weatherDownloaderService.saveWeatherToDatabase(cityService.getAll());
 
         // docasna testovaci class
         ctx.getBean(Foo.class).makeSound();

@@ -22,7 +22,8 @@
     <packaging>war</packaging>
 
     <dependencies>
-        <!--  thymeleaf
+
+        <!--  thymeleaf - bije se, nejde mit snadno 2 VIEW frameworky
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

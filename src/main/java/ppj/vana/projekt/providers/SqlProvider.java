@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SqlProvider {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
+    private static final Logger log = LoggerFactory.getLogger(SqlProvider.class);
 
     @Autowired
     private NamedParameterJdbcOperations namedParameterJdbcOperations;

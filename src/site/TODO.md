@@ -1,13 +1,15 @@
 ﻿# TODO LIST
 
 ##Iterace 2 - X.X.2019 (PO)
+- [ ] Konfigurovatelná expirace záznamů měření (default 14 dnů) <br />
+- [ ] Maven Deploy - samostně spustitelná web app  <br />
+
 - [ ] u HTML APi udělat tlačítko zpět na hlavní stránku (přesměrování na localhost/ )
 - [ ] udělat @Transactional pristup v service
-- [ ] Konfigurovatelná expirace záznamů měření (default 14 dnů) <br />
-- [ ] Read-only mód  - TODO po auto aktualizaci <br />
-- [ ] Automatická aktualizace dat a její nastavení  <br />
-- [ ] Maven Deploy - samostně spustitelná web app  <br />
 - [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
+
+- [x] Automatická aktualizace dat a její nastavení (uvnitř .properties) <br />
+- [x] Read-only mód <br />
 - [x] implementace obecného interface v service třídách
 - [x] upravení modelu (smazat sunrise-sunset)   <br />
 - [x] Stáhnout nějaký plugin pro javadoc <br />

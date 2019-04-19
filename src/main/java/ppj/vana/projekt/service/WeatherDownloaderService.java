@@ -33,7 +33,7 @@ import java.util.List;
 @Service
 public class WeatherDownloaderService {
 
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(WeatherDownloaderService.class);
     private static final String CURRENT_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather";
     private static final String UNITS = "metric";
     private static SimpleDateFormat simpleDateFormat = null;

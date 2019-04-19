@@ -24,7 +24,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  */
 public class MongoMeasurementService implements IService<Measurement, ObjectId> {
 
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(MongoMeasurementService.class);
     private static final long ONE_DAY_MILISSECONDS = 86400000;
     private final MongoOperations mongo;
 
