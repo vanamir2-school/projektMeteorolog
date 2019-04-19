@@ -69,7 +69,7 @@ public class MeasurementByCountryHTMLController {
         // all measurements for selected citites - object Measurement
         List<Measurement> measumenetList = measurementService.findAllRecordForCities(citiesID);
         // all measurements for selected citites - String
-        Map<Integer, City> mapIdToCity = ContextProvider.getContext().getBean(CityService.class).getIdToCityMap();
+        Map<Integer, City> mapIdToCity = cityService.getIdToCityMap();
         measumenetList.forEach( (m)->measurementStringList.add(m.toStringReadable(mapIdToCity) ));
 
         model.addAttribute("measurementList", measurementStringList.isEmpty() ? measurementStringList.add("No model available.") : measurementStringList);

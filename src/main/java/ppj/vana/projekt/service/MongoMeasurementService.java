@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Query;
-import ppj.vana.projekt.Main;
-import ppj.vana.projekt.model.repository.MeasurementRepository;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
+import ppj.vana.projekt.model.repository.MeasurementRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -25,7 +23,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 public class MongoMeasurementService implements IService<Measurement, ObjectId> {
 
     private static final Logger logger = LoggerFactory.getLogger(MongoMeasurementService.class);
-    private static final long ONE_DAY_MILISSECONDS = 86400000;
+
     private final MongoOperations mongo;
 
     @Autowired
@@ -66,6 +64,20 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
         return measurement;
     }
 
+    /**
+     * cityID - city
+     * timestampSeconds - select only data measured after this timepstamp (newer ones)
+     */
+    public List<Measurement> getMeasurementsForCityAfterTimestamp(Integer cityID, Long timestampSeconds) {
+        return mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestampSeconds)), Measurement.class);
+    }
+
+    /**
+     * timestampSeconds - select only data measured before this timepstamp (newer ones)
+     */
+    public List<Measurement> getMeasurementBeforeTimestamp(Long timestampSeconds) {
+        return mongo.find(Query.query(where("timeOfMeasurement").lt(timestampSeconds)), Measurement.class);
+    }
 
     /**
      * Vrátí instanci Measurement uvnitř které jsou zprůměrované hodnoty.
@@ -75,11 +87,12 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
      * @return the string
      */
     public String averageValuesForCity(String cityName, int days) {
-        // city does not exists? null
+        // city does not exists? error
         if (!cityService.existsById(cityName))
             return "City " + cityName + " does not exist.";
+
         City city = cityService.get(cityName);
-        // city does not have connection with mongoDB? null
+        // city does not have connection with mongoDB? error
         Integer cityID = city.getOpenWeatherMapID();
         if (cityID == null)
             return "City " + cityName + " does not have any measured model.";
@@ -87,42 +100,18 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
         // rozsah dnů je 1-365, jinak null
         if (days < 1 || days > 365)
             return "You can calculate average back to 1-365 days.";
-        Date currentTime = new Date();
 
-        Long timestamp = currentTime.getTime() - ONE_DAY_MILISSECONDS * days;
-        Long timestampSeconds = timestamp / 1000;
-        logger.info("Aktuální čas: " + WeatherDownloaderService.timestampToStringMilliSeconds(currentTime.getTime()));
-        logger.info("Průměr se počítá od: " + WeatherDownloaderService.timestampToStringMilliSeconds(timestamp));
+        // timestamp x days back
+        Long timestampSeconds = UtilService.getTimestampXDaysBackInSeconds(days);
+        // filtered measurements
+        List<Measurement> filteredList = getMeasurementsForCityAfterTimestamp(cityID, timestampSeconds);
 
-       /* System.out.println(timestamp);
-        System.out.println(weatherDownloaderService.timestampToStringMilliSeconds(currentTime.getTime()));
-        System.out.println(weatherDownloaderService.timestampToStringMilliSeconds(timestamp));*/
-
-        double temperature = 0;
-        double humidity = 0;
-        double pressure = 0;
-        double wind = 0.0;
-        List<Measurement> filteredList = mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestampSeconds)), Measurement.class);
         if (filteredList.isEmpty())
-            return "No measured model in requested interval.";
+            return "No measured data in requested interval.";
 
-        for (Measurement m : filteredList) {
-            // pokud není vyplněno u záznamu vše, nebudu ho do průměru počítat
-            if (m.getTemperature() == null || m.getHumidity() == null || m.getPressure() == null || m.getWind() == null)
-                continue;
-            temperature += m.getTemperature();
-            humidity += m.getHumidity();
-            pressure += m.getPressure();
-            wind += m.getWind();
-        }
-        int numberOfRecords = filteredList.size();
         String output = String.format("Averaged values for city %s in last %d days:", cityName, days) + System.lineSeparator();
-        output += String.format("Temperature: %s", temperature / numberOfRecords) + System.lineSeparator();
-        output += String.format("Humidity: %s", humidity / numberOfRecords) + System.lineSeparator();
-        output += String.format("Pressure: %s", pressure / numberOfRecords) + System.lineSeparator();
-        output += String.format("Wind speed: %s", wind / numberOfRecords) + System.lineSeparator();
-        System.out.println(output);
-        //filteredList.forEach( (m) -> System.out.println(m.toString()));
+        output += calculateAndSummarizeAverage(filteredList);
+        logger.info(output);
         return output;
     }
 
@@ -162,6 +151,32 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     public void delete(Measurement measurement) {
         mongo.remove(measurement);
     }
+
+    // ------------------------------------------------ PRIVATE METHODS
+
+    private String calculateAndSummarizeAverage(List<Measurement> filteredList) {
+        double averageTemperature = 0;
+        double averageHumidity = 0;
+        double averagePressure = 0;
+        double averageWind = 0.0;
+
+        for (Measurement m : filteredList) {
+            // pokud není vyplněno u záznamu vše, nebudu ho do průměru počítat
+            if (m.getTemperature() == null || m.getHumidity() == null || m.getPressure() == null || m.getWind() == null)
+                continue;
+            averageTemperature += m.getTemperature();
+            averageHumidity += m.getHumidity();
+            averagePressure += m.getPressure();
+            averageWind += m.getWind();
+        }
+        int numberOfRecords = filteredList.size();
+        String output = String.format("Temperature: %s", averageTemperature / numberOfRecords) + System.lineSeparator();
+        output += String.format("Humidity: %s", averageHumidity / numberOfRecords) + System.lineSeparator();
+        output += String.format("Pressure: %s", averagePressure / numberOfRecords) + System.lineSeparator();
+        output += String.format("Wind speed: %s", averageWind / numberOfRecords) + System.lineSeparator();
+        return output;
+    }
+
 
     // ------------------------------------------------ MAP-REDUCE
 

@@ -6,10 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ppj.vana.projekt.model.serialization.ObjectIdSerializer;
-import ppj.vana.projekt.providers.ContextProvider;
-import ppj.vana.projekt.service.CityService;
-import ppj.vana.projekt.service.CountryService;
-import ppj.vana.projekt.service.WeatherDownloaderService;
+import ppj.vana.projekt.service.UtilService;
 
 import javax.persistence.Id;
 import java.util.Map;
@@ -119,10 +116,12 @@ public class Measurement {
                 '}';
     }
 
+    /**
+     * mapIdToCity can be obratined from cityService.getIdToCityMap();
+     * */
     public String toStringReadable(Map<Integer, City> mapIdToCity ) {
-
         return "City: " + mapIdToCity.get(cityID).getName() +
-                ", time=" + WeatherDownloaderService.timestampToStringSeconds(timeOfMeasurement) +
+                ", time=" + UtilService.timestampToStringSeconds(timeOfMeasurement) +
                 ", temperature=" + temperature + " °C" +
                 ", humidity=" + humidity + "%" +
                 ", pressure=" + pressure + " hPa" +

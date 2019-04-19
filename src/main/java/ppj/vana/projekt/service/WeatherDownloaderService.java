@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
-import ppj.vana.projekt.Main;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
 
@@ -17,13 +16,8 @@ import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
-//import org.json.JSONException;
-//import org.json.JSONObject;
-
 
 /**
  * WeatherDownloaderService je třída na stažení počasí ze stránky https://openweathermap.org přes poskytované API.
@@ -36,7 +30,7 @@ public class WeatherDownloaderService {
     private static final Logger logger = LoggerFactory.getLogger(WeatherDownloaderService.class);
     private static final String CURRENT_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather";
     private static final String UNITS = "metric";
-    private static SimpleDateFormat simpleDateFormat = null;
+
     @Autowired
     private MongoMeasurementService measurementService;
     private Date queryStartDate = null;
@@ -47,21 +41,6 @@ public class WeatherDownloaderService {
     @NotNull
     @Value("${app.apilimit}")
     private Integer apilimit;
-
-    /**
-     * Converts UNIX time to String with pattern "dd-MM-yyyy HH:mm:ss".
-     */
-    public static String timestampToStringSeconds(Long value) {
-        if (simpleDateFormat == null)
-            simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        return simpleDateFormat.format(value * 1000L);
-    }
-
-    public static String timestampToStringMilliSeconds(Long value) {
-        if (simpleDateFormat == null)
-            simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        return simpleDateFormat.format(value);
-    }
 
     public Integer getApilimit() {
         return apilimit;
@@ -87,7 +66,7 @@ public class WeatherDownloaderService {
             return false;
         }
         ++queryCounter;
-        logger.info("Za poslední minutu je toto " + queryCounter + ". dotaz na OpenWeatherAPI.");
+        logger.info("This is request number" + queryCounter + " in the last minute on OpenWeatherAPI.");
         if (queryCounter > apilimit)
             return true;
         return false;
