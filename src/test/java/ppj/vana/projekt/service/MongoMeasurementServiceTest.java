@@ -79,8 +79,8 @@ public class MongoMeasurementServiceTest {
     @Test
     public void averageValuesForCityTest() {
         Country country = new Country("Česká republika");
-        countryService.save(country);
-        cityService.save(new City("Praha", country, 3077929)); //     public City(String name, Country country, Integer id) {
+        countryService.add(country);
+        cityService.add(new City("Praha", country, 3077929)); //     public City(String name, Country country, Integer id) {
         int days = 10;
         long timestamp = new Date().getTime() / 1000 - ONE_DAY_SECONDS * days; // 10 dnu zpatky - tyto udaje chceme
         Long timestampPlusOneDay = timestamp + ONE_DAY_SECONDS; // toto je OK, ty chceme v mereni, stalo se to o den pozdeji

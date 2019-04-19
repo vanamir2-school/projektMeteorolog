@@ -41,7 +41,7 @@ public class CityRESTController {
     // GET - by ID (nazevMesta)
     @RequestMapping(value = CITY_NAME_PATH, method = RequestMethod.GET)
     public ResponseEntity<City> getCityByID(@PathVariable(CITY_NAME) String cityName) {
-        City city = cityService.getByName(cityName).orElse(null);
+        City city = cityService.get(cityName);
         if (city == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(city, HttpStatus.OK);
@@ -50,7 +50,7 @@ public class CityRESTController {
     // DELETE - by ID (nazevMesta)
     @RequestMapping(value = CITY_NAME_PATH, method = RequestMethod.DELETE)
     public ResponseEntity deleteCity(@PathVariable(CITY_NAME) String cityName) {
-        City city = cityService.getByName(cityName).orElse(null);
+        City city = cityService.get(cityName);
         if (city == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         cityService.delete(city);
@@ -60,9 +60,9 @@ public class CityRESTController {
     // PUT - add City
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity addCity(@RequestBody City city) {
-        if (cityService.exists(city.getName()))
+        if (cityService.exists(city))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        cityService.save(city);
+        cityService.add(city);
         return new ResponseEntity<>(city, HttpStatus.OK);
     }
 
@@ -70,13 +70,13 @@ public class CityRESTController {
     @RequestMapping(value = CITY_NAME_PATH, method = RequestMethod.POST)
     public ResponseEntity updateCity(@PathVariable(CITY_NAME) String cityName, @RequestBody City city) {
         // Check if updated city exists
-        if (!cityService.exists(cityName))
+        if (!cityService.existsById(cityName))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         // check if updated city name (ID) matches requested cityName
-        City cityLoaded = cityService.getByName(cityName).orElse(null);
+        City cityLoaded = cityService.get(cityName);
         if (cityLoaded == null || !cityLoaded.getName().equals(cityName))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        cityService.save(city);
+        cityService.add(city);
         return new ResponseEntity<>(city, HttpStatus.OK);
     }
 

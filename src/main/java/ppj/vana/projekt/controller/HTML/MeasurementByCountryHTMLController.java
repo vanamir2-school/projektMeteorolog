@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.Measurement;
+import ppj.vana.projekt.providers.ContextProvider;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
@@ -54,11 +55,10 @@ public class MeasurementByCountryHTMLController {
         model.addAttribute("selectCountry", country.getName());
         model.addAttribute("countryList", countryStringList);
 
-        fillMap();
         List<String>  measurementStringList = new ArrayList<>();
         // all cities in country
         List<City> cityListByCounty = cityService.getCitiesByCountry(selectedCountry);
-        if(cityListByCounty == null){
+        if(cityListByCounty == null || cityListByCounty.isEmpty() ){
             measurementStringList.add("No measurements available.");
             model.addAttribute("measurementList",measurementStringList);
             return "measurementByCountry";
@@ -69,15 +69,11 @@ public class MeasurementByCountryHTMLController {
         // all measurements for selected citites - object Measurement
         List<Measurement> measumenetList = measurementService.findAllRecordForCities(citiesID);
         // all measurements for selected citites - String
-        measumenetList.forEach( (m)->measurementStringList.add(m.toStringReadable() ));
+        Map<Integer, City> mapIdToCity = ContextProvider.getContext().getBean(CityService.class).getIdToCityMap();
+        measumenetList.forEach( (m)->measurementStringList.add(m.toStringReadable(mapIdToCity) ));
 
         model.addAttribute("measurementList", measurementStringList.isEmpty() ? measurementStringList.add("No model available.") : measurementStringList);
         return "measurementByCountry";
-    }
-
-    private void fillMap() {
-        CountryService.mapIdToCity.clear();
-        cityService.getAll().forEach((city) -> CountryService.mapIdToCity.put(city.getOpenWeatherMapID(), city));
     }
 
 }

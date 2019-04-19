@@ -29,7 +29,7 @@ public class CountryRESTController {
     // GET - by ID (nazevStatu)
     @RequestMapping(value = COUNTRY_NAME_PATH, method = RequestMethod.GET)
     public ResponseEntity<Country> getCountryByID(@PathVariable(COUNTRY_NAME) String countryName) {
-        Country country = countryService.getByName(countryName).orElse(null);
+        Country country = countryService.get(countryName);
         if (country == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(country, HttpStatus.OK);
@@ -38,7 +38,7 @@ public class CountryRESTController {
     // DELETE - by ID (nazevStatu)
     @RequestMapping(value = COUNTRY_NAME_PATH, method = RequestMethod.DELETE)
     public ResponseEntity deleteCountry(@PathVariable(COUNTRY_NAME) String countryName) {
-        Country country = countryService.getByName(countryName).orElse(null);
+        Country country = countryService.get(countryName);
         if (country == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         countryService.delete(country);
@@ -48,9 +48,9 @@ public class CountryRESTController {
     // PUT - add Country
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity addCountry(@RequestBody Country country) {
-        if (countryService.exists(country.getName()))
+        if (countryService.exists(country))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        countryService.save(country);
+        countryService.add(country);
         return new ResponseEntity<>(country, HttpStatus.OK);
     }
 

@@ -6,56 +6,67 @@ import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.repository.CountryRepository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class CountryService {
-
-    // support map that is filled with HTTP request and used by Measurement entity to fill City name
-    public static Map<Integer, City> mapIdToCity = new HashMap<>();
+public class CountryService implements IService<Country, String> {
 
     @Autowired
     private CountryRepository countryRepository;
 
-    public void create(Country country) {
-        countryRepository.save(country);
-    }
-
-    public void save(Country country) {
-        countryRepository.save(country);
+    public void deleteById(String country) {
+        countryRepository.deleteById(country);
     }
 
     public void saveList(List list) {
         countryRepository.saveAll(list);
     }
 
-    public boolean exists(String country) {
+    public boolean existsById(String country) {
         return countryRepository.existsById(country);
     }
 
+
+    // ------------------------------------------------ INTERFACE @Override
+    @Override
+    public void add(Country country) {
+        countryRepository.save(country);
+    }
+
+    @Override
     public List<Country> getAll() {
         return StreamSupport.stream(countryRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
+    @Override
     public void deleteAll() {
         countryRepository.deleteAll();
     }
 
-    public Optional<Country> getByName(String countryName) {
-        return countryRepository.findById(countryName);
+    @Override
+    public Country get(String countryName) {
+        if(countryRepository.findById(countryName).isPresent())
+            return countryRepository.findById(countryName).get();
+        return null;
     }
 
-    public Long count() {
+    @Override
+    public long count() {
         return countryRepository.count();
     }
 
+    @Override
     public void delete(Country country) {
         countryRepository.delete(country);
     }
 
-    public void deleteById(String country) {
-        countryRepository.deleteById(country);
+    @Override
+    public boolean exists(Country entity) {
+        return countryRepository.existsById(entity.getName());
     }
+
 }

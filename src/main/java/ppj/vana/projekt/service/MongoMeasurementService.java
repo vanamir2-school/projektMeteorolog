@@ -76,9 +76,9 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
      */
     public String averageValuesForCity(String cityName, int days) {
         // city does not exists? null
-        if (!cityService.exists(cityName))
+        if (!cityService.existsById(cityName))
             return "City " + cityName + " does not exist.";
-        City city = cityService.getByName(cityName).get();
+        City city = cityService.get(cityName);
         // city does not have connection with mongoDB? null
         Integer cityID = city.getOpenWeatherMapID();
         if (cityID == null)

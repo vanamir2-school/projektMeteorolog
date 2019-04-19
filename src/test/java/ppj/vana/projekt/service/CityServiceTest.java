@@ -24,11 +24,6 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:app_test.properties")
 public class CityServiceTest {
 
-    @Autowired
-    private CityService cityService;
-    @Autowired
-    private CountryService countryService;
-
     private final List<Country> countryList = new ArrayList<Country>(
             Arrays.asList(
                     new Country("Austrálie"),
@@ -51,6 +46,10 @@ public class CityServiceTest {
     private final City city5 = new City("Krysoň", country6);
     private final City city6 = new City("AlianceHood", country7);
     private final City city7 = new City("HordePub", country8);
+    @Autowired
+    private CityService cityService;
+    @Autowired
+    private CountryService countryService;
 
     @Before
     public void init() {
@@ -61,7 +60,7 @@ public class CityServiceTest {
 
     @Test
     public void testCreateRetrieve() {
-        cityService.save(city1);
+        cityService.add(city1);
 
         List<City> cities = cityService.getAll();
 
@@ -70,9 +69,9 @@ public class CityServiceTest {
         assertEquals("One field should have been created and retrieved", 1, cities.size());
         assertEquals("Inserted field should match retrieved", city1, cities.get(0));
 
-        cityService.save(city2);
-        cityService.save(city3);
-        cityService.save(city4);
+        cityService.add(city2);
+        cityService.add(city3);
+        cityService.add(city4);
 
         cities = cityService.getAll();
         assertEquals("Should be four retrieved fields.", 4, cities.size());
@@ -80,31 +79,31 @@ public class CityServiceTest {
 
     @Test
     public void testExists() {
-        cityService.save(city2);
-        cityService.save(city3);
-        cityService.save(city4);
+        cityService.add(city2);
+        cityService.add(city3);
+        cityService.add(city4);
 
-        assertTrue("Entity should exist.", cityService.exists(city2.getName()));
-        assertFalse("Entity should not exist.", cityService.exists("xkjhsfjlsjf"));
-        assertEquals("Česká republika", cityService.getByName("Ostrava").get().getCountry().getName());
+        assertTrue("Entity should exist.", cityService.exists(city2));
+        assertFalse("Entity should not exist.", cityService.existsById("xkjhsfjlsjf"));
+        assertEquals("Česká republika", cityService.get("Ostrava").getCountry().getName());
     }
 
     @Test
     public void testSave() {
         cityService.deleteAll();
-        cityService.save(city1);
-        cityService.save(city2);
-        cityService.save(city3);
-        cityService.save(city4);
-        cityService.save(city5);
-        cityService.save(city6);
-        assertTrue("Entity should exist.", cityService.exists(city1.getName()));
-        assertTrue("Entity should exist.", cityService.exists(city2.getName()));
-        assertTrue("Entity should exist.", cityService.exists(city3.getName()));
-        assertTrue("Entity should exist.", cityService.exists(city4.getName()));
-        assertTrue("Entity should exist.", cityService.exists(city5.getName()));
-        assertTrue("Entity should exist.", cityService.exists(city6.getName()));
-        assertFalse("Entity should NOT exist.", cityService.exists(city7.getName()));
+        cityService.add(city1);
+        cityService.add(city2);
+        cityService.add(city3);
+        cityService.add(city4);
+        cityService.add(city5);
+        cityService.add(city6);
+        assertTrue("Entity should exist.", cityService.exists(city1));
+        assertTrue("Entity should exist.", cityService.exists(city2));
+        assertTrue("Entity should exist.", cityService.exists(city3));
+        assertTrue("Entity should exist.", cityService.exists(city4));
+        assertTrue("Entity should exist.", cityService.exists(city5));
+        assertTrue("Entity should exist.", cityService.exists(city6));
+        assertFalse("Entity should NOT exist.", cityService.exists(city7));
 
         cityService.delete(city4);
         List<City> cities1 = cityService.getAll();

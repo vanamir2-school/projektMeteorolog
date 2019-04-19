@@ -7,15 +7,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ppj.vana.projekt.model.Measurement;
 import ppj.vana.projekt.controller.exceptions.APIErrorMessage;
 import ppj.vana.projekt.controller.exceptions.APIException;
+import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.Measurement;
+import ppj.vana.projekt.providers.ContextProvider;
 import ppj.vana.projekt.service.CityService;
-import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MeasurementHTMLController {
@@ -27,18 +29,12 @@ public class MeasurementHTMLController {
 
     @RequestMapping("/printMeasurements")
     public String showMeasurements(Model model) {
-        fillMap();
         List<String> measurementStringList = new ArrayList<>();
         List<Measurement> measurementList = measurementService.getAll();
-        measurementList.forEach((measurement) -> measurementStringList.add(measurement.toStringReadable()));
+        Map<Integer, City> mapIdToCity = ContextProvider.getContext().getBean(CityService.class).getIdToCityMap();
+        measurementList.forEach((measurement) -> measurementStringList.add(measurement.toStringReadable(mapIdToCity)));
         model.addAttribute("measurements", measurementStringList);
         return "printMeasurements";
-    }
-
-
-    private void fillMap() {
-        CountryService.mapIdToCity.clear();
-        cityService.getAll().forEach((city) -> CountryService.mapIdToCity.put(city.getOpenWeatherMapID(), city));
     }
 
     @ExceptionHandler(APIException.class)

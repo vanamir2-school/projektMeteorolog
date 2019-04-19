@@ -42,16 +42,16 @@ public class CountryServiceTest {
 
     @Test
     public void testCreateRetrieve() {
-        countryService.save(country1);
+        countryService.add(country1);
         List<Country> countries = countryService.getAll();
         System.out.println(countries);
 
         assertEquals("One field should have been created and retrieved", 1, countries.size());
         assertEquals("Inserted field should match retrieved", country1, countries.get(0));
 
-        countryService.save(country2);
-        countryService.save(country3);
-        countryService.save(country4);
+        countryService.add(country2);
+        countryService.add(country3);
+        countryService.add(country4);
 
 
         countries = countryService.getAll();
@@ -60,23 +60,23 @@ public class CountryServiceTest {
 
     @Test
     public void testExists() {
-        countryService.save(country2);
-        countryService.save(country3);
-        countryService.save(country4);
-        countryService.save(country5);
+        countryService.add(country2);
+        countryService.add(country3);
+        countryService.add(country4);
+        countryService.add(country5);
 
-        assertTrue("Field should exist.", countryService.exists(country2.getName()));
-        assertFalse("Field should not exist.", countryService.exists("xkjhsfjlsjf"));
-        assertEquals("Česká republika", countryService.getByName("Česká republika").get().getName());
+        assertTrue("Field should exist.", countryService.exists(country2));
+        assertFalse("Field should not exist.", countryService.existsById("xkjhsfjlsjf"));
+        assertEquals("Česká republika", countryService.get("Česká republika").getName());
     }
 
     @Test
     public void testCityMapping() {
-        countryService.save(country4);
-        countryService.save(country5);
-        cityService.save(city1);
-        cityService.save(city2);
-        cityService.save(city3);
+        countryService.add(country4);
+        countryService.add(country5);
+        cityService.add(city1);
+        cityService.add(city2);
+        cityService.add(city3);
 
         //   EntityGraph<Post> entityGraph = entityManager.createEntityGraph(Post.class);
 

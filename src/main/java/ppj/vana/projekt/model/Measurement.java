@@ -6,6 +6,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ppj.vana.projekt.model.serialization.ObjectIdSerializer;
+import ppj.vana.projekt.providers.ContextProvider;
+import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.WeatherDownloaderService;
 
@@ -117,8 +119,8 @@ public class Measurement {
                 '}';
     }
 
-    public String toStringReadable() {
-        Map<Integer, City> mapIdToCity = CountryService.mapIdToCity;
+    public String toStringReadable(Map<Integer, City> mapIdToCity ) {
+
         return "City: " + mapIdToCity.get(cityID).getName() +
                 ", time=" + WeatherDownloaderService.timestampToStringSeconds(timeOfMeasurement) +
                 ", temperature=" + temperature + " °C" +

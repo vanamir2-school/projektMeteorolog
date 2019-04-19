@@ -2,30 +2,29 @@ package ppj.vana.projekt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ppj.vana.projekt.model.repository.CityRepository;
 import ppj.vana.projekt.model.City;
+import ppj.vana.projekt.model.repository.CityRepository;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class CityService {
+public class CityService implements IService<City, String> {
 
     @Autowired
     private CityRepository cityRepository;
 
-    public void save(City city) {
-        cityRepository.save(city);
-    }
+    // support map that holds openWeatherMapID and its City
+    private Map<Integer, City> mapIdToCity = new HashMap<>();
 
-    public boolean exists(String city) {
-        return cityRepository.existsById(city);
-    }
+    // flag to indicate the need of refresh
+    private boolean updateMap = true;
 
-    public List<City> getAll() {
-        return StreamSupport.stream(cityRepository.findAll().spliterator(), false).collect(Collectors.toList());
+    public void deleteCityById(String city) {
+        cityRepository.deleteById(city);
     }
 
     public List<City> getCitiesByCountry(String countryName) {
@@ -38,23 +37,58 @@ public class CityService {
         return cityList;
     }
 
+    public boolean existsById(String city) {
+        return cityRepository.existsById(city);
+    }
+
+    public Map<Integer, City> getIdToCityMap() {
+        if (updateMap) {
+            mapIdToCity.clear();
+            getAll().forEach((city) -> mapIdToCity.put(city.getOpenWeatherMapID(), city));
+            updateMap = false;
+        }
+        return this.mapIdToCity;
+    }
+
+    // ------------------------------------------------ INTERFACE @Override
+
+    @Override
+    public void add(City city) {
+        updateMap = true;
+        cityRepository.save(city);
+    }
+
+    @Override
+    public List<City> getAll() {
+        return StreamSupport.stream(cityRepository.findAll().spliterator(), false).collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteAll() {
         cityRepository.deleteAll();
     }
 
-    public Optional<City> getByName(String city) {
-        return cityRepository.findById(city);
+    @Override
+    public City get(String city) {
+        if(cityRepository.findById(city).isPresent())
+            return cityRepository.findById(city).get();
+        return null;
     }
 
-    public Long count() {
+    @Override
+    public long count() {
         return cityRepository.count();
     }
 
+    @Override
     public void delete(City city) {
+        updateMap = true;
         cityRepository.delete(city);
     }
 
-    public void deleteCityById(String city) {
-        cityRepository.deleteById(city);
+    @Override
+    public boolean exists(City entity) {
+        return cityRepository.existsById(entity.getName());
     }
+
 }
