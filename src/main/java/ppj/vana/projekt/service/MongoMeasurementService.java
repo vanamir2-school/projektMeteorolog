@@ -109,7 +109,7 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
         if (filteredList.isEmpty())
             return "No measured data in requested interval.";
 
-        String output = String.format("Averaged values for city %s in last %d days:", cityName, days) + System.lineSeparator();
+        String output = String.format("Averaged values for %s in %d last days:", cityName, days) + System.lineSeparator();
         output += calculateAndSummarizeAverage(filteredList);
         logger.info(output);
         return output;
@@ -170,10 +170,10 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
             averageWind += m.getWind();
         }
         int numberOfRecords = filteredList.size();
-        String output = String.format("Temperature: %s", averageTemperature / numberOfRecords) + System.lineSeparator();
-        output += String.format("Humidity: %s", averageHumidity / numberOfRecords) + System.lineSeparator();
-        output += String.format("Pressure: %s", averagePressure / numberOfRecords) + System.lineSeparator();
-        output += String.format("Wind speed: %s", averageWind / numberOfRecords) + System.lineSeparator();
+        String output = String.format("Temperature: %.2f", averageTemperature / numberOfRecords) + System.lineSeparator();
+        output += String.format("Humidity: %.2f", averageHumidity / numberOfRecords) + System.lineSeparator();
+        output += String.format("Pressure: %.2f", averagePressure / numberOfRecords) + System.lineSeparator();
+        output += String.format("Wind speed: %.2f", averageWind / numberOfRecords) + System.lineSeparator();
         return output;
     }
 

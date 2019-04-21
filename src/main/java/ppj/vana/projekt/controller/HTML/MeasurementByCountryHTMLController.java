@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.Measurement;
-import ppj.vana.projekt.providers.ContextProvider;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MeasurementByCountryHTMLController {
@@ -55,12 +57,12 @@ public class MeasurementByCountryHTMLController {
         model.addAttribute("selectCountry", country.getName());
         model.addAttribute("countryList", countryStringList);
 
-        List<String>  measurementStringList = new ArrayList<>();
+        List<String> measurementStringList = new ArrayList<>();
         // all cities in country
         List<City> cityListByCounty = cityService.getCitiesByCountry(selectedCountry);
-        if(cityListByCounty == null || cityListByCounty.isEmpty() ){
+        if (cityListByCounty == null || cityListByCounty.isEmpty()) {
             measurementStringList.add("No measurements available.");
-            model.addAttribute("measurementList",measurementStringList);
+            model.addAttribute("measurementList", measurementStringList);
             return "measurementByCountry";
         }
         // all IDs of selected cities
@@ -70,7 +72,7 @@ public class MeasurementByCountryHTMLController {
         List<Measurement> measumenetList = measurementService.findAllRecordForCities(citiesID);
         // all measurements for selected citites - String
         Map<Integer, City> mapIdToCity = cityService.getIdToCityMap();
-        measumenetList.forEach( (m)->measurementStringList.add(m.toStringReadable(mapIdToCity) ));
+        measumenetList.forEach((m) -> measurementStringList.add(m.toStringReadable(mapIdToCity)));
 
         model.addAttribute("measurementList", measurementStringList.isEmpty() ? measurementStringList.add("No model available.") : measurementStringList);
         return "measurementByCountry";
