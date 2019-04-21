@@ -1,11 +1,14 @@
 package ppj.vana.projekt.service;
 
+import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
@@ -43,6 +46,39 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
 
     public List<Measurement> findAllRecordForCities(List<Integer> citiesID) {
         return mongo.find(Query.query(where("cityID").in(citiesID)), Measurement.class);
+    }
+
+    public List<DBObject> readAverage(Integer cityID) {
+        if (cityID == null) {
+            logger.error("Method readAverage(Integer cityID) was called with no cityID filled.");
+            throw new NullPointerException("Method readAverage(Integer cityID) was called with no cityID filled.");
+        }
+
+        // prepeare mongo aggregation
+        MatchOperation matchStage = Aggregation.match(new Criteria("_id").is(cityID)); // to podle čeho se grupuje se nastavuje jako nové ID... hledám ne cityID, ale _id
+        ProjectionOperation projection = Aggregation.project("temperature", "humidity", "pressure", "wind", "cityID");
+        GroupOperation group = Aggregation.group("cityID")
+                .avg("temperature").as("avgTemperature")
+                .avg("humidity").as("avgHumidity")
+                .avg("pressure").as("avgPressure")
+                .avg("wind").as("avgWind");
+
+        TypedAggregation<Measurement> aggregation = Aggregation.newAggregation(Measurement.class, projection, group, matchStage);
+        return mongo.aggregate(aggregation, DBObject.class).getMappedResults();
+    }
+
+    public List<DBObject> readAverageAllCities() {
+        TypedAggregation<Measurement> aggregation = Aggregation.newAggregation(Measurement.class,
+                Aggregation.project("temperature", "humidity", "pressure", "wind", "cityID"),
+                Aggregation.group("cityID")
+                        .avg("temperature").as("avgTemperature")
+                        .avg("humidity").as("avgHumidity")
+                        .avg("pressure").as("avgPressure")
+                        .avg("wind").as("avgWind")
+        );
+        AggregationResults<DBObject> result = mongo.aggregate(aggregation, DBObject.class);
+        List<DBObject> resultList = result.getMappedResults();
+        return resultList;
     }
 
     public List<Measurement> findAllRecordForCityID(Integer cityID) {
@@ -170,10 +206,10 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
             averageWind += m.getWind();
         }
         int numberOfRecords = filteredList.size();
-        String output = String.format("Temperature: %.2f", averageTemperature / numberOfRecords) + System.lineSeparator();
-        output += String.format("Humidity: %.2f", averageHumidity / numberOfRecords) + System.lineSeparator();
-        output += String.format("Pressure: %.2f", averagePressure / numberOfRecords) + System.lineSeparator();
-        output += String.format("Wind speed: %.2f", averageWind / numberOfRecords) + System.lineSeparator();
+        String output = String.format("Temperature: %.1f", averageTemperature / numberOfRecords) + System.lineSeparator();
+        output += String.format("Humidity: %.1f", averageHumidity / numberOfRecords) + System.lineSeparator();
+        output += String.format("Pressure: %.1f", averagePressure / numberOfRecords) + System.lineSeparator();
+        output += String.format("Wind speed: %.1f", averageWind / numberOfRecords) + System.lineSeparator();
         return output;
     }
 
