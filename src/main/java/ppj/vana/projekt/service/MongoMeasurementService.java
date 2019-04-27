@@ -1,6 +1,6 @@
 package ppj.vana.projekt.service;
 
-import com.mongodb.DBObject;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,12 +25,15 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
  */
 public class MongoMeasurementService implements IService<Measurement, ObjectId> {
 
+    private static final Long MAX_LENGTH_OF_MEASUREMENT = 730L; // 2 years
     private static final Logger logger = LoggerFactory.getLogger(MongoMeasurementService.class);
-
+    private static final String AVG_TEMP = "avgTemp";
+    private static final String AVG_HUM = "avgHum";
+    private static final String AVG_PRESS = "avgPress";
+    private static final String AVG_WIND = "avgWind";
     private final MongoOperations mongo;
-
     @Autowired
-    WeatherDownloaderService weatherDownloaderService;
+    private WeatherDownloaderService weatherDownloaderService;
     @Autowired
     private MeasurementRepository measurementRepository;
     @Autowired
@@ -48,37 +51,40 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
         return mongo.find(Query.query(where("cityID").in(citiesID)), Measurement.class);
     }
 
-    public List<DBObject> readAverage(Integer cityID) {
-        if (cityID == null) {
-            logger.error("Method readAverage(Integer cityID) was called with no cityID filled.");
-            throw new NullPointerException("Method readAverage(Integer cityID) was called with no cityID filled.");
-        }
+    /**
+     * Vrátí instanci Measurement uvnitř které jsou zprůměrované hodnoty.
+     *
+     * @param cityName the city name
+     * @param days     udává kolik dnů "dozadu" bude výpočet zahrnovat. Range 1-365.
+     * @return the string
+     */
+    public String averageValuesForCity(String cityName, int days) {
+        // city does not exists? error
+        if (!cityService.existsById(cityName))
+            return "City " + cityName + " does not exist.";
 
-        // prepeare mongo aggregation
-        MatchOperation matchStage = Aggregation.match(new Criteria("_id").is(cityID)); // to podle čeho se grupuje se nastavuje jako nové ID... hledám ne cityID, ale _id
-        ProjectionOperation projection = Aggregation.project("temperature", "humidity", "pressure", "wind", "cityID");
-        GroupOperation group = Aggregation.group("cityID")
-                .avg("temperature").as("avgTemperature")
-                .avg("humidity").as("avgHumidity")
-                .avg("pressure").as("avgPressure")
-                .avg("wind").as("avgWind");
+        City city = cityService.get(cityName);
+        // city does not have connection with mongoDB? error
+        Integer cityID = city.getOpenWeatherMapID();
+        if (cityID == null)
+            return "City " + cityName + " does not have any measured model.";
 
-        TypedAggregation<Measurement> aggregation = Aggregation.newAggregation(Measurement.class, projection, group, matchStage);
-        return mongo.aggregate(aggregation, DBObject.class).getMappedResults();
+        // rozsah dnů je 1-730, jinak null
+        if (days < 1 || days > MAX_LENGTH_OF_MEASUREMENT)
+            return "You can calculate average back to 1-730 days.";
+
+        // timestamp x days back
+        Long timestampSeconds = UtilService.getTimestampXDaysBackInSeconds(days);
+        Document avgMeasurement = this.getAverageAfterTimestamp(cityID, timestampSeconds);
+        String output = String.format("Averaged values for %s in %d last days:", cityName, days) + System.lineSeparator();
+        output += this.formatAverageValues(avgMeasurement);
+        logger.info(output);
+        return output;
     }
 
-    public List<DBObject> readAverageAllCities() {
-        TypedAggregation<Measurement> aggregation = Aggregation.newAggregation(Measurement.class,
-                Aggregation.project("temperature", "humidity", "pressure", "wind", "cityID"),
-                Aggregation.group("cityID")
-                        .avg("temperature").as("avgTemperature")
-                        .avg("humidity").as("avgHumidity")
-                        .avg("pressure").as("avgPressure")
-                        .avg("wind").as("avgWind")
-        );
-        AggregationResults<DBObject> result = mongo.aggregate(aggregation, DBObject.class);
-        List<DBObject> resultList = result.getMappedResults();
-        return resultList;
+    // calculate average values for selected city
+    public Document getAverageValuesForCity(Integer cityID) {
+        return this.getAverageAfterTimestamp(cityID, MAX_LENGTH_OF_MEASUREMENT);
     }
 
     public List<Measurement> findAllRecordForCityID(Integer cityID) {
@@ -114,43 +120,6 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     public List<Measurement> getMeasurementBeforeTimestamp(Long timestampSeconds) {
         return mongo.find(Query.query(where("timeOfMeasurement").lt(timestampSeconds)), Measurement.class);
     }
-
-    /**
-     * Vrátí instanci Measurement uvnitř které jsou zprůměrované hodnoty.
-     *
-     * @param cityName the city name
-     * @param days     udává kolik dnů "dozadu" bude výpočet zahrnovat. Range 1-365.
-     * @return the string
-     */
-    public String averageValuesForCity(String cityName, int days) {
-        // city does not exists? error
-        if (!cityService.existsById(cityName))
-            return "City " + cityName + " does not exist.";
-
-        City city = cityService.get(cityName);
-        // city does not have connection with mongoDB? error
-        Integer cityID = city.getOpenWeatherMapID();
-        if (cityID == null)
-            return "City " + cityName + " does not have any measured model.";
-
-        // rozsah dnů je 1-365, jinak null
-        if (days < 1 || days > 365)
-            return "You can calculate average back to 1-365 days.";
-
-        // timestamp x days back
-        Long timestampSeconds = UtilService.getTimestampXDaysBackInSeconds(days);
-        // filtered measurements
-        List<Measurement> filteredList = getMeasurementsForCityAfterTimestamp(cityID, timestampSeconds);
-
-        if (filteredList.isEmpty())
-            return "No measured data in requested interval.";
-
-        String output = String.format("Averaged values for %s in %d last days:", cityName, days) + System.lineSeparator();
-        output += calculateAndSummarizeAverage(filteredList);
-        logger.info(output);
-        return output;
-    }
-
 
     // ------------------------------------------------ INTERFACE @Override
     @Override
@@ -190,29 +159,34 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
 
     // ------------------------------------------------ PRIVATE METHODS
 
-    private String calculateAndSummarizeAverage(List<Measurement> filteredList) {
-        double averageTemperature = 0;
-        double averageHumidity = 0;
-        double averagePressure = 0;
-        double averageWind = 0.0;
-
-        for (Measurement m : filteredList) {
-            // pokud není vyplněno u záznamu vše, nebudu ho do průměru počítat
-            if (m.getTemperature() == null || m.getHumidity() == null || m.getPressure() == null || m.getWind() == null)
-                continue;
-            averageTemperature += m.getTemperature();
-            averageHumidity += m.getHumidity();
-            averagePressure += m.getPressure();
-            averageWind += m.getWind();
-        }
-        int numberOfRecords = filteredList.size();
-        String output = String.format("Temperature: %.1f", averageTemperature / numberOfRecords) + System.lineSeparator();
-        output += String.format("Humidity: %.1f", averageHumidity / numberOfRecords) + System.lineSeparator();
-        output += String.format("Pressure: %.1f", averagePressure / numberOfRecords) + System.lineSeparator();
-        output += String.format("Wind speed: %.1f", averageWind / numberOfRecords) + System.lineSeparator();
+    private String formatAverageValues(Document averageData) {
+        String output = String.format("Temperature: %.1f", averageData.get(AVG_TEMP)) + System.lineSeparator();
+        output += String.format("Humidity: %.1f", averageData.get(AVG_HUM)) + System.lineSeparator();
+        output += String.format("Pressure: %.1f", averageData.get(AVG_PRESS)) + System.lineSeparator();
+        output += String.format("Wind speed: %.1f", averageData.get(AVG_WIND)) + System.lineSeparator();
         return output;
     }
 
+    // calculate average values for selected city, there is no check of cityID - that should be done before calling this mathod.
+    private Document getAverageAfterTimestamp(Integer cityID, Long timestampSeconds) {
+        if (cityID == null) {
+            logger.error("Method readAverage(Integer cityID) was called with no cityID filled.");
+            throw new NullPointerException("Method readAverage(Integer cityID) was called with no cityID filled.");
+        }
+
+        MatchOperation matchStage = Aggregation.match(new Criteria("cityID").is(cityID).and("timeOfMeasurement").gte(timestampSeconds)); // to podle čeho se grupuje se nastavuje jako nové ID... hledám ne cityID, ale _id
+        ProjectionOperation projection = Aggregation.project("temperature", "humidity", "pressure", "wind", "cityID");
+        GroupOperation group = Aggregation.group("cityID")
+                .avg("temperature").as(AVG_TEMP)
+                .avg("humidity").as(AVG_HUM)
+                .avg("pressure").as(AVG_PRESS)
+                .avg("wind").as(AVG_WIND);
+        TypedAggregation<Measurement> aggregation = Aggregation.newAggregation(Measurement.class, matchStage, projection, group);
+        List<Document> list = mongo.aggregate(aggregation, Document.class).getMappedResults();
+        if (list == null || list.isEmpty())
+            throw new NullPointerException("There is no city with id " + cityID + " method getAverageAfterTimestamp() failed.");
+        return list.get(0);
+    }
 
     // ------------------------------------------------ MAP-REDUCE
 

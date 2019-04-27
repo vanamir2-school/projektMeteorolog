@@ -38,9 +38,8 @@ public class Main extends SpringBootServletInitializer {
         System.out.println(ContextProvider.getContext().getBean(CountryService.class).getAll().toString());
 
 
-        // TODO - začít používat tuto krásnou funkci
-        List<DBObject> measurements = ContextProvider.getContext().getBean(MongoMeasurementService.class).readAverage(2825297);
-        System.out.println(measurements);
+        //String result = ContextProvider.getContext().getBean(MongoMeasurementService.class).averageValuesForCity("Prague", 4);
+        //System.out.println(result);
 
 
         // docasna testovaci class

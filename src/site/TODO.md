@@ -1,16 +1,13 @@
 ﻿# TODO LIST
 
 ##Iterace 2 - X.X.2019 (PO)
-
-
-- [ ] Počítat average přímo dotazem na MongoDB, namísto v Javě - rozpracovan - začít používat MongoMeasurementService.readAverage()<br />
 - [ ] udělat @Transactional pristup v service
 - [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
-
 - [ ] Opravit tlačítko submit u select country .. rozbiji se protoze neni relativni a na deploy je jina adresa http://localhost:8080/meteorolog/measurementByCountry <br />
 - [ ] Vygenerovat dokumentaci
 - [ ] Dodělat testy na service classes
 
+- [x] Počítat average přímo dotazem na MongoDB, namísto v Javě - rozpracovan - začít používat MongoMeasurementService.readAverage()<br />
 - [x] Zkrášlit response na average REST API requesty - aby to v prohlížeči vypadalo lidstky a ne číslo s 10.0000000001 <br />
 - [x] u HTML APi udělat tlačítko zpět na hlavní stránku (přesměrování na localhost/ )
 - [x] Maven Deploy - samostně spustitelná web app - deploy pomocí .WAR na TomCat 9.0.19 <br /> 

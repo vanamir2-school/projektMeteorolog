@@ -11,7 +11,7 @@
 <a href="/">
     <img src="<c:url value='https://image.flaticon.com/icons/png/512/53/53567.png'/>" width="42" height="42" border="0" />
 </a>
-<title>Insert title here</title>
+<title>Measurements</title>
 
 <h1>List of all countries saved in database:</h1>
 <c:forEach var="measurement" items="${measurements}">

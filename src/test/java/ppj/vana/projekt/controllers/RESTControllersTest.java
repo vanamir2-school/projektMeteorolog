@@ -143,7 +143,6 @@ public class RESTControllersTest {
     }
 
     @Test
-
     public void MeasurementOperations() throws IOException {
         final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, 40, 40, 40.0);
         final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 20L, 20.0, null, null, null);

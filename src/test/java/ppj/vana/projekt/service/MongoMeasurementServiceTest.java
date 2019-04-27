@@ -86,6 +86,8 @@ public class MongoMeasurementServiceTest {
         Long timestampPlusOneDay = timestamp + ONE_DAY_SECONDS; // toto je OK, ty chceme v mereni, stalo se to o den pozdeji
         Long timestampMinusOneDay = timestamp - ONE_DAY_SECONDS; // toto je stary udaj, ten nechceme
 
+
+        service.deleteAll();
         measurement1.setTimeOfMeasurement(timestampPlusOneDay); // ma se zapocitat - mesto i cas OK
         measurement2.setTimeOfMeasurement(timestampPlusOneDay);  // nema se zapocitat - mesto nesedi
         measurement3.setTimeOfMeasurement(timestampPlusOneDay);  // ma se zapocitat - mesto i cas OK
