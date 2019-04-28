@@ -1,12 +1,14 @@
 ﻿# TODO LIST
 
 ##Iterace 2 - X.X.2019 (PO)
-- [ ] udělat @Transactional pristup v service
+- [ ] MongoDB TTL
+- [ ] Measurements v MVC do tabulky
 - [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
 - [ ] Opravit tlačítko submit u select country .. rozbiji se protoze neni relativni a na deploy je jina adresa http://localhost:8080/meteorolog/measurementByCountry <br />
 - [ ] Vygenerovat dokumentaci
 - [ ] Dodělat testy na service classes
 
+- [x] udělat @Transactional pristup v service
 - [x] Počítat average přímo dotazem na MongoDB, namísto v Javě - rozpracovan - začít používat MongoMeasurementService.readAverage()<br />
 - [x] Zkrášlit response na average REST API requesty - aby to v prohlížeči vypadalo lidstky a ne číslo s 10.0000000001 <br />
 - [x] u HTML APi udělat tlačítko zpět na hlavní stránku (přesměrování na localhost/ )

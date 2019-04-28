@@ -87,3 +87,9 @@ https://softwareengineering.stackexchange.com/questions/175950/in-mvc-dao-should
 CMD: <TomCat_Home>\bin> .\catalina.bat run <br />
 Browser: http://localhost:8080/meteorolog/
 
+### Spring transakce
+Hello world:
+https://spring.io/guides/gs/managing-transactions/ <br/>
+Annotation understanding:
+https://www.javacodegeeks.com/2016/05/understanding-transactional-annotation-spring.html
+

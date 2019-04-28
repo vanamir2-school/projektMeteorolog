@@ -2,6 +2,8 @@ package ppj.vana.projekt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.repository.CityRepository;
 
@@ -23,10 +25,13 @@ public class CityService implements IService<City, String> {
     // flag to indicate the need of refresh
     private boolean updateMap = true;
 
+    // ------------------------------------------------ PUBLIC METHODS
+    @Transactional
     public void deleteCityById(String city) {
         cityRepository.deleteById(city);
     }
 
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public List<City> getCitiesByCountry(String countryName) {
         if (countryName == null)
             return null;
@@ -37,6 +42,7 @@ public class CityService implements IService<City, String> {
         return cityList;
     }
 
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public boolean existsById(String city) {
         return cityRepository.existsById(city);
     }
@@ -70,7 +76,7 @@ public class CityService implements IService<City, String> {
 
     @Override
     public City get(String city) {
-        if(cityRepository.findById(city).isPresent())
+        if (cityRepository.findById(city).isPresent())
             return cityRepository.findById(city).get();
         return null;
     }

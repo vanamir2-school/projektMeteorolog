@@ -10,6 +10,9 @@ import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
 import ppj.vana.projekt.model.repository.MeasurementRepository;
@@ -20,9 +23,7 @@ import java.util.TreeMap;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-/**
- * The type Mongo measurement service.
- */
+@Service
 public class MongoMeasurementService implements IService<Measurement, ObjectId> {
 
     private static final Long MAX_LENGTH_OF_MEASUREMENT = 730L; // 2 years
@@ -39,14 +40,13 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     @Autowired
     private CityService cityService;
 
-
     public MongoMeasurementService(MongoOperations mongo) {
         this.mongo = mongo;
     }
 
 
     // ---------------------------------------------------------------- CUSTOM PUBLIC METHODS
-
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public List<Measurement> findAllRecordForCities(List<Integer> citiesID) {
         return mongo.find(Query.query(where("cityID").in(citiesID)), Measurement.class);
     }
@@ -83,33 +83,38 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     }
 
     // calculate average values for selected city
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public Document getAverageValuesForCity(Integer cityID) {
         return this.getAverageAfterTimestamp(cityID, MAX_LENGTH_OF_MEASUREMENT);
     }
 
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public List<Measurement> findAllRecordForCityID(Integer cityID) {
         return mongo.find(Query.query(where("cityID").is(cityID)), Measurement.class);
     }
 
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public Measurement getByHexaString(String id) {
         ObjectId objectId = new ObjectId(id);
         return mongo.findOne(Query.query(where("_id").is(objectId)), Measurement.class);
     }
 
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public Boolean existsByHexaString(String id) {
         ObjectId objectId = new ObjectId(id);
         return measurementRepository.existsById(objectId);
     }
 
-    public Measurement update(Measurement measurement) {
+    @Transactional
+    public void update(Measurement measurement) {
         measurementRepository.save(measurement);
-        return measurement;
     }
 
     /**
      * cityID - city
      * timestampSeconds - select only data measured after this timepstamp (newer ones)
      */
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public List<Measurement> getMeasurementsForCityAfterTimestamp(Integer cityID, Long timestampSeconds) {
         return mongo.find(Query.query(where("cityID").is(cityID).and("timeOfMeasurement").gt(timestampSeconds)), Measurement.class);
     }
@@ -117,6 +122,7 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     /**
      * timestampSeconds - select only data measured before this timepstamp (newer ones)
      */
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public List<Measurement> getMeasurementBeforeTimestamp(Long timestampSeconds) {
         return mongo.find(Query.query(where("timeOfMeasurement").lt(timestampSeconds)), Measurement.class);
     }

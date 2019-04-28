@@ -8,6 +8,7 @@ import java.util.Date;
 
 public class UtilService {
 
+    public static final int TRANSACTION_TIMEOUT = 20000;
     private static final Logger logger = LoggerFactory.getLogger(UtilService.class);
     private static final long ONE_DAY_MILISSECONDS = 86400000;
     private static SimpleDateFormat simpleDateFormat = null;

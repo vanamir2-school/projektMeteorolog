@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
 
@@ -18,6 +19,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+
+import static ppj.vana.projekt.service.UtilService.TRANSACTION_TIMEOUT;
 
 /**
  * WeatherDownloaderService je třída na stažení počasí ze stránky https://openweathermap.org přes poskytované API.
