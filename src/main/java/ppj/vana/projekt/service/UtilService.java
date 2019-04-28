@@ -10,7 +10,8 @@ public class UtilService {
 
     public static final int TRANSACTION_TIMEOUT = 20000;
     private static final Logger logger = LoggerFactory.getLogger(UtilService.class);
-    private static final long ONE_DAY_MILISSECONDS = 86400000;
+    public static final long ONE_DAY_MILISSECONDS = 86400000;
+    public static final long ONE_DAY_SECONDS = 86400;
     private static SimpleDateFormat simpleDateFormat = null;
 
     private UtilService(){}

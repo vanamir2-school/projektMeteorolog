@@ -9,6 +9,7 @@ import ppj.vana.projekt.model.serialization.ObjectIdSerializer;
 import ppj.vana.projekt.service.UtilService;
 
 import javax.persistence.Id;
+import java.util.Date;
 import java.util.Map;
 
 @Document(collection = "meteorolog")
@@ -23,16 +24,16 @@ public class Measurement {
     @Indexed
     private Integer cityID;
 
+    // default expiration after 14 days
+    @Indexed(expireAfterSeconds = 1209600)
+    private Date ttl;
+
     private Long timeOfMeasurement;
 
     private Double temperature;
-
     private Integer humidity;
-
     private Integer pressure;
-
-    // wind speed in m/s
-    private Double wind;
+    private Double wind; // wind speed in m/s
 
     public Measurement() {
     }
@@ -45,6 +46,14 @@ public class Measurement {
         this.humidity = humidity;
         this.pressure = pressure;
         this.wind = wind;
+    }
+
+    public Date getTtl() {
+        return ttl;
+    }
+
+    public void setTtl(Date ttl) {
+        this.ttl = ttl;
     }
 
     public ObjectId getId() {
@@ -118,8 +127,8 @@ public class Measurement {
 
     /**
      * mapIdToCity can be obratined from cityService.getIdToCityMap();
-     * */
-    public String toStringReadable(Map<Integer, City> mapIdToCity ) {
+     */
+    public String toStringReadable(Map<Integer, City> mapIdToCity) {
         return "City: " + mapIdToCity.get(cityID).getName() +
                 ", time=" + UtilService.timestampToStringSeconds(timeOfMeasurement) +
                 ", temperature=" + temperature + " °C" +

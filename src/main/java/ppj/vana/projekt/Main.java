@@ -1,6 +1,5 @@
 package ppj.vana.projekt;
 
-import com.mongodb.DBObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import ppj.vana.projekt.providers.ContextProvider;
 import ppj.vana.projekt.providers.SqlProvider;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MongoMeasurementService;
-
-import java.util.List;
 
 /**
  * extends SpringBootServletInitializer must be declared. otherwise TomCat server does not work
@@ -35,12 +32,9 @@ public class Main extends SpringBootServletInitializer {
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
         // ctxProvider
-        System.out.println(ContextProvider.getContext().getBean(CountryService.class).getAll().toString());
+        //System.out.println(ContextProvider.getContext().getBean(CountryService.class).getAll().toString());
 
-
-        //String result = ContextProvider.getContext().getBean(MongoMeasurementService.class).averageValuesForCity("Prague", 4);
-        //System.out.println(result);
-
+      // ContextProvider.getContext().getBean(MongoMeasurementService.class).deleteAll();
 
         // docasna testovaci class
         ctx.getBean(Foo.class).makeSound();

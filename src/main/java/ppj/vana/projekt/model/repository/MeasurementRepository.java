@@ -13,4 +13,5 @@ public interface MeasurementRepository extends MongoRepository<Measurement, Obje
 
     List<Measurement> findByCityID(Integer cityID, Pageable pageable);
 
+
 }

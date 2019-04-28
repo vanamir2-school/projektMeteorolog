@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
@@ -17,11 +18,15 @@ import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Measurement;
 import ppj.vana.projekt.model.repository.MeasurementRepository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static ppj.vana.projekt.service.UtilService.ONE_DAY_SECONDS;
 
 @Service
 public class MongoMeasurementService implements IService<Measurement, ObjectId> {
@@ -32,6 +37,10 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     private static final String AVG_HUM = "avgHum";
     private static final String AVG_PRESS = "avgPress";
     private static final String AVG_WIND = "avgWind";
+
+    @Value("${app.daysToExpire}")
+    private Integer daysToExpire;
+
     private final MongoOperations mongo;
     @Autowired
     private WeatherDownloaderService weatherDownloaderService;
@@ -43,7 +52,6 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     public MongoMeasurementService(MongoOperations mongo) {
         this.mongo = mongo;
     }
-
 
     // ---------------------------------------------------------------- CUSTOM PUBLIC METHODS
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
@@ -155,6 +163,7 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
 
     @Override
     public void add(Measurement entity) {
+        entity.setTtl( Date.from( LocalDateTime.now().plusDays(daysToExpire).toInstant(ZoneOffset.UTC)));
         mongo.insert(entity);
     }
 
