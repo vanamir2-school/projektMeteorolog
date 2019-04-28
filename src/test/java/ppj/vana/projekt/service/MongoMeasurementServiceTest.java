@@ -14,9 +14,7 @@ import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.Measurement;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -106,6 +104,12 @@ public class MongoMeasurementServiceTest {
         String output = service.averageValuesForCity("Praha", days);
 
         assertEquals(incOutput, output);
+    }
+
+    @Test
+    public void basicOperationTest() {
+        List<Measurement> measurementList = new ArrayList<>(Arrays.asList(measurement1, measurement2, measurement3));
+        TestUtils.serviceTest(measurementList, service, measurement1.getId(), measurement2.getId());
     }
 
 }

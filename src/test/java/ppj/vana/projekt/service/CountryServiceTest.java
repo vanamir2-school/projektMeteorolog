@@ -9,9 +9,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ppj.vana.projekt.Main;
-import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -27,13 +28,9 @@ public class CountryServiceTest {
     private final Country country3 = new Country("Norsko");
     private final Country country4 = new Country("Brazílie");
     private final Country country5 = new Country("Česká republika");
-    private final City city1 = new City("Sloup v Čechách", country5);
-    private final City city2 = new City("Janov", country4);
-    private final City city3 = new City("Ostrava", country5);
+
     @Autowired
     private CountryService countryService;
-    @Autowired
-    private CityService cityService;
 
     @Before
     public void init() {
@@ -70,16 +67,11 @@ public class CountryServiceTest {
         assertEquals("Česká republika", countryService.get("Česká republika").getName());
     }
 
+
     @Test
-    public void testCityMapping() {
-        countryService.add(country4);
-        countryService.add(country5);
-        cityService.add(city1);
-        cityService.add(city2);
-        cityService.add(city3);
-
-        //   EntityGraph<Post> entityGraph = entityManager.createEntityGraph(Post.class);
-
-        //assertEquals( countryService.getByName("Česká republika").get().getCities().size() , 2);
+    public void basicOperationTest() {
+        List<Country> countryList = new ArrayList<>(Arrays.asList(country1, country2, country3));
+        TestUtils.serviceTest(countryList, countryService, country1.getName(), country2.getName());
     }
+
 }

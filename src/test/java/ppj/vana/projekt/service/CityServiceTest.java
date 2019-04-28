@@ -110,4 +110,10 @@ public class CityServiceTest {
         assertEquals("Should be 5 cities.", 5, cities1.size());
 
     }
+
+    @Test
+    public void basicOperationTest() {
+        List<City> citiesList = new ArrayList<>(Arrays.asList(city1, city2, city3));
+        TestUtils.serviceTest(citiesList, cityService, city1.getName(), city2.getName());
+    }
 }
