@@ -13,8 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import ppj.vana.projekt.providers.ContextProvider;
 import ppj.vana.projekt.providers.SqlProvider;
-import ppj.vana.projekt.service.CountryService;
-import ppj.vana.projekt.service.MongoMeasurementService;
+import ppj.vana.projekt.service.MeasurementService;
 
 /**
  * extends SpringBootServletInitializer must be declared. otherwise TomCat server does not work
@@ -27,14 +26,15 @@ public class Main extends SpringBootServletInitializer {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     @Autowired
-    private MongoMeasurementService mongoMeasurementService;
+    private MeasurementService measurementService;
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
         // ctxProvider
         //System.out.println(ContextProvider.getContext().getBean(CountryService.class).getAll().toString());
 
-      // ContextProvider.getContext().getBean(MongoMeasurementService.class).deleteAll();
+        ContextProvider.getContext().getBean(MeasurementService.class).deleteAll();
+        MeasurementService mongo = ContextProvider.getContext().getBean(MeasurementService.class);
 
         // docasna testovaci class
         ctx.getBean(Foo.class).makeSound();

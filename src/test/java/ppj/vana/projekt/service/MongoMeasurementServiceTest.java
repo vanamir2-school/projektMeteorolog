@@ -31,7 +31,7 @@ public class MongoMeasurementServiceTest {
     private final Measurement measurement4 = new Measurement(new ObjectId(), 3077929, 1554370113850L, 20.0, 100, 100, 100.0);
 
     @Autowired
-    private MongoMeasurementService service;
+    private MeasurementService service;
     @Autowired
     private CityService cityService;
     @Autowired

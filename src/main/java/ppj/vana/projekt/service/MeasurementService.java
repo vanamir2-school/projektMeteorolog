@@ -26,13 +26,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static ppj.vana.projekt.service.UtilService.ONE_DAY_SECONDS;
 
 @Service
-public class MongoMeasurementService implements IService<Measurement, ObjectId> {
+public class MeasurementService implements IService<Measurement, ObjectId> {
 
     private static final Long MAX_LENGTH_OF_MEASUREMENT = 730L; // 2 years
-    private static final Logger logger = LoggerFactory.getLogger(MongoMeasurementService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeasurementService.class);
     private static final String AVG_TEMP = "avgTemp";
     private static final String AVG_HUM = "avgHum";
     private static final String AVG_PRESS = "avgPress";
@@ -49,7 +48,7 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
     @Autowired
     private CityService cityService;
 
-    public MongoMeasurementService(MongoOperations mongo) {
+    public MeasurementService(MongoOperations mongo) {
         this.mongo = mongo;
     }
 
@@ -163,7 +162,7 @@ public class MongoMeasurementService implements IService<Measurement, ObjectId> 
 
     @Override
     public void add(Measurement entity) {
-        entity.setTtl( Date.from( LocalDateTime.now().plusDays(daysToExpire).toInstant(ZoneOffset.UTC)));
+        entity.setTtl( Date.from( LocalDateTime.now().plusDays(daysToExpire).toInstant(ZoneOffset.ofHours(2))));
         mongo.insert(entity);
     }
 

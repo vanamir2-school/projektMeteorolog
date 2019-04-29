@@ -13,7 +13,7 @@ import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.Measurement;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
-import ppj.vana.projekt.service.MongoMeasurementService;
+import ppj.vana.projekt.service.MeasurementService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class MeasurementByCountryHTMLController {
 
     @Autowired
-    private MongoMeasurementService measurementService;
+    private MeasurementService measurementService;
     @Autowired
     private CityService cityService;
     @Autowired

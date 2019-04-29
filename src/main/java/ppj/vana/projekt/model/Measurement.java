@@ -24,8 +24,11 @@ public class Measurement {
     @Indexed
     private Integer cityID;
 
-    // default expiration after 14 days
-    @Indexed(expireAfterSeconds = 1209600)
+    // MongoDB stores all Date values in UTC (which is 2 hours behind SELC - Prague timezone]
+    // All dates in MongoDB are shifted 2 hours backwards
+    // https://docs.mongodb.com/v3.2/tutorial/model-time-data/
+    // https://www.compose.com/articles/understanding-dates-in-compose-mongodb/
+    @Indexed(expireAfterSeconds = 0)
     private Date ttl;
 
     private Long timeOfMeasurement;

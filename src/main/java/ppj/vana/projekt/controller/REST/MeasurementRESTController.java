@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ppj.vana.projekt.model.Measurement;
 import ppj.vana.projekt.controller.exceptions.APIErrorMessage;
 import ppj.vana.projekt.controller.exceptions.APIException;
-import ppj.vana.projekt.service.MongoMeasurementService;
+import ppj.vana.projekt.service.MeasurementService;
 
 import javax.validation.constraints.NotNull;
 
@@ -21,7 +21,7 @@ import static ppj.vana.projekt.controller.ServerAPI.*;
 public class MeasurementRESTController {
 
     @Autowired
-    private MongoMeasurementService measurementService;
+    private MeasurementService measurementService;
 
     private static final String READ_ONLY_ERROR = "READ-ONLY state is ON! You can not add or delete anything";
 
