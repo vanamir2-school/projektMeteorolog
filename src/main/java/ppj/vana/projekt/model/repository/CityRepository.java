@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface CityRepository extends JpaRepository<City, String> {
 
-    @Query("SELECT c FROM City AS c WHERE c.country.name=:countryName")
-    public List<City> findByCountry(@Param("countryName") String countryName);
+    @Query("SELECT c FROM City AS c WHERE c.country.name= ?1")
+    public List<City> findByCountry( String countryName);
 
 }

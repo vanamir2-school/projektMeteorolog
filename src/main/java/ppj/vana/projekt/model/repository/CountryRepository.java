@@ -7,5 +7,4 @@ import ppj.vana.projekt.model.Country;
 @Repository
 public interface CountryRepository extends JpaRepository<Country, String> {
 
-
 }
