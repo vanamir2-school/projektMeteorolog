@@ -1,15 +1,13 @@
 ﻿# TODO LIST
 
 ##Iterace 2 - X.X.2019 (PO)
-
-
-- [ ] Measurements v MVC do tabulky
 - [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
 - [ ] Opravit tlačítko submit u select country .. rozbiji se protoze neni relativni a na deploy je jina adresa http://localhost:8080/meteorolog/measurementByCountry <br />
 - [ ] Vygenerovat dokumentaci
 - [ ] All comments in English
 - [ ] No debug print to CMD
 
+- [x] Measurements v MVC do tabulky
 - [x] Přidat do DB tabulku pro ukládání datumu měření. Podle toho se bude checkovat case, kdy se provedl restart, aby nebyl download dat pres API veicekrat za 10 minut
 - [x] MongoDB TTL
 - [x] Dodělat testy na service classes - genericky test dle IService

@@ -1,6 +1,9 @@
 package ppj.vana.projekt.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
@@ -9,12 +12,6 @@ import java.sql.Timestamp;
 public class MesHistory {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue
-    private Integer id;
-
-    @Basic
-    @NotNull
     @Column(name = "time")
     private Timestamp timestamp;
 
@@ -28,7 +25,6 @@ public class MesHistory {
     @Override
     public String toString() {
         return "MesHistory{" +
-                "id=" + id +
                 ", timestamp=" + timestamp +
                 '}';
     }
@@ -39,25 +35,12 @@ public class MesHistory {
         if (o == null || getClass() != o.getClass()) return false;
 
         MesHistory that = (MesHistory) o;
-
-        if (!id.equals(that.id)) return false;
         return timestamp.equals(that.timestamp);
-
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
-        result = 31 * result + timestamp.hashCode();
-        return result;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
+        return timestamp.hashCode();
     }
 
     public Timestamp getTimestamp() {

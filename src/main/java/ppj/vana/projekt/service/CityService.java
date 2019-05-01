@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.repository.CityRepository;
+import ppj.vana.projekt.providers.ContextProvider;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +21,10 @@ public class CityService implements IService<City, String> {
     private CityRepository cityRepository;
 
     // support map that holds openWeatherMapID and its City
-    private Map<Integer, City> mapIdToCity = new HashMap<>();
+    private static Map<Integer, City> mapIdToCity = new HashMap<>();
 
     // flag to indicate the need of refresh
-    private boolean updateMap = true;
+    private static boolean updateMap = true;
 
     // ------------------------------------------------ PUBLIC METHODS
     @Transactional
@@ -47,13 +48,22 @@ public class CityService implements IService<City, String> {
         return cityRepository.existsById(city);
     }
 
-    public Map<Integer, City> getIdToCityMap() {
+
+    public static String getCityById(Integer cityID){
+        City city = CityService.getIdToCityMap().get(cityID);
+        if( city == null )
+            throw new IllegalArgumentException( "Method CityService.getCityById() recieved non-existing cityID.");
+        return city.getName();
+    }
+
+    // TODO - private
+    private static Map<Integer, City> getIdToCityMap() {
         if (updateMap) {
             mapIdToCity.clear();
-            getAll().forEach((city) -> mapIdToCity.put(city.getOpenWeatherMapID(), city));
+            ContextProvider.getContext().getBean(CityService.class).getAll().forEach((city) -> mapIdToCity.put(city.getOpenWeatherMapID(), city));
             updateMap = false;
         }
-        return this.mapIdToCity;
+        return CityService.mapIdToCity;
     }
 
     // ------------------------------------------------ INTERFACE @Override

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.Measurement;
+import ppj.vana.projekt.model.MesHistory;
 import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.CountryService;
 import ppj.vana.projekt.service.MeasurementService;
@@ -18,8 +19,8 @@ import ppj.vana.projekt.service.MeasurementService;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class MeasurementByCountryHTMLController {
@@ -40,6 +41,7 @@ public class MeasurementByCountryHTMLController {
         countryStringList.clear();
         countryService.getAll().forEach((country) -> countryStringList.add(country.getName()));
         model.addAttribute("countryList", countryStringList);
+        model.addAttribute("measurementList", new ArrayList<Measurement>());
         return "measurementByCountry";
     }
 
@@ -57,24 +59,20 @@ public class MeasurementByCountryHTMLController {
         model.addAttribute("selectCountry", country.getName());
         model.addAttribute("countryList", countryStringList);
 
-        List<String> measurementStringList = new ArrayList<>();
         // all cities in country
         List<City> cityListByCounty = cityService.getCitiesByCountry(selectedCountry);
         if (cityListByCounty == null || cityListByCounty.isEmpty()) {
-            measurementStringList.add("No measurements available.");
-            model.addAttribute("measurementList", measurementStringList);
+            model.addAttribute("measurementList", new ArrayList<Measurement>());
             return "measurementByCountry";
         }
         // all IDs of selected cities
         List<Integer> citiesID = new ArrayList<>();
         cityListByCounty.forEach((c) -> citiesID.add(c.getOpenWeatherMapID()));
         // all measurements for selected citites - object Measurement
-        List<Measurement> measumenetList = measurementService.findAllRecordForCities(citiesID);
-        // all measurements for selected citites - String
-        Map<Integer, City> mapIdToCity = cityService.getIdToCityMap();
-        measumenetList.forEach((m) -> measurementStringList.add(m.toStringReadable(mapIdToCity)));
+        List<Measurement> measurementList = measurementService.findAllRecordForCities(citiesID);
+        measurementList.sort(Comparator.comparing(Measurement::getCityID).thenComparing(Measurement::getTimeOfMeasurement));
 
-        model.addAttribute("measurementList", measurementStringList.isEmpty() ? measurementStringList.add("No model available.") : measurementStringList);
+        model.addAttribute("measurementList", measurementList);
         return "measurementByCountry";
     }
 

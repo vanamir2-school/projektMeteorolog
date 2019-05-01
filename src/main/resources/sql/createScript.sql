@@ -10,8 +10,7 @@ CREATE TABLE Country
 
 CREATE TABLE MesHistory
 (
-    id   int PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    time TIMESTAMP                      NOT NULL
+    time TIMESTAMP PRIMARY KEY NOT NULL
 );
 
 CREATE TABLE City

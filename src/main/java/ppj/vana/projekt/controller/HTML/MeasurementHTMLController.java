@@ -16,6 +16,7 @@ import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.MeasurementService;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -29,11 +30,9 @@ public class MeasurementHTMLController {
 
     @RequestMapping("/printMeasurements")
     public String showMeasurements(Model model) {
-        List<String> measurementStringList = new ArrayList<>();
         List<Measurement> measurementList = measurementService.getAll();
-        Map<Integer, City> mapIdToCity = ContextProvider.getContext().getBean(CityService.class).getIdToCityMap();
-        measurementList.forEach((measurement) -> measurementStringList.add(measurement.toStringReadable(mapIdToCity)));
-        model.addAttribute("measurements", measurementStringList);
+        measurementList.sort(Comparator.comparing(Measurement::getCityID).thenComparing(Measurement::getTimeOfMeasurement));
+        model.addAttribute("measurements", measurementList);
         return "printMeasurements";
     }
 

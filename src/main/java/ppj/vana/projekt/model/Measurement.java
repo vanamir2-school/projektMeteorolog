@@ -3,9 +3,11 @@ package ppj.vana.projekt.model;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.annotations.Expose;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ppj.vana.projekt.model.serialization.ObjectIdSerializer;
+import ppj.vana.projekt.service.CityService;
 import ppj.vana.projekt.service.UtilService;
 
 import javax.persistence.Id;
@@ -126,6 +128,14 @@ public class Measurement {
                 ", pressure=" + pressure +
                 ", wind=" + wind +
                 '}';
+    }
+
+    public String timeOfMeasurementReadable(){
+        return UtilService.timestampToStringSeconds(timeOfMeasurement);
+    }
+
+    public String cityName(){
+        return CityService.getCityById(cityID);
     }
 
     /**
