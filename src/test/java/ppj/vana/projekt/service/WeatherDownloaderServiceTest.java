@@ -1,6 +1,7 @@
 package ppj.vana.projekt.service;
 
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +12,6 @@ import ppj.vana.projekt.Main;
 import ppj.vana.projekt.model.Measurement;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Main.class)
@@ -24,11 +24,10 @@ public class WeatherDownloaderServiceTest {
 
     // test API call limit
     @Test
-    public void testLimitandDownload() {
+    public void testLimitAndDownload() {
         for (int i = 0; i < weatherDownloaderService.getApilimit(); ++i)
             cheackMeasurementLoaded(weatherDownloaderService.getWeatherByCityID(3077929));
-        Measurement measurement2 = weatherDownloaderService.getWeatherByCityID(3071961);
-        assertNull(measurement2);
+        Assertions.assertThrows(IllegalStateException.class, () -> weatherDownloaderService.getWeatherByCityID(3071961));
     }
 
     // check if model download was completely done

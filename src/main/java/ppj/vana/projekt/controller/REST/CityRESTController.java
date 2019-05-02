@@ -49,9 +49,9 @@ public class CityRESTController {
     // GET - by ID (cityName)
     @RequestMapping(value = CITY_NAME_PATH, method = RequestMethod.GET)
     public ResponseEntity<City> getCityByID(@PathVariable(CITY_NAME) String cityName) {
-        City city = cityService.get(cityName);
-        if (city == null)
+        if (!cityService.existsById(cityName))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        City city = cityService.get(cityName);
         return new ResponseEntity<>(city, HttpStatus.OK);
     }
 

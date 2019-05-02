@@ -3,6 +3,7 @@
 ##Iterace 2 - X.X.2019 (PO)
 - [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
 - [ ] Vygenerovat dokumentaci
+- [ ] Print REST API, MVC API usage
 
 - [x] No debug print to CMD
 - [x] All comments in English

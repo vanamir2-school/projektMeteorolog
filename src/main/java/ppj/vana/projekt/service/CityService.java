@@ -1,5 +1,7 @@
 package ppj.vana.projekt.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import java.util.Map;
 @Service
 public class CityService implements IService<City, String> {
 
+    private static final Logger logger = LoggerFactory.getLogger(CityService.class);
     // support map that holds openWeatherMapID and its City
     private static Map<Integer, City> mapIdToCity = new HashMap<>();
     // flag to indicate the need of refresh
@@ -49,12 +52,17 @@ public class CityService implements IService<City, String> {
 
     @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public List<City> getCitiesByCountry(String countryName) {
-        if (countryName == null)
-            return null;
+        if (countryName == null) {
+            String errorText = "Name of the country can not be null.";
+            logger.error(errorText);
+            throw new NullPointerException(errorText);
+        } else if (countryName.isEmpty()) {
+            String errorText = "Name of the country can't be empty.";
+            logger.error(errorText);
+            throw new IllegalArgumentException(errorText);
+        }
 
         List<City> cityList = cityRepository.findByCountry(countryName);
-        if (cityList.size() == 0)
-            return cityList;
         return cityList;
     }
 

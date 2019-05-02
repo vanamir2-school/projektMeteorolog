@@ -72,13 +72,17 @@ public class WeatherDownloaderService {
         return queryCounter > apilimit;
     }
 
+    // downloads and save new measurements for cities in list
     public void saveWeatherToDatabase(List<City> cityList) {
         cityList.forEach(this::saveWeatherToDatabase);
     }
 
+    // downloads and save new measurement for city param
     public void saveWeatherToDatabase(City city) {
-        if (city == null || city.getOpenWeatherMapID() == null)
-            throw new NullPointerException("Entity City must be initilized with opeanWeatherMap cityID.");
+        if (city == null)
+            throw new NullPointerException("Entity City can not be null.");
+        else if (city.getOpenWeatherMapID() == null)
+            throw new NullPointerException("Entity City must be initilized with opeanWeatherMap cityID to perform download.");
         Measurement measurement = this.getWeatherByCityID(city.getOpenWeatherMapID());
         measurementService.add(measurement);
         logger.info("Measurement INSERTION: " + measurement.toString());
@@ -86,8 +90,9 @@ public class WeatherDownloaderService {
 
     public Measurement getWeatherByCityID(int cityID) {
         if (limitExceeded()) {
-            logger.error("Number of request to weather API was exceeded. There was more then " + apilimit + " request in a minute.");
-            return null;
+            String error = "Number of requests to weather API was exceeded. There was more then " + apilimit + " requests in a minute.";
+            logger.error(error);
+            throw new IllegalStateException(error);
         }
 
         // stazeni dat do JSON formatu
@@ -108,7 +113,7 @@ public class WeatherDownloaderService {
             measurement = new Measurement(new ObjectId(), cityID, timeOfMeasurement.longValue(), temperature, humidity, pressure, windSpeed);
 
         } catch (IOException | JSONException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage() + e.getStackTrace().toString());
         }
 
         return measurement;

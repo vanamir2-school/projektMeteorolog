@@ -193,8 +193,10 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
         // ORDER OF PARAMETERS MATTER!
         TypedAggregation<Measurement> aggregation = Aggregation.newAggregation(Measurement.class, matchStage, projection, group);
         List<Document> list = mongo.aggregate(aggregation, Document.class).getMappedResults();
-        if (list == null || list.isEmpty())
+        if (list == null)
             throw new NullPointerException("There is no city with id " + cityID + " method getAverageAfterTimestamp() failed.");
+        else if (list.isEmpty())
+            throw new IllegalStateException("There is no city with id " + cityID + " method getAverageAfterTimestamp() failed.");
         return list.get(0);
     }
 
