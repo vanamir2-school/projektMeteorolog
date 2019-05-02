@@ -54,8 +54,11 @@ public class MeasurementByCountryHTMLController {
     @RequestMapping(value = "/confirmCountry", method = RequestMethod.POST)
     public String submit(@Valid @ModelAttribute("country") Country country, BindingResult result, ModelMap model) {
         if (result.hasErrors())
-            return URL_MEASUREMENT_BY_COUNTRY;
+            throw new IllegalArgumentException("There was an error." + result.getFieldError().toString());
         String selectedCountry = country.getName();
+
+        if(countryStringList.indexOf(selectedCountry) == -1)
+            throw new IllegalArgumentException("Selected country is not in DB.");
 
         // set selected country to be first value of the select combo
         Collections.swap(countryStringList, 0, countryStringList.indexOf(selectedCountry));

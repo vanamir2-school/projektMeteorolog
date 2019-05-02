@@ -7,7 +7,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
-import ppj.vana.projekt.Main;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -29,7 +28,7 @@ public class SqlProvider {
             log.warn("DB Provisioner: No tables exist and will be created");
             createDb();
             allTables = namedParameterJdbcOperations.getJdbcOperations().queryForList("SELECT TABLE_NAME FROM  INFORMATION_SCHEMA.TABLES", String.class);
-            System.out.println(allTables);
+            log.debug(allTables.toString());
         } else
             log.info("DB Provisioner: Table OFFERS exists, all existing tables: " + allTables);
     }

@@ -21,7 +21,6 @@
         <start-class>ppj.vana.projekt.Main</start-class>
     </properties>
 
-
     <packaging>war</packaging>
 
     <dependencies>
@@ -244,7 +243,7 @@
                 </executions>
             </plugin>
 
-            <!-- PLUGIN NA AUTOMATICKE SPUSTENI MAIN METHOD PO BUILDU -->
+            <!-- AUTOMATIC MAIN METHOD  RUN AFTER BUILD -->
             <!-- <plugin>
                  <groupId>org.codehaus.mojo</groupId>
                  <artifactId>exec-maven-plugin</artifactId>
@@ -258,7 +257,6 @@
                          <configuration>
                              <mainClass>ppj.vana.projekt.Main</mainClass>
                              <arguments>
-                                 <argument>Ahoj světe</argument>
                                  <argument>Test args</argument>
                              </arguments>
                          </configuration>

@@ -95,7 +95,7 @@ public class MongoMeasurementServiceTest {
         service.add(measurement3);
         service.add(measurement4);
 
-        String incOutput = String.format("Averaged values for %s in %d last days:", "Praha", days) + System.lineSeparator();
+        String incOutput = String.format("Average values for %s in %d last days:", "Praha", days) + System.lineSeparator();
         incOutput += String.format("Temperature: %s", "22,5") + System.lineSeparator();
         incOutput += String.format("Humidity: %s", "32,5") + System.lineSeparator();
         incOutput += String.format("Pressure: %s", "33,0") + System.lineSeparator();

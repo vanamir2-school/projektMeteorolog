@@ -1,26 +1,21 @@
 package ppj.vana.projekt.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import ppj.vana.projekt.model.City;
 import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.model.repository.CountryRepository;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static ppj.vana.projekt.service.UtilService.TRANSACTION_TIMEOUT;
 
 @Service
 public class CountryService implements IService<Country, String> {
 
-    @Autowired
-    private CountryRepository countryRepository;
+    private final CountryRepository countryRepository;
+
+    public CountryService(CountryRepository countryRepository) {
+        this.countryRepository = countryRepository;
+    }
 
     @Transactional
     public void deleteById(String country) {
@@ -28,7 +23,9 @@ public class CountryService implements IService<Country, String> {
     }
 
     @Transactional
-    public void saveList(List list) {
+    public void saveList(List<Country> list) {
+        if (list == null)
+            throw new NullPointerException("No List provided.");
         countryRepository.saveAll(list);
     }
 
@@ -46,7 +43,7 @@ public class CountryService implements IService<Country, String> {
 
     @Override
     public List<Country> getAll() {
-        return StreamSupport.stream(countryRepository.findAll().spliterator(), false).collect(Collectors.toList());
+        return countryRepository.findAll();
     }
 
     @Override
@@ -56,7 +53,7 @@ public class CountryService implements IService<Country, String> {
 
     @Override
     public Country get(String countryName) {
-        if(countryRepository.findById(countryName).isPresent())
+        if (countryRepository.findById(countryName).isPresent())
             return countryRepository.findById(countryName).get();
         return null;
     }

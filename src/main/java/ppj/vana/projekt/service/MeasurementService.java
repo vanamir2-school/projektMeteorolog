@@ -4,7 +4,6 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -36,20 +35,16 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
     private static final String AVG_HUM = "avgHum";
     private static final String AVG_PRESS = "avgPress";
     private static final String AVG_WIND = "avgWind";
-
+    private final MongoOperations mongo;
+    private final MeasurementRepository measurementRepository;
+    private final CityService cityService;
     @Value("${app.daysToExpire}")
     private Integer daysToExpire;
 
-    private final MongoOperations mongo;
-    @Autowired
-    private WeatherDownloaderService weatherDownloaderService;
-    @Autowired
-    private MeasurementRepository measurementRepository;
-    @Autowired
-    private CityService cityService;
-
-    public MeasurementService(MongoOperations mongo) {
+    public MeasurementService(MongoOperations mongo, MeasurementRepository measurementRepository, CityService cityService) {
         this.mongo = mongo;
+        this.measurementRepository = measurementRepository;
+        this.cityService = cityService;
     }
 
     // ---------------------------------------------------------------- CUSTOM PUBLIC METHODS
@@ -59,10 +54,10 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
     }
 
     /**
-     * Vrátí instanci Measurement uvnitř které jsou zprůměrované hodnoty.
+     * Returns instance of Measurement with average values.
      *
      * @param cityName the city name
-     * @param days     udává kolik dnů "dozadu" bude výpočet zahrnovat. Range 1-365.
+     * @param days     how many days backward it can search. Range 1-365.
      * @return the string
      */
     public String averageValuesForCity(String cityName, int days) {
@@ -76,14 +71,14 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
         if (cityID == null)
             return "City " + cityName + " does not have any measured model.";
 
-        // rozsah dnů je 1-730, jinak null
+        // range is 1-730, otherwise null
         if (days < 1 || days > MAX_LENGTH_OF_MEASUREMENT)
             return "You can calculate average back to 1-730 days.";
 
         // timestamp x days back
         Long timestampSeconds = UtilService.getTimestampXDaysBackInSeconds(days);
         Document avgMeasurement = this.getAverageAfterTimestamp(cityID, timestampSeconds);
-        String output = String.format("Averaged values for %s in %d last days:", cityName, days) + System.lineSeparator();
+        String output = String.format("Average values for %s in %d last days:", cityName, days) + System.lineSeparator();
         output += this.formatAverageValues(avgMeasurement);
         logger.info(output);
         return output;
@@ -162,7 +157,7 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
 
     @Override
     public void add(Measurement entity) {
-        entity.setTtl( Date.from( LocalDateTime.now().plusDays(daysToExpire).toInstant(ZoneOffset.ofHours(2))));
+        entity.setTtl(Date.from(LocalDateTime.now().plusDays(daysToExpire).toInstant(ZoneOffset.ofHours(2))));
         mongo.insert(entity);
     }
 
@@ -188,13 +183,14 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
             throw new NullPointerException("Method readAverage(Integer cityID) was called with no cityID filled.");
         }
 
-        MatchOperation matchStage = Aggregation.match(new Criteria("cityID").is(cityID).and("timeOfMeasurement").gte(timestampSeconds)); // to podle čeho se grupuje se nastavuje jako nové ID... hledám ne cityID, ale _id
+        MatchOperation matchStage = Aggregation.match(new Criteria("cityID").is(cityID).and("timeOfMeasurement").gte(timestampSeconds));
         ProjectionOperation projection = Aggregation.project("temperature", "humidity", "pressure", "wind", "cityID");
         GroupOperation group = Aggregation.group("cityID")
                 .avg("temperature").as(AVG_TEMP)
                 .avg("humidity").as(AVG_HUM)
                 .avg("pressure").as(AVG_PRESS)
                 .avg("wind").as(AVG_WIND);
+        // ORDER OF PARAMETERS MATTER!
         TypedAggregation<Measurement> aggregation = Aggregation.newAggregation(Measurement.class, matchStage, projection, group);
         List<Document> list = mongo.aggregate(aggregation, Document.class).getMappedResults();
         if (list == null || list.isEmpty())
@@ -209,7 +205,7 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
     public Map<Integer, Integer> numOfRecordsUsingMapReduce() {
         final String mapJS = "classpath:mongoDB/measurement_cityID_map.js";
         final String reduceJS = "classpath:mongoDB/measurement_cityID_reduce.js";
-        // query , kolekce (coz je seskupeni dokumentu - neco jako RDBMS tabulka), map, reduce, entityClass
+        // query , collection (something like table in RDBMS), map, reduce, entityClass
         MapReduceResults<CountEntry> mapReduceResult = mongo.mapReduce(new Query(), mongo.getCollectionName(Measurement.class), mapJS, reduceJS, CountEntry.class);
         Map<Integer, Integer> numOfRecords = new TreeMap<>();
         mapReduceResult.forEach((result) -> numOfRecords.put(result.id, result.value));
@@ -217,8 +213,8 @@ public class MeasurementService implements IService<Measurement, ObjectId> {
     }
 
     private static class CountEntry {
-        // id == cityID -- to si definujeme v map
-        public int id; // TOTO SE MUSI SHODOVAT S ID DANE ENTITY (Measurement), jinak se to POSE*E
+        // id == cityID -- this is defined in map
+        public int id; // THIS MUST BE EQUALS TO ID OF ENTITY (Measurement), othwerwise it gets fucked
         public int value; // count
     }
 

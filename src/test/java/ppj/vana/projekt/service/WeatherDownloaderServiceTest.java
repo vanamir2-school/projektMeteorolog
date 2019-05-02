@@ -42,5 +42,4 @@ public class WeatherDownloaderServiceTest {
         assertNotNull(measurement1.getTimeOfMeasurement());
     }
 
-
 }

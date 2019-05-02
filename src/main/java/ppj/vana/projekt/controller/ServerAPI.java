@@ -13,12 +13,13 @@ import java.util.List;
 //  DELETE  = DELETE
 //  GET     = READ
 
-
 /**
- * Interface odpovídající REST API. Rozhraní je anotováno pomocí retrofit2.
+ * Interface correspoding to REST API. Interface is annotated by retrofit2.
  * retrofit2 Tutorial: https://www.vogella.com/tutorials/Retrofit/article.html
  */
 public interface ServerAPI {
+
+    String READ_ONLY_ERROR = "READ-ONLY state is ON! You can not add or delete anything";
 
     // -------------------------------------------------------------- COUNTRY API - PATHS
     String COUNTRY_BASE_PATH = "/country";

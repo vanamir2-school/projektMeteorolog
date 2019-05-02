@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
@@ -20,27 +19,32 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * WeatherDownloaderService je třída na stažení počasí ze stránky https://openweathermap.org přes poskytované API.
- * Umožňuje konfiguraci dle požadavků v zadání PPJ projektu - TODO
- * Konfigurace se natahuje z .properties souborů
+ * WeatherDownloaderService provides data download from https://openweathermap.org via their API.
+ * Configuration is received from .properties files
  */
 @Service
 public class WeatherDownloaderService {
 
     private static final Logger logger = LoggerFactory.getLogger(WeatherDownloaderService.class);
-    private static final String CURRENT_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather";
     private static final String UNITS = "metric";
 
-    @Autowired
-    private MeasurementService measurementService;
+    private final MeasurementService measurementService;
     private Date queryStartDate = null;
     private int queryCounter = 0;
+
+    @NotNull
+    @Value("${app.apiUrl}")
+    private String currentWeatherApiUrl;
     @NotNull
     @Value("${app.appid}")
     private String appid;
     @NotNull
     @Value("${app.apilimit}")
     private Integer apilimit;
+
+    public WeatherDownloaderService(MeasurementService measurementService) {
+        this.measurementService = measurementService;
+    }
 
     public Integer getApilimit() {
         return apilimit;
@@ -51,29 +55,25 @@ public class WeatherDownloaderService {
     }
 
     /**
-     * Zkontroluje, zda nebyl překročen nastavený limit v počtu dotazů za minutu.
+     * Check if Query limit does not exceeded.
      */
     private boolean limitExceeded() {
-        if (apilimit == null)
-            throw new NullPointerException("Applimit konfigurovatelný v souboru: aplication.properties nebyl nalezen");
         if (queryStartDate == null)
             queryStartDate = new Date();
-        // pokud je queryStartDate mensi o vice jak 60 000ms - uz je pryc minuta a muzeme ho vynulovat
-        Long casovyRozdil = new Date().getTime() - queryStartDate.getTime();
-        if (casovyRozdil > 60000L) {
+        // if queryStartDate is smaller by more then 60 000ms - one minute is gone and we can reset it
+        Long timeDiff = new Date().getTime() - queryStartDate.getTime();
+        if (timeDiff > 60000L) {
             queryStartDate = new Date();
             queryCounter = 0;
             return false;
         }
         ++queryCounter;
-        logger.info("This is request number " + queryCounter + " in the last minute on OpenWeatherAPI.");
-        if (queryCounter > apilimit)
-            return true;
-        return false;
+        logger.debug("This is request number " + queryCounter + " in the last minute on OpenWeatherAPI.");
+        return queryCounter > apilimit;
     }
 
     public void saveWeatherToDatabase(List<City> cityList) {
-        cityList.forEach((city) -> saveWeatherToDatabase(city));
+        cityList.forEach(this::saveWeatherToDatabase);
     }
 
     public void saveWeatherToDatabase(City city) {
@@ -86,12 +86,12 @@ public class WeatherDownloaderService {
 
     public Measurement getWeatherByCityID(int cityID) {
         if (limitExceeded()) {
-            logger.error("Byl překročen limit v počtu dorazů. Bylo voláno více než " + apilimit + " dotazů za minutu");
+            logger.error("Number of request to weather API was exceeded. There was more then " + apilimit + " request in a minute.");
             return null;
         }
 
         // stazeni dat do JSON formatu
-        String urlString = CURRENT_WEATHER_API_URL + String.format("?id=%d&APPID=%s&units=%s", cityID, appid, UNITS);
+        String urlString = currentWeatherApiUrl + String.format("?id=%d&APPID=%s&units=%s", cityID, appid, UNITS);
         String jsonData = null;
         Measurement measurement = null;
         try {
@@ -107,11 +107,8 @@ public class WeatherDownloaderService {
             Integer pressure = json.getJSONObject("main").getInt("pressure");
             measurement = new Measurement(new ObjectId(), cityID, timeOfMeasurement.longValue(), temperature, humidity, pressure, windSpeed);
 
-            // TODO - dodelat LOGOVANI
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (IOException | JSONException e) {
+            logger.error(e.getMessage());
         }
 
         return measurement;

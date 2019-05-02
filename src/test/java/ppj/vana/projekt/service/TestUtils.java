@@ -6,9 +6,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.*;
 
-public class TestUtils {
+class TestUtils {
 
-    public static <Entity, Key> void serviceTest(List<Entity> entityList, IService<Entity, Key> service, Key key1, Key key2) {
+    static <Entity, Key> void serviceTest(List<Entity> entityList, IService<Entity, Key> service, Key key1, Key key2) {
         if (entityList.size() != 3)
             throw new IllegalStateException("There must be list of length 3.");
 
@@ -32,6 +32,6 @@ public class TestUtils {
         service.deleteAll();
         assertEquals(service.count(), 0);
         assertNull(service.get(key1));
-        assertEquals(false, service.exists(entityList.get(0)));
+        assertFalse(service.exists(entityList.get(0)));
     }
 }

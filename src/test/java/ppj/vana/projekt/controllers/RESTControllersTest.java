@@ -1,7 +1,5 @@
 package ppj.vana.projekt.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.bson.types.ObjectId;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +27,6 @@ import static org.junit.Assert.*;
 
 
 // https://www.baeldung.com/spring-boot-testing
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Main.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles({"test"})
@@ -45,8 +42,8 @@ public class RESTControllersTest {
     public void init() {
         String URL = "http://localhost:" + this.port;
 
-        // GsonConverterFactory  NEFUNGUJE
-        // NUTNO POUŽÍT JacksonConverterFactory, JINAK SE NEPOUŽIJÍ CUSTOM SERIALIZACE/DESERIALIZACE
+        // GsonConverterFactory  does not work
+        // MUST BE JacksonConverterFactory, OTHERWISE CUSTOM SERIALIZATION/DESERIALIZATION DOES NOT WORK
         Retrofit retrofit = new Retrofit.Builder().baseUrl(URL).addConverterFactory(JacksonConverterFactory.create()).build();
         serverAPI = retrofit.create(ServerAPI.class);
 
@@ -137,7 +134,7 @@ public class RESTControllersTest {
         assertEquals(cityResponse.body().getName(), "Vidlákov");
         assertEquals(cityResponse.body(), new City("Vidlákov", new Country(PANDARIA), 42));
 
-        // země vrátíme do původního stavu
+        // return countries to previous state
         serverAPI.deleteCountry("Pandaria").execute();
 
     }
@@ -147,15 +144,6 @@ public class RESTControllersTest {
         final Measurement measurement1 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, 40, 40, 40.0);
         final Measurement measurement2 = new Measurement(new ObjectId(), 3077925, 20L, 20.0, null, null, null);
         final Measurement measurement3 = new Measurement(new ObjectId(), 3077929, 20L, 20.0, null, null, null);
-
-        // test se/deserializace
-        ObjectMapper objectMapper = new ObjectMapper();
-        System.out.println(objectMapper.writeValueAsString(measurement1));
-
-        SimpleModule module = new SimpleModule();
-        Measurement measurement1Deserialized = objectMapper.readValue(objectMapper.writeValueAsString(measurement1), Measurement.class);
-        System.out.println(objectMapper.writeValueAsString(measurement1Deserialized));
-
 
         // ADD
         assertEquals(serverAPI.addMeasurement(measurement1).execute().raw().code(), HttpStatus.OK.value());

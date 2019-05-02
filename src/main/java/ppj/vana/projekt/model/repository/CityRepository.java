@@ -3,7 +3,6 @@ package ppj.vana.projekt.model.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ppj.vana.projekt.model.City;
 
@@ -13,6 +12,6 @@ import java.util.List;
 public interface CityRepository extends JpaRepository<City, String> {
 
     @Query("SELECT c FROM City AS c WHERE c.country.name= ?1")
-    public List<City> findByCountry( String countryName);
+    List<City> findByCountry(String countryName);
 
 }

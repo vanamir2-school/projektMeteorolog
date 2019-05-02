@@ -9,13 +9,14 @@ import java.util.Date;
 public class UtilService {
 
     public static final int TRANSACTION_TIMEOUT = 20000;
-    private static final Logger logger = LoggerFactory.getLogger(UtilService.class);
     public static final long ONE_DAY_MILISSECONDS = 86400000;
     public static final long ONE_DAY_SECONDS = 86400;
     public static final long ONE_MINUTE_MILLISECONDS = 60000L;
+    private static final Logger logger = LoggerFactory.getLogger(UtilService.class);
     private static SimpleDateFormat simpleDateFormat = null;
 
-    private UtilService(){}
+    private UtilService() {
+    }
 
     /**
      * Converts UNIX time to String with pattern "dd-MM-yyyy HH:mm:ss".
@@ -32,12 +33,12 @@ public class UtilService {
         return simpleDateFormat.format(miliseconds);
     }
 
-    public static Long getTimestampXDaysBackInSeconds(int daysAgo){
+    public static Long getTimestampXDaysBackInSeconds(int daysAgo) {
         Date currentTime = new Date();
         Long timestampXDaysBack = currentTime.getTime() - ONE_DAY_MILISSECONDS * daysAgo;
         Long timestampXDaysBackSeconds = timestampXDaysBack / 1000;
-        logger.info("Current time: " + UtilService.timestampToStringMilliSeconds(currentTime.getTime()));
-        logger.info("Timestamp {} days ago is: " + UtilService.timestampToStringSeconds(timestampXDaysBackSeconds), daysAgo);
+        logger.debug("Current time: " + UtilService.timestampToStringMilliSeconds(currentTime.getTime()));
+        logger.debug("Timestamp {} days ago is: " + UtilService.timestampToStringSeconds(timestampXDaysBackSeconds), daysAgo);
         return timestampXDaysBackSeconds;
     }
 

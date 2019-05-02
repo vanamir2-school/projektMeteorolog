@@ -1,6 +1,5 @@
 package ppj.vana.projekt.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,20 +10,36 @@ import ppj.vana.projekt.providers.ContextProvider;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class CityService implements IService<City, String> {
 
-    @Autowired
-    private CityRepository cityRepository;
-
     // support map that holds openWeatherMapID and its City
     private static Map<Integer, City> mapIdToCity = new HashMap<>();
-
     // flag to indicate the need of refresh
     private static boolean updateMap = true;
+
+    private final CityRepository cityRepository;
+
+    public CityService(CityRepository cityRepository) {
+        this.cityRepository = cityRepository;
+    }
+
+    public static String getCityById(Integer cityID) {
+        City city = CityService.getIdToCityMap().get(cityID);
+        if (city == null)
+            throw new IllegalArgumentException("Method CityService.getCityById() recieved non-existing cityID.");
+        return city.getName();
+    }
+
+    private static Map<Integer, City> getIdToCityMap() {
+        if (updateMap) {
+            mapIdToCity.clear();
+            ContextProvider.getContext().getBean(CityService.class).getAll().forEach((city) -> mapIdToCity.put(city.getOpenWeatherMapID(), city));
+            updateMap = false;
+        }
+        return CityService.mapIdToCity;
+    }
 
     // ------------------------------------------------ PUBLIC METHODS
     @Transactional
@@ -48,24 +63,6 @@ public class CityService implements IService<City, String> {
         return cityRepository.existsById(city);
     }
 
-
-    public static String getCityById(Integer cityID){
-        City city = CityService.getIdToCityMap().get(cityID);
-        if( city == null )
-            throw new IllegalArgumentException( "Method CityService.getCityById() recieved non-existing cityID.");
-        return city.getName();
-    }
-
-    // TODO - private
-    private static Map<Integer, City> getIdToCityMap() {
-        if (updateMap) {
-            mapIdToCity.clear();
-            ContextProvider.getContext().getBean(CityService.class).getAll().forEach((city) -> mapIdToCity.put(city.getOpenWeatherMapID(), city));
-            updateMap = false;
-        }
-        return CityService.mapIdToCity;
-    }
-
     // ------------------------------------------------ INTERFACE @Override
 
     @Override
@@ -76,7 +73,7 @@ public class CityService implements IService<City, String> {
 
     @Override
     public List<City> getAll() {
-        return StreamSupport.stream(cityRepository.findAll().spliterator(), false).collect(Collectors.toList());
+        return cityRepository.findAll();
     }
 
     @Override

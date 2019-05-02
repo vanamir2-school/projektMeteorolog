@@ -11,14 +11,13 @@ import ppj.vana.projekt.service.UtilService;
 
 import javax.persistence.Id;
 import java.util.Date;
-import java.util.Map;
+import java.util.Objects;
 
 @Document(collection = "meteorolog")
 public class Measurement {
 
     @Id
     @Expose
-    //@JsonDeserialize(using = ObjectIdDeserializer.class)
     @JsonSerialize(using = ObjectIdSerializer.class)
     private ObjectId id;
 
@@ -137,18 +136,6 @@ public class Measurement {
         return CityService.getCityById(cityID);
     }
 
-    /**
-     * mapIdToCity can be obratined from cityService.getIdToCityMap();
-     */
-    public String toStringReadable(Map<Integer, City> mapIdToCity) {
-        return "City: " + mapIdToCity.get(cityID).getName() +
-                ", time=" + UtilService.timestampToStringSeconds(timeOfMeasurement) +
-                ", temperature=" + temperature + " °C" +
-                ", humidity=" + humidity + "%" +
-                ", pressure=" + pressure + " hPa" +
-                ", wind=" + wind + " m/s";
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -157,13 +144,13 @@ public class Measurement {
         Measurement that = (Measurement) o;
 
         if (!id.equals(that.id)) return false;
-        if (cityID != null ? !cityID.equals(that.cityID) : that.cityID != null) return false;
-        if (timeOfMeasurement != null ? !timeOfMeasurement.equals(that.timeOfMeasurement) : that.timeOfMeasurement != null)
+        if (!Objects.equals(cityID, that.cityID)) return false;
+        if (!Objects.equals(timeOfMeasurement, that.timeOfMeasurement))
             return false;
-        if (temperature != null ? !temperature.equals(that.temperature) : that.temperature != null) return false;
-        if (humidity != null ? !humidity.equals(that.humidity) : that.humidity != null) return false;
-        if (pressure != null ? !pressure.equals(that.pressure) : that.pressure != null) return false;
-        return wind != null ? wind.equals(that.wind) : that.wind == null;
+        if (!Objects.equals(temperature, that.temperature)) return false;
+        if (!Objects.equals(humidity, that.humidity)) return false;
+        if (!Objects.equals(pressure, that.pressure)) return false;
+        return Objects.equals(wind, that.wind);
 
     }
 

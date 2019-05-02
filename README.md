@@ -1,2 +1,9 @@
-# projektMeteorolog
-Projekt v rámci předmětu PPJ na vyzkoušení Java technologií.
+# project Meteorolog
+Semestral work to try Java technologies.
+- Spring boot
+- Maven
+- MVC - JSP
+- REST API
+- Jackson 2
+- Scheduler
+- Profiles, loggs

@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 @TestPropertySource(locations = "classpath:app_test.properties")
 public class CityServiceTest {
 
-    private final List<Country> countryList = new ArrayList<Country>(
+    private final List<Country> countryList = new ArrayList<>(
             Arrays.asList(
                     new Country("Austrálie"),
                     new Country("Estonsko"),
@@ -61,10 +61,7 @@ public class CityServiceTest {
     @Test
     public void testCreateRetrieve() {
         cityService.add(city1);
-
         List<City> cities = cityService.getAll();
-
-        System.out.println(cities);
 
         assertEquals("One field should have been created and retrieved", 1, cities.size());
         assertEquals("Inserted field should match retrieved", city1, cities.get(0));

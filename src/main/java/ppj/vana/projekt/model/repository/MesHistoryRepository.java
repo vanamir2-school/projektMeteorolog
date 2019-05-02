@@ -10,5 +10,5 @@ public interface MesHistoryRepository extends JpaRepository<MesHistory, Integer>
 
     // JPA @Query tutorial https://www.baeldung.com/spring-data-jpa-query
     @Query(value = "SELECT * FROM MesHistory WHERE time = (SELECT max(time) FROM MesHistory)", nativeQuery = true)
-    public MesHistory getLatestMes();
+    MesHistory getLatestMes();
 }

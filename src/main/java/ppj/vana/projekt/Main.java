@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import ppj.vana.projekt.providers.SqlProvider;
 
 /**
- * extends SpringBootServletInitializer must be declared. otherwise TomCat server does not work
+ * extends SpringBootServletInitializer must be declared. otherwise TomCat server does not work.
  */
 @SpringBootApplication
 @EnableScheduling
@@ -20,10 +20,9 @@ public class Main extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
-        // print active profile
+        // log(info) active profile
         ctx.getBean(Foo.class).printLog();
     }
-
 
     @Profile({"devel,prod"})
     @Bean(initMethod = "doProvision")

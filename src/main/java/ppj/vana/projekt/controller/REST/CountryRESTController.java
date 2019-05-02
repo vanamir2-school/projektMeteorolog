@@ -1,13 +1,12 @@
 package ppj.vana.projekt.controller.REST;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.controller.exceptions.APIErrorMessage;
 import ppj.vana.projekt.controller.exceptions.APIException;
+import ppj.vana.projekt.model.Country;
 import ppj.vana.projekt.service.CountryService;
 
 import javax.validation.constraints.NotNull;
@@ -19,22 +18,23 @@ import static ppj.vana.projekt.controller.ServerAPI.*;
 @RequestMapping(COUNTRY_BASE_PATH)
 public class CountryRESTController {
 
-    @Autowired
-    private CountryService countryService;
-
-    private static final String READ_ONLY_ERROR = "READ-ONLY state is ON! You can not add or delete anything";
+    private final CountryService countryService;
 
     @NotNull
     @Value("${app.readonly}")
     private Boolean readonly;
 
-    // GET - všechny státy JSON formát
+    public CountryRESTController(CountryService countryService) {
+        this.countryService = countryService;
+    }
+
+    // GET - all states in JSON format
     @RequestMapping(value = COUNTRY_ALL_PATH, method = RequestMethod.GET)
     public ResponseEntity<List<Country>> getCountries() {
         return new ResponseEntity<>(countryService.getAll(), HttpStatus.OK);
     }
 
-    // GET - by ID (nazevStatu)
+    // GET - by ID (countryName)
     @RequestMapping(value = COUNTRY_NAME_PATH, method = RequestMethod.GET)
     public ResponseEntity<Country> getCountryByID(@PathVariable(COUNTRY_NAME) String countryName) {
         Country country = countryService.get(countryName);
@@ -43,10 +43,10 @@ public class CountryRESTController {
         return new ResponseEntity<>(country, HttpStatus.OK);
     }
 
-    // DELETE - by ID (nazevStatu)
+    // DELETE - by ID (countryName)
     @RequestMapping(value = COUNTRY_NAME_PATH, method = RequestMethod.DELETE)
     public ResponseEntity deleteCountry(@PathVariable(COUNTRY_NAME) String countryName) {
-        if(readonly)
+        if (readonly)
             return new ResponseEntity(READ_ONLY_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         Country country = countryService.get(countryName);
         if (country == null)
@@ -58,7 +58,7 @@ public class CountryRESTController {
     // PUT - add Country
     @RequestMapping(method = RequestMethod.PUT)
     public ResponseEntity addCountry(@RequestBody Country country) {
-        if(readonly)
+        if (readonly)
             return new ResponseEntity(READ_ONLY_ERROR, HttpStatus.METHOD_NOT_ALLOWED);
         if (countryService.exists(country))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

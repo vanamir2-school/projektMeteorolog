@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Třída demonstruje použití profilů - je nakonfigurována ve třídě FooConfiguration.
+ * Class to demonstrate profile usage. Configured in FooConfiguration.
  */
 public class Foo {
 
@@ -20,5 +20,4 @@ public class Foo {
     public void printLog() {
         logger.info(text);
     }
-
 }

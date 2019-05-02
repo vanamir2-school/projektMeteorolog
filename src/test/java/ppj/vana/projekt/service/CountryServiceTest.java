@@ -41,7 +41,6 @@ public class CountryServiceTest {
     public void testCreateRetrieve() {
         countryService.add(country1);
         List<Country> countries = countryService.getAll();
-        System.out.println(countries);
 
         assertEquals("One field should have been created and retrieved", 1, countries.size());
         assertEquals("Inserted field should match retrieved", country1, countries.get(0));

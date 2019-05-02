@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Table(name = "city")
@@ -16,7 +17,7 @@ public class City {
     @Id
     @NotNull
     @Column(name = "name")
-    @Length(max = 50)
+    @Length(max = 80)
     private String name;
 
     @ManyToOne
@@ -32,7 +33,6 @@ public class City {
 
 
     public City() {
-        this.country = new Country();
     }
 
     public City(String name, Country country) {
@@ -78,7 +78,7 @@ public class City {
         City city = (City) o;
 
         if (!name.equals(city.name)) return false;
-        return country != null ? country.equals(city.country) : city.country == null;
+        return Objects.equals(country, city.country);
 
     }
 
