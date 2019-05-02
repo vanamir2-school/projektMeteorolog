@@ -118,3 +118,7 @@ Field injection is not recommended  for reasons:
  - Tests are forced to use Spring container
  https://blog.marcnuri.com/field-injection-is-not-recommended/ <br/>
 https://www.vojtechruzicka.com/field-dependency-injection-considered-harmful/
+
+
+### calculate number of lines
+wc -l \`find . -name \\* -print\`

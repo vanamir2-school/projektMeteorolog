@@ -1,4 +1,8 @@
 # project Meteorolog
+Build and run:
+<project_root_folder>\ mvn spring-boot:run
+
+
 Semestral work to try Java technologies.
 - Spring boot
 - Maven
