@@ -9,7 +9,7 @@
     <style><%@include file="/WEB-INF/css/style.css"%></style>
 </head>
 <body>
-<a href="/">
+<a href="${pageContext.request.contextPath}/">
     <img src="<c:url value='https://image.flaticon.com/icons/png/512/53/53567.png'/>" width="42" height="42" border="0" />
 </a>
 <title>Measurements</title>

@@ -6,7 +6,7 @@
 
     <groupId>projektVana</groupId>
     <artifactId>meteorolog</artifactId>
-    <version>1</version>
+    <version>1.1</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -17,6 +17,8 @@
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- The main class to start by executing "java -jar" -->
+        <start-class>ppj.vana.projekt.Main</start-class>
     </properties>
 
 
@@ -56,6 +58,11 @@
             <scope>provided</scope>
         </dependency>
         <!--  servlet  -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
@@ -194,11 +201,22 @@
 
     <!-- MY OWN BUILD GOAL - COMPILE AND RUN MAIN METHOD -->
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <finalName>meteorolog</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>ppj.vana.projekt.Main</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <!-- Vytvoreni projektu tak, aby obsahoval rovnou vsechny dependencies (a sel spustit z CMD)-->
             <!-- https://www.staldal.nu/tech/2014/10/26/create-a-self-contained-jar-file-with-maven/ -->

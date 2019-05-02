@@ -93,3 +93,17 @@ https://spring.io/guides/gs/managing-transactions/ <br/>
 Annotation understanding:
 https://www.javacodegeeks.com/2016/05/understanding-transactional-annotation-spring.html
 
+### Deploy
+
+#### Spring boot Main class
+https://www.baeldung.com/spring-boot-main-class
+
+#### App root context path
+Java:
+https://howtodoinjava.com/spring-boot/change-application-root-context-path/
+- Spring Boot 2.X:  server.servlet.context-path=/meteorolog
+- Spring Boot 1.5:  server.context-path=/meteorolog
+
+JSP:
+https://stackoverflow.com/questions/4764405/how-to-use-relative-paths-without-including-the-context-root-name
+${pageContext.request.contextPath}

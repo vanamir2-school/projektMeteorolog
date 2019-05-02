@@ -1,10 +1,15 @@
 package ppj.vana.projekt;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Třída demonstruje použití profilů - je nakonfigurována ve třídě FooConfiguration.
  */
 public class Foo {
+
+    private static final Logger logger = LoggerFactory.getLogger(Foo.class);
 
     private final String text;
 
@@ -13,7 +18,7 @@ public class Foo {
     }
 
     public void makeSound() {
-        System.out.println(text);
+        logger.info(text);
     }
 
 }
