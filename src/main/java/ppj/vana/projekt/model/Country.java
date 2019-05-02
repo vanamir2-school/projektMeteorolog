@@ -1,5 +1,7 @@
 package ppj.vana.projekt.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,6 +14,7 @@ public class Country {
 
     @Id
     @Column(name = "name")
+    @Length(max = 50)
     private String name;
 
     public Country() {

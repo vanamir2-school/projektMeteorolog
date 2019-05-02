@@ -12,6 +12,7 @@ public class UtilService {
     private static final Logger logger = LoggerFactory.getLogger(UtilService.class);
     public static final long ONE_DAY_MILISSECONDS = 86400000;
     public static final long ONE_DAY_SECONDS = 86400;
+    public static final long ONE_MINUTE_MILLISECONDS = 60000L;
     private static SimpleDateFormat simpleDateFormat = null;
 
     private UtilService(){}

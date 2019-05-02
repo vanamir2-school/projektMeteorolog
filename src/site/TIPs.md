@@ -107,3 +107,14 @@ https://howtodoinjava.com/spring-boot/change-application-root-context-path/
 JSP:
 https://stackoverflow.com/questions/4764405/how-to-use-relative-paths-without-including-the-context-root-name
 ${pageContext.request.contextPath}
+
+### Runtime config
+https://stackoverflow.com/questions/27919270/set-override-spring-spring-boot-properties-at-runtime
+
+### Dependecy injections - types and downside of field injection
+Field injection is not recommended  for reasons:
+ - It is easier to break Single responsibility principle
+ - Hidden dependencies
+ - Tests are forced to use Spring container
+ https://blog.marcnuri.com/field-injection-is-not-recommended/ <br/>
+https://www.vojtechruzicka.com/field-dependency-injection-considered-harmful/

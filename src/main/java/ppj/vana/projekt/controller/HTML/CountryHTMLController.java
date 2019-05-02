@@ -1,6 +1,5 @@
 package ppj.vana.projekt.controller.HTML;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,8 +16,11 @@ import java.util.List;
 @Controller
 public class CountryHTMLController {
 
-    @Autowired
-    private CountryService countryService;
+    private final CountryService countryService;
+
+    public CountryHTMLController(CountryService countryService) {
+        this.countryService = countryService;
+    }
 
     @RequestMapping("/printCountries")
     public String showOffers(Model model) {

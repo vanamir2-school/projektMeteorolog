@@ -11,6 +11,4 @@ public class APIErrorMessage {
     public String getMessage() {
         return message;
     }
-
-
 }

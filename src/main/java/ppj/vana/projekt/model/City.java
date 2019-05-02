@@ -3,6 +3,8 @@ package ppj.vana.projekt.model;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +16,7 @@ public class City {
     @Id
     @NotNull
     @Column(name = "name")
+    @Length(max = 50)
     private String name;
 
     @ManyToOne
@@ -24,6 +27,7 @@ public class City {
 
     @Basic
     @Column(name = "openweathermapid")
+    @Range(min = 0)
     private Integer openWeatherMapID;
 
 

@@ -10,10 +10,10 @@
 </head>
 <body>
 
-<p><a href="${pageContext.request.contextPath}/printCountries">Print all countries</a></p>
-<p><a href="${pageContext.request.contextPath}/printCities">Print all cities</a></p>
-<p><a href="${pageContext.request.contextPath}/printMeasurements">Print all measurements</a></p>
-<p><a href="${pageContext.request.contextPath}/measurementByCountry">Measurement by country</a></p>
+<p><a href="${pageContext.request.contextPath}/printCountries">Countries</a></p>
+<p><a href="${pageContext.request.contextPath}/printCities">Cities</a></p>
+<p><a href="${pageContext.request.contextPath}/printMeasurements">Measurements</a></p>
+<p><a href="${pageContext.request.contextPath}/measurementByCountry">Measurements by country</a></p>
 
 </body>
 </html>

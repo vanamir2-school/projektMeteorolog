@@ -3,7 +3,6 @@ package ppj.vana.projekt.model;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.annotations.Expose;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import ppj.vana.projekt.model.serialization.ObjectIdSerializer;
@@ -130,11 +129,11 @@ public class Measurement {
                 '}';
     }
 
-    public String timeOfMeasurementReadable(){
+    public String timeOfMeasurementReadable() {
         return UtilService.timestampToStringSeconds(timeOfMeasurement);
     }
 
-    public String cityName(){
+    public String cityName() {
         return CityService.getCityById(cityID);
     }
 

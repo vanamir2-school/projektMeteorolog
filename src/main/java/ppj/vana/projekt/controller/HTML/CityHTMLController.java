@@ -1,6 +1,5 @@
 package ppj.vana.projekt.controller.HTML;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,8 +16,11 @@ import java.util.List;
 @Controller
 public class CityHTMLController {
 
-    @Autowired
-    private CityService cityService;
+    private final CityService cityService;
+
+    public CityHTMLController(CityService cityService) {
+        this.cityService = cityService;
+    }
 
     @RequestMapping("/printCities")
     public String showOffers(Model model) {

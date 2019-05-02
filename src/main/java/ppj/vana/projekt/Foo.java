@@ -17,7 +17,7 @@ public class Foo {
         this.text = text;
     }
 
-    public void makeSound() {
+    public void printLog() {
         logger.info(text);
     }
 

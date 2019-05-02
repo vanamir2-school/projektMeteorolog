@@ -23,7 +23,7 @@ public class SqlProvider {
     private DataSource dataSource;
 
     public void doProvision() {
-        // TODO - NENI SCHEMA ADAPTABILNI
+        // TODO - IT IS NOT ADAPTABLE BY CURRENT SCHEMA
         List<String> allTables = namedParameterJdbcOperations.getJdbcOperations().queryForList("SELECT TABLE_NAME FROM  INFORMATION_SCHEMA.TABLES", String.class);
         if (!allTables.contains("city") || !allTables.contains("country")) {
             log.warn("DB Provisioner: No tables exist and will be created");

@@ -1,6 +1,5 @@
 package ppj.vana.projekt.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +10,7 @@ import ppj.vana.projekt.Foo;
 
 import java.util.Arrays;
 
-// Testovaci konfiguracni trida ktera vytváří kontruktor dle profilu a stejně tak nastavuje field "note" dle profilu
+// Configuration class for test purpores. It creates contructor by active profile and set note by profil note in .config.
 
 // @Configuration Indicates that a class declares one or more @Bean methods and may be processed by the Spring container
 // to generate bean definitions and service requests for those beans at runtime
@@ -23,10 +22,13 @@ import java.util.Arrays;
 @ConfigurationProperties(prefix = "app")
 public class FooConfiguration {
 
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
 
     private String note;
+
+    public FooConfiguration(Environment environment) {
+        this.environment = environment;
+    }
 
     public void setNote(String note) {
         this.note = note;
