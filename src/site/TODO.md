@@ -4,6 +4,7 @@
 - [ ] Zamyslet se, zda by neslo lepe implementovat RESTControllery - s dedicnosti a generickymi typy  <br />
 - [ ] Vygenerovat dokumentaci
 - [ ] Print REST API, MVC API usage
+- [ ] Vyměnit u entity Measurement uložení TTL při volání service metody pro add(), raději využít anotaci @PrePersist - zamezí se tak prodloužení TTL updatem.
 
 - [x] No debug print to CMD
 - [x] All comments in English
